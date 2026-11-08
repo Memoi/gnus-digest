@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T19:18:12.420Z",
+  "generatedAt": "2026-11-08T19:49:49.645Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -43,7 +43,7 @@
       "upgraded": 1
     },
     "headline": "42 commits by 3 contributors across 6 repos. Most active: GeniusCognitiveSystem (15), SuperGenius (9), GeniusWallet (8). Plus 100 automated commits. 1 release published. 40 CI builds published.",
-    "summary": "The team made dozens of changes across six projects, with three contributors doing most of the work. Their biggest efforts were on the GeniusCognitiveSystem, SuperGenius, and GeniusWallet projects. They also published one new release and ran many automated updates."
+    "summary": "The team delivered many improvements across several projects, adding new features, fixing bugs, and refining build processes. They also published a test library release and added documentation and planning materials. Overall the work boosted stability, functionality, and readiness for future development."
   },
   "days": [
     {
@@ -108,7 +108,7 @@
       "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed). 1 CI build published (SuperGenius ×1).",
       "commits": 3,
       "automated": 0,
-      "summary": "They added scripts to help set up testing on macOS and Ubuntu and updated a setup script to keep certain environment settings. They also fixed a configuration to ensure specific testing machines are used."
+      "summary": "The team added new setup scripts for macOS and Ubuntu and improved environment settings, then fixed a configuration issue for self‑hosted runners."
     },
     {
       "date": "2026-11-06",
@@ -180,7 +180,7 @@
       "headline": "4 commits across 2 repos: openapi-cpp-scaffolding (added, build/release), GeniusNetwork (fixed). 3 automated commits (rlp_enodes).",
       "commits": 4,
       "automated": 3,
-      "summary": "They added new contract definitions and service registration for order placement. They also fixed a testing issue related to a recent tag build."
+      "summary": "They introduced order and product handling features, cleaned up a build drift issue, and corrected a post‑release testing problem."
     },
     {
       "date": "2026-11-05",
@@ -245,7 +245,7 @@
       "headline": "2 commits across 2 repos: SuperGenius (fixed), GeniusNetwork (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 48,
-      "summary": "They fixed a shutdown process in one component and resolved a crash in a network test."
+      "summary": "The team fixed a shutdown process bug and resolved a crash that occurred during a network test."
     },
     {
       "date": "2026-11-04",
@@ -316,7 +316,7 @@
       "headline": "7 commits across 2 repos: SuperGenius (fixed, build/release), GeniusCognitiveSystem (docs). 46 automated commits (rlp_enodes).",
       "commits": 7,
       "automated": 46,
-      "summary": "They addressed several test crashes and performance issues, and added a planning document for a cognitive system project."
+      "summary": "Several crash and performance problems were addressed, testing filters were updated, and a planning document was added."
     },
     {
       "date": "2026-11-03",
@@ -475,7 +475,7 @@
       "headline": "25 commits across 4 repos: GeniusCognitiveSystem (added, fixed), GeniusWallet (upgraded, build/release), GeniusNetwork (added, updated) +1 more. 3 automated commits (rlp_enodes). Released thirdparty test_coldstorage_rtti. 39 CI builds published (SuperGenius ×2, GeniusCognitiveSystem ×12, GeniusWallet ×6, GeniusSDK ×16, zkLLVM ×1, thirdparty ×2).",
       "commits": 25,
       "automated": 3,
-      "summary": "They added features to automatically join rooms, fixed a user interface issue, recorded test findings, and updated documentation and roadmaps. They also upgraded a mobile scanning library and improved the iOS build process, and added a Java development kit installation and updated another tool."
+      "summary": "New room‑joining features and related bug fixes were added, the mobile app was updated for better compatibility, build scripts were improved, and documentation and a roadmap were created; a test library was also released."
     },
     {
       "date": "2026-11-02",
@@ -504,12 +504,12 @@
       "headline": "1 commit across 1 repo: SuperGenius (fixed).",
       "commits": 1,
       "automated": 0,
-      "summary": "They improved robustness in a data encoding process and cleaned up connection handling."
+      "summary": "Robustness and cleanup issues in a core component were fixed."
     }
   ],
-  "builder": "v9",
+  "builder": "v11",
   "prs": {
-    "prsOpened": 1,
+    "prsOpened": 5,
     "prsMerged": 10,
     "prsClosed": 0,
     "issuesOpened": 0,
@@ -638,10 +638,12 @@
       }
     ],
     "openPrs": 23,
-    "openIssues": 210
+    "openIssues": 210,
+    "closedIssuesTotal": 393,
+    "mergedPrsTotal": 803
   },
   "readiness": {
-    "fetchedAt": "2026-11-08T19:18:17.894Z",
+    "fetchedAt": "2026-11-08T19:49:55.399Z",
     "pages": [
       {
         "key": "release-status",
