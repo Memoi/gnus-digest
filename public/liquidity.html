@@ -6,32 +6,41 @@
 <title>DEX pool depth (Uniswap / PancakeSwap)</title>
 <style>
   :root{
-    --bg:#eef1f4; --panel:#fff; --ink:#1c2630; --mute:#66727f; --line:#d5dbe1;
-    --buy:#0e7c6b; --buy-bg:#d9efe9; --sell:#b4412f; --sell-bg:#f4dfda;
+    --bg:#f4f1ec; --panel:#fff; --ink:#22201c; --mute:#716b62; --line:#ddd7cc; --accent:#8a4b12;
+    --buy:#2e7d32; --buy-bg:#dbe9d9; --sell:#a8432f; --sell-bg:#f1dcd5;
   }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#1d1b18; --panel:#272420; --ink:#ece7de; --mute:#a39b8f; --line:#3a352e; --accent:#e0a367;
+    --buy:#7fc883; --buy-bg:#2b3a2c; --sell:#e08a76; --sell-bg:#40281f;
+  }}
   *{box-sizing:border-box}
-  body{margin:0;padding:24px;background:var(--bg);color:var(--ink);font:15px/1.45 "Segoe UI",system-ui,sans-serif}
+  body{margin:0;padding:20px;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif}
+  input,textarea,button,select,table,label,.info,details,#status,.note,.sub,nav{font-family:system-ui,sans-serif}
   main{max-width:1000px;margin:0 auto}
-  h1{font-size:22px;margin:0 0 4px}
-  h2{font-size:16px;margin:28px 0 8px}
-  .sub{color:var(--mute);margin:0 0 18px}
+  h1{font-size:26px;margin:0 0 2px;font-weight:700}
+  h2{font:600 13px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:26px 0 8px}
+  .sub{color:var(--mute);font-size:13px;margin:0 0 22px}
+  nav{font-size:14px;margin:0 0 18px}
+  nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
+  nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
   .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-  input,textarea,button{font:inherit;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:#fff;color:var(--ink)}
+  input,textarea,button{font:inherit;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
   input#addr{flex:1;min-width:300px;font-family:Consolas,monospace;font-size:13px}
   input#lv{width:100%}
-  button{background:var(--ink);color:#fff;border-color:var(--ink);cursor:pointer}
+  button{background:var(--ink);color:var(--bg);border-color:var(--ink);cursor:pointer;font-weight:600}
   button:disabled{opacity:.5;cursor:wait}
-  button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--buy);outline-offset:1px}
+  button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   details{margin:6px 0 10px;color:var(--mute)}
+  summary{cursor:pointer;color:var(--accent)}
   textarea{width:100%;height:80px;font-family:Consolas,monospace;font-size:12px}
   label{display:block;margin:10px 0 4px;color:var(--mute);font-size:13px}
   #status{min-height:22px;color:var(--mute);margin:10px 0}
   #status.err{color:var(--sell)}
   .info{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
-  .info div{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 12px}
+  .info div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
   .info b{display:block;font-size:12px;font-weight:600;color:var(--mute)}
   .info span{font-variant-numeric:tabular-nums;font-size:16px}
-  .wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+  .wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px}
   table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
   th,td{padding:8px 12px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
   th{font-size:12px;font-weight:600;color:var(--mute)}
@@ -45,7 +54,7 @@
   .fill{height:100%;border-radius:5px}
   .buy .fill{background:var(--buy)} .sell .fill{background:var(--sell)}
   .note{color:var(--mute);font-size:13px;margin-top:22px}
-  select{font:inherit;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:#fff;color:var(--ink)}
+  select{font:inherit;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
   @media (max-width:640px){
     body{padding:10px;font-size:14px}
     h1{font-size:19px}
@@ -74,7 +83,7 @@
 </head>
 <body>
 <main>
-  <p style="font-size:14px;margin:0 0 12px"><a href="./" style="color:#0e7c6b;font-weight:600;text-decoration:none">← Digest</a></p>
+  <nav><a href="./">Digest</a><a href="liquidity.html" aria-current="page">GNUS liquidity</a></nav>
   <h1>DEX pool depth (Uniswap / PancakeSwap)</h1>
   <p class="sub">How much buying (or selling) it would actually take to reach each price level. Data is read live from the blockchain, nothing to update.</p>
 
