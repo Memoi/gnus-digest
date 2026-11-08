@@ -300,13 +300,128 @@ async function polishWithLLM(digest) {
   return digest;
 }
 
+/* ---------------- Issues & Pull Requests ---------------- */
+const IP_QUERY = `query($q:String!){ search(query:$q,type:ISSUE,first:100){ nodes{ __typename
+  ... on Issue{ title url number createdAt closedAt repository{name} author{login} }
+  ... on PullRequest{ title url number isDraft createdAt closedAt mergedAt repository{name} author{login} } } } }`;
+const COUNT_QUERY = `query($a:String!,$b:String!){ prs:search(query:$a,type:ISSUE,first:1){issueCount} issues:search(query:$b,type:ISSUE,first:1){issueCount} }`;
+
+export function summarizeIssuesPrs(nodes, since) {
+  const items = [];
+  for (const n of nodes) {
+    if (!n || !n.title) continue;
+    const pr = n.__typename === 'PullRequest';
+    let event = null, date = null;
+    if (pr && n.mergedAt && new Date(n.mergedAt) >= since) { event = 'merged'; date = n.mergedAt; }
+    else if (n.closedAt && new Date(n.closedAt) >= since) { event = 'closed'; date = n.closedAt; }
+    else if (new Date(n.createdAt) >= since) { event = 'opened'; date = n.createdAt; }
+    if (!event) continue;                                   // simple mise à jour : ignorée
+    items.push({ type: pr ? 'pr' : 'issue', event, repo: n.repository.name, number: n.number, title: n.title.slice(0, 140),
+      url: n.url, author: n.author?.login || 'ghost', draft: !!n.isDraft, date });
+  }
+  items.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const count = (type, event) => items.filter(i => i.type === type && i.event === event).length;
+  return { prsOpened: count('pr', 'opened'), prsMerged: count('pr', 'merged'), prsClosed: count('pr', 'closed'),
+           issuesOpened: count('issue', 'opened'), issuesClosed: count('issue', 'closed'), items: items.slice(0, 40) };
+}
+
+async function fetchIssuesPrs(since) {
+  const day = since.toISOString().slice(0, 10);
+  const d = await ghql(IP_QUERY, { q: `org:${ORG} is:public updated:>=${day} sort:updated-desc` });
+  const out = summarizeIssuesPrs(d.search.nodes, since);
+  const c = await ghql(COUNT_QUERY, { a: `org:${ORG} is:public is:pr is:open`, b: `org:${ORG} is:public is:issue is:open` });
+  out.openPrs = c.prs.issueCount; out.openIssues = c.issues.issueCount;
+  return out;
+}
+
+/* ---------------- Docs : mainnet readiness (release-status, public-roadmap) ---------------- */
+// Les pages de docs.gnus.ai sont générées depuis le repo MkDocs GeniusVentures/documentation :
+// on lit le Markdown source (les icônes ✅ 🔄 ⬜ y sont intactes) plutôt que le HTML rendu.
+const DOCS_REPO  = process.env.DOCS_REPO || 'GeniusVentures/documentation';
+const DOC_PAGES  = (process.env.DOC_PAGES || 'release-status,public-roadmap').split(',').map(x => x.trim()).filter(Boolean);
+const DOCS_BASE  = process.env.DOCS_BASE || 'https://docs.gnus.ai/about-gnus.ai/';
+
+const STATUS_RULES = [
+  ['done',     /^(✅|☑️?|✔️?|\[x\]|:white_check_mark:|:heavy_check_mark:)\s*/i],
+  ['progress', /^(🔄|🚧|⏳|🟡|:construction:|:arrows_counterclockwise:|:hourglass(_flowing_sand)?:)\s*/i],
+  ['todo',     /^(⬜|☐|🔲|\[ \]|:white_large_square:|:black_square_button:)\s*/i],
+];
+const mdClean = t => t.replace(/!\[[^\]]*\]\([^)]*\)/g, '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+  .replace(/[*_`]+/g, '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+export function detectStatus(text) {
+  const t = text.trim();
+  for (const [status, re] of STATUS_RULES) { const m = t.match(re); if (m) return { status, rest: t.slice(m[0].length) }; }
+  return null;
+}
+function splitLabel(rest) {
+  const clean = mdClean(rest).replace(/^\d+[.)]\s*/, '');
+  const [label, target] = clean.split(/\s+(?:→|->|=>)\s+/);
+  return { label: label.trim().slice(0, 140), target: target ? target.trim().slice(0, 80) : '' };
+}
+
+export function parseReadiness(md) {
+  const sections = [];
+  let cur = { heading: '', level: 0, text: [], items: [] };
+  const push = () => { if (cur.heading || cur.text.length || cur.items.length) sections.push(cur); };
+  for (const raw of md.replace(/\r/g, '').split('\n')) {
+    const h = raw.match(/^(#{1,6})\s+(.*)$/);
+    if (h) { push(); cur = { heading: mdClean(h[2]), level: h[1].length, text: [], items: [] }; continue; }
+    const line = raw.trim();
+    if (!line || /^[-|: ]+$/.test(line) || /^(---|```)/.test(line)) continue;
+    if (line.startsWith('|')) {                                            // ligne de tableau
+      const cells = line.split('|').map(c => c.trim()).filter(Boolean);
+      const idx = cells.findIndex(c => detectStatus(c));
+      if (idx >= 0) {
+        const st = detectStatus(cells[idx]);
+        const others = [st.rest, ...cells.filter((_, i) => i !== idx)].filter(Boolean).join(' — ');
+        cur.items.push({ status: st.status, ...splitLabel(others) });
+      }
+      continue;
+    }
+    const body = line.replace(/^([-*+]|\d+[.)])\s+/, '');
+    const st = detectStatus(body) || detectStatus(body.replace(/^\*\*/, ''));
+    if (st) cur.items.push({ status: st.status, ...splitLabel(st.rest) });
+    else { const t = mdClean(body); if (t) cur.text.push(t.slice(0, 260)); }
+  }
+  push();
+
+  const tracks = sections.filter(x => x.items.length >= 1).map(x => {
+    const n = st => x.items.filter(i => i.status === st).length;
+    const done = n('done'), progress = n('progress'), todo = n('todo'), total = x.items.length;
+    return { name: x.heading || 'Status', summary: x.text[0] || '', done, progress, todo, total,
+             percent: Math.round(100 * (done + 0.1 * progress) / total), items: x.items, note: x.text.slice(1, 3).join(' ') };
+  });
+  const notes = sections.filter(x => !x.items.length && x.text.length).slice(0, 8)
+    .map(x => ({ heading: x.heading, lines: x.text.slice(0, 6) }));
+  return { tracks, notes };
+}
+
+async function fetchDocs() {
+  const repo = await gh(`/repos/${DOCS_REPO}`);
+  const tree = await gh(`/repos/${DOCS_REPO}/git/trees/${repo.default_branch}`, { recursive: '1' });
+  const pages = [];
+  for (const key of DOC_PAGES) {
+    const f = (tree.tree || []).find(t => t.type === 'blob' && /\.md$/i.test(t.path) && t.path.toLowerCase().includes(key) && !t.path.startsWith('hdocs/'));
+    if (!f) { pages.push({ key, error: 'source file not found in docs repo' }); continue; }
+    const r = await fetch(`https://raw.githubusercontent.com/${DOCS_REPO}/${repo.default_branch}/${f.path.split('/').map(encodeURIComponent).join('/')}`);
+    if (!r.ok) { pages.push({ key, error: `raw fetch ${r.status}` }); continue; }
+    pages.push({ key, url: `${DOCS_BASE}${key}/`, source: f.path, ...parseReadiness(await r.text()) });
+  }
+  return { fetchedAt: new Date().toISOString(), pages };
+}
+
 /* ---------------- main ---------------- */
 async function main() {
   const now = new Date();
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v6';
+  digest.builder = 'v8';
+  try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
+  catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
+  try { digest.readiness = await fetchDocs(); }
+  catch (e) { digest.readinessError = String(e.message).slice(0, 200); console.warn('Docs step skipped:', e.message); }
   if (process.env.USE_LLM === '1') {
     try { digest = await polishWithLLM(digest); digest.ai = digest.aiModel; console.log('AI summaries added'); }
     catch (e) { digest.aiError = String(e.message).slice(0, 400); console.warn('LLM step skipped:', e.message); }
