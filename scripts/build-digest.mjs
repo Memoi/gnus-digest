@@ -233,8 +233,16 @@ export function buildDigest(activity, now = new Date(), days = DAYS) {
 }
 
 /* ---------------- IA gratuite optionnelle (GitHub Models) ---------------- */
+const LLM_BAD = /whisper|tts|guard|embed|moderation|orpheus|playai|compound|safeguard|vision|ocr/i;
+const LLM_PREFS = [/gpt-oss-120b/, /llama-3\.3-70b/, /70b/, /gpt-oss-20b/, /llama.*(instant|8b)/, /qwen/, /./];
+function pickModel(ids) {
+  const ok = ids.filter(i => !LLM_BAD.test(i));
+  for (const re of LLM_PREFS) { const f = ok.find(i => re.test(i)); if (f) return f; }
+  return null;
+}
+
 async function polishWithLLM(digest) {
-  // charge utile compacte (le niveau gratuit limite la taille d'entrée)
+  // charge utile compacte (les niveaux gratuits limitent la taille d'entrée)
   const payload = {
     week: { ...digest.week, byType: undefined },
     days: digest.days.filter(d => d.repos.length || d.releases.length || Object.keys(d.ciBuilds).length).map(d => ({
@@ -243,35 +251,47 @@ async function polishWithLLM(digest) {
         changes: r.items.filter(i => i.type !== 'automated').slice(0, 4).map(i => i.text.slice(0, 110)) })),
       releases: d.releases.slice(0, 5).map(r => `${r.repo} ${r.tag}`),
       ciBuilds: Object.values(d.ciBuilds).reduce((a, b) => a + b, 0) })) };
+
   // Fournisseur configurable : GitHub Models par défaut, ou toute API compatible OpenAI (LLM_URL + LLM_KEY + LLM_MODEL)
   const url = process.env.LLM_URL || 'https://models.github.ai/inference/chat/completions';
   const key = process.env.LLM_KEY || TOKEN;
-  const isGitHub = /(^|\.)github\.ai\//.test(url) || url.includes('models.github.ai');
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'User-Agent': 'gnus-digest', Authorization: `Bearer ${key}`,
-      ...(isGitHub ? { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } : {}) },
-    body: JSON.stringify({
-      model: process.env.LLM_MODEL || 'openai/gpt-4.1-mini', temperature: 0.2,
-      messages: [
-        { role: 'system', content: 'You write a short GitHub digest, always in English, for non-developers. ' +
-          'For each day write 1-2 plain sentences describing what the team did (no jargon, no commit hashes, no run IDs). ' +
-          'Ignore automated commits and CI builds unless nothing else happened (then mention them in a few words). ' +
-          'Also write a 3-sentence summary of the week. Never invent facts that are not in the data. ' +
-          'Answer in plain text only, no markdown, no JSON, exactly one line per item: first a line "WEEK: <summary>", ' +
-          'then one line "YYYY-MM-DD: <summary>" for each day present in the data.' },
-        { role: 'user', content: JSON.stringify(payload) },
-      ] }),
-  });
-  if (!res.ok) throw new Error(`LLM ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  const raw = await res.text();
+  const isGitHub = url.includes('models.github.ai');
+  const headers = { 'Content-Type': 'application/json', 'User-Agent': 'gnus-digest', Authorization: `Bearer ${key}`,
+    ...(isGitHub ? { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } : {}) };
+  const messages = [
+    { role: 'system', content: 'You write a short GitHub digest, always in English, for non-developers. ' +
+      'For each day write 1-2 plain sentences describing what the team did (no jargon, no commit hashes, no run IDs). ' +
+      'Ignore automated commits and CI builds unless nothing else happened (then mention them in a few words). ' +
+      'Also write a 3-sentence summary of the week. Never invent facts that are not in the data. ' +
+      'Answer in plain text only, no markdown, no JSON, exactly one line per item: first a line "WEEK: <summary>", ' +
+      'then one line "YYYY-MM-DD: <summary>" for each day present in the data.' },
+    { role: 'user', content: JSON.stringify(payload) }];
+  const call = model => fetch(url, { method: 'POST', headers, body: JSON.stringify({ model, temperature: 0.2, messages }) });
+
+  let model = process.env.LLM_MODEL || 'openai/gpt-4.1-mini';
+  let res = await call(model);
+  let raw = await res.text();
+
+  // modèle inconnu ou inaccessible : on interroge la liste des modèles du fournisseur et on en choisit un
+  if (res.status === 404 || (res.status === 400 && /model/i.test(raw))) {
+    const mr = await fetch(url.replace(/\/chat\/completions.*$/, '') + '/models', { headers });
+    const ids = ((await mr.json().catch(() => ({}))).data || []).map(m => m.id);
+    const alt = pickModel(ids.filter(i => i !== model));
+    if (!alt) throw new Error(`model "${model}" unavailable; models seen: ${ids.slice(0, 15).join(', ') || 'none'}`);
+    console.log(`Model "${model}" unavailable, trying "${alt}"`);
+    model = alt;
+    res = await call(model);
+    raw = await res.text();
+  }
+  digest.aiModel = model;
+  if (!res.ok) throw new Error(`LLM ${res.status} (model ${model}): ${raw.slice(0, 200)}`);
   let body;
   try { body = JSON.parse(raw); }
-  catch { throw new Error(`LLM HTTP ${res.status} from ${res.url} (redirected=${res.redirected}, type=${res.headers.get('content-type')}), not JSON: ${JSON.stringify(raw.slice(0, 120))}`); }
+  catch { throw new Error(`LLM HTTP ${res.status} from ${res.url} (type=${res.headers.get('content-type')}), not JSON: ${JSON.stringify(raw.slice(0, 120))}`); }
   const txt = body.choices?.[0]?.message?.content || '';
   let gotWeek = false, gotDays = 0;
-  for (const raw of txt.split('\n')) {
-    const m = raw.replace(/^[\s\-*•]+/, '').replace(/\*\*/g, '').match(/^(WEEK|\d{4}-\d{2}-\d{2})\s*:\s*(.+)$/i);
+  for (const line of txt.split('\n')) {
+    const m = line.replace(/^[\s\-*•]+/, '').replace(/\*\*/g, '').match(/^(WEEK|\d{4}-\d{2}-\d{2})\s*:\s*(.+)$/i);
     if (!m) continue;
     if (m[1].toUpperCase() === 'WEEK') { digest.week.summary = m[2].trim(); gotWeek = true; }
     else { const d = digest.days.find(x => x.date === m[1]); if (d) { d.summary = m[2].trim(); gotDays++; } }
@@ -286,9 +306,9 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v5';
+  digest.builder = 'v6';
   if (process.env.USE_LLM === '1') {
-    try { digest = await polishWithLLM(digest); digest.ai = process.env.LLM_MODEL || 'openai/gpt-4.1-mini'; console.log('AI summaries added'); }
+    try { digest = await polishWithLLM(digest); digest.ai = digest.aiModel; console.log('AI summaries added'); }
     catch (e) { digest.aiError = String(e.message).slice(0, 400); console.warn('LLM step skipped:', e.message); }
   }
   await mkdir('public', { recursive: true });
