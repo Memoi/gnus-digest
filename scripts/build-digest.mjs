@@ -301,36 +301,50 @@ async function polishWithLLM(digest) {
 }
 
 /* ---------------- Issues & Pull Requests ---------------- */
-const IP_QUERY = `query($q:String!){ search(query:$q,type:ISSUE,first:100){ nodes{ __typename
+const IP_QUERY = `query($q:String!,$after:String){ search(query:$q,type:ISSUE,first:100,after:$after){ pageInfo{hasNextPage endCursor} nodes{ __typename
   ... on Issue{ title url number createdAt closedAt repository{name} author{login} }
   ... on PullRequest{ title url number isDraft createdAt closedAt mergedAt repository{name} author{login} } } } }`;
-const COUNT_QUERY = `query($a:String!,$b:String!){ prs:search(query:$a,type:ISSUE,first:1){issueCount} issues:search(query:$b,type:ISSUE,first:1){issueCount} }`;
+const COUNT_QUERY = `query($a:String!,$b:String!,$c:String!,$d:String!){ prs:search(query:$a,type:ISSUE,first:1){issueCount} issues:search(query:$b,type:ISSUE,first:1){issueCount} closed:search(query:$c,type:ISSUE,first:1){issueCount} merged:search(query:$d,type:ISSUE,first:1){issueCount} }`;
 
 export function summarizeIssuesPrs(nodes, since) {
   const items = [];
+  const c = { prsOpened: 0, prsMerged: 0, prsClosed: 0, issuesOpened: 0, issuesClosed: 0 };
   for (const n of nodes) {
     if (!n || !n.title) continue;
     const pr = n.__typename === 'PullRequest';
-    let event = null, date = null;
-    if (pr && n.mergedAt && new Date(n.mergedAt) >= since) { event = 'merged'; date = n.mergedAt; }
-    else if (n.closedAt && new Date(n.closedAt) >= since) { event = 'closed'; date = n.closedAt; }
-    else if (new Date(n.createdAt) >= since) { event = 'opened'; date = n.createdAt; }
+    const created = new Date(n.createdAt) >= since;
+    const merged = pr && n.mergedAt && new Date(n.mergedAt) >= since;
+    const closed = !merged && n.closedAt && new Date(n.closedAt) >= since;
+    // compteurs indépendants : une PR ouverte ET fusionnée dans la semaine compte dans « opened » et dans « merged »
+    if (created) c[pr ? 'prsOpened' : 'issuesOpened']++;
+    if (merged) c.prsMerged++;
+    if (closed) c[pr ? 'prsClosed' : 'issuesClosed']++;
+    // liste : un seul événement par élément, le plus récent
+    const event = merged ? 'merged' : closed ? 'closed' : created ? 'opened' : null;
     if (!event) continue;                                   // simple mise à jour : ignorée
+    const date = merged ? n.mergedAt : closed ? n.closedAt : n.createdAt;
     items.push({ type: pr ? 'pr' : 'issue', event, repo: n.repository.name, number: n.number, title: n.title.slice(0, 140),
       url: n.url, author: n.author?.login || 'ghost', draft: !!n.isDraft, date });
   }
   items.sort((a, b) => new Date(b.date) - new Date(a.date));
-  const count = (type, event) => items.filter(i => i.type === type && i.event === event).length;
-  return { prsOpened: count('pr', 'opened'), prsMerged: count('pr', 'merged'), prsClosed: count('pr', 'closed'),
-           issuesOpened: count('issue', 'opened'), issuesClosed: count('issue', 'closed'), items: items.slice(0, 40) };
+  return { ...c, items: items.slice(0, 40) };
 }
 
 async function fetchIssuesPrs(since) {
   const day = since.toISOString().slice(0, 10);
-  const d = await ghql(IP_QUERY, { q: `org:${ORG} is:public updated:>=${day} sort:updated-desc` });
-  const out = summarizeIssuesPrs(d.search.nodes, since);
-  const c = await ghql(COUNT_QUERY, { a: `org:${ORG} is:public is:pr is:open`, b: `org:${ORG} is:public is:issue is:open` });
+  const q = `org:${ORG} is:public updated:>=${day} sort:updated-desc`;
+  let nodes = [], after = null;
+  for (let page = 0; page < 3; page++) {                       // jusqu'à 300 éléments modifiés dans la fenêtre
+    const d = await ghql(IP_QUERY, { q, after });
+    nodes = nodes.concat(d.search.nodes);
+    if (!d.search.pageInfo.hasNextPage) break;
+    after = d.search.pageInfo.endCursor;
+  }
+  const out = summarizeIssuesPrs(nodes, since);
+  const base = `org:${ORG} is:public`;
+  const c = await ghql(COUNT_QUERY, { a: `${base} is:pr is:open`, b: `${base} is:issue is:open`, c: `${base} is:issue is:closed`, d: `${base} is:pr is:merged` });
   out.openPrs = c.prs.issueCount; out.openIssues = c.issues.issueCount;
+  out.closedIssuesTotal = c.closed.issueCount; out.mergedPrsTotal = c.merged.issueCount;
   return out;
 }
 
@@ -463,7 +477,7 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v9';
+  digest.builder = 'v11';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
