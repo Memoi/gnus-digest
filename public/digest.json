@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T14:59:44.490Z",
+  "generatedAt": "2026-11-08T15:03:17.030Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -42,7 +42,8 @@
       "tests": 1,
       "upgraded": 1
     },
-    "headline": "42 commits by 3 contributors across 6 repos. Most active: GeniusCognitiveSystem (15), SuperGenius (9), GeniusWallet (8). Plus 100 automated commits. 1 release published. 40 CI builds published."
+    "headline": "42 commits by 3 contributors across 6 repos. Most active: GeniusCognitiveSystem (15), SuperGenius (9), GeniusWallet (8). Plus 100 automated commits. 1 release published. 40 CI builds published.",
+    "summary": "Over the past week the team delivered dozens of improvements across six projects, adding new features, fixing bugs, and refining testing setups. They also published one release and ran many automated checks to keep everything stable. Overall the work boosted functionality, reliability, and documentation for the products."
   },
   "days": [
     {
@@ -106,7 +107,8 @@
       },
       "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed). 1 CI build published (SuperGenius ×1).",
       "commits": 3,
-      "automated": 0
+      "automated": 0,
+      "summary": "The team added scripts to set up testing environments on macOS and Ubuntu and updated the macOS setup to keep important settings. They also fixed a problem that forced certain testing machines to be used."
     },
     {
       "date": "2026-11-06",
@@ -177,7 +179,8 @@
       "ciBuilds": {},
       "headline": "4 commits across 2 repos: openapi-cpp-scaffolding (added, build/release), GeniusNetwork (fixed). 3 automated commits (rlp_enodes).",
       "commits": 4,
-      "automated": 3
+      "automated": 3,
+      "summary": "New contract definitions for order placement and product services were added, and some build files were cleaned up. A testing issue in the network code was also fixed."
     },
     {
       "date": "2026-11-05",
@@ -241,7 +244,8 @@
       "ciBuilds": {},
       "headline": "2 commits across 2 repos: SuperGenius (fixed), GeniusNetwork (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
-      "automated": 48
+      "automated": 48,
+      "summary": "They fixed a shutdown process issue and repaired a crash that occurred during a network test."
     },
     {
       "date": "2026-11-04",
@@ -311,7 +315,8 @@
       "ciBuilds": {},
       "headline": "7 commits across 2 repos: SuperGenius (fixed, build/release), GeniusCognitiveSystem (docs). 46 automated commits (rlp_enodes).",
       "commits": 7,
-      "automated": 46
+      "automated": 46,
+      "summary": "Crash reporting on macOS was improved and test settings were refined, while a new planning document was created for the cognitive system project."
     },
     {
       "date": "2026-11-03",
@@ -469,7 +474,8 @@
       },
       "headline": "25 commits across 4 repos: GeniusCognitiveSystem (added, fixed), GeniusWallet (upgraded, build/release), GeniusNetwork (added, updated) +1 more. 3 automated commits (rlp_enodes). Released thirdparty test_coldstorage_rtti. 39 CI builds published (SuperGenius ×2, GeniusCognitiveSystem ×12, GeniusWallet ×6, GeniusSDK ×16, zkLLVM ×1, thirdparty ×2).",
       "commits": 25,
-      "automated": 3
+      "automated": 3,
+      "summary": "Several new features and fixes were added across projects, including automatic room joining, UI improvements, an upgraded mobile scanner library, and updated build scripts, and a test library update was released."
     },
     {
       "date": "2026-11-02",
@@ -497,9 +503,11 @@
       "ciBuilds": {},
       "headline": "1 commit across 1 repo: SuperGenius (fixed).",
       "commits": 1,
-      "automated": 0
+      "automated": 0,
+      "summary": "The team strengthened code robustness and cleaned up shutdown procedures in one of the core components."
     }
   ],
-  "builder": "v5",
-  "aiError": "LLM 404: {\"error\":{\"message\":\"The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.\",\"type\":\"invalid_request_error\",\"code\":\"model_not_found\"}}\n"
+  "builder": "v6",
+  "aiModel": "openai/gpt-oss-120b",
+  "ai": "openai/gpt-oss-120b"
 }
