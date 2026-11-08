@@ -245,7 +245,8 @@ async function polishWithLLM(digest) {
       ciBuilds: Object.values(d.ciBuilds).reduce((a, b) => a + b, 0) })) };
   const res = await fetch('https://models.github.ai/inference/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${TOKEN}` },
+    headers: { 'Content-Type': 'application/json', Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'gnus-digest', Authorization: `Bearer ${TOKEN}` },
     body: JSON.stringify({
       model: process.env.LLM_MODEL || 'openai/gpt-4.1-mini', temperature: 0.2,
       messages: [
@@ -262,7 +263,7 @@ async function polishWithLLM(digest) {
   const raw = await res.text();
   let body;
   try { body = JSON.parse(raw); }
-  catch { throw new Error(`LLM HTTP ${res.status}, reply is not JSON: ${JSON.stringify(raw.slice(0, 160))}`); }
+  catch { throw new Error(`LLM HTTP ${res.status} from ${res.url} (redirected=${res.redirected}, type=${res.headers.get('content-type')}), not JSON: ${JSON.stringify(raw.slice(0, 120))}`); }
   const txt = body.choices?.[0]?.message?.content || '';
   let gotWeek = false, gotDays = 0;
   for (const raw of txt.split('\n')) {
@@ -281,10 +282,10 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v3';
+  digest.builder = 'v4';
   if (process.env.USE_LLM === '1') {
     try { digest = await polishWithLLM(digest); digest.ai = process.env.LLM_MODEL || 'openai/gpt-4.1-mini'; console.log('AI summaries added'); }
-    catch (e) { digest.aiError = String(e.message).slice(0, 200); console.warn('LLM step skipped:', e.message); }
+    catch (e) { digest.aiError = String(e.message).slice(0, 400); console.warn('LLM step skipped:', e.message); }
   }
   await mkdir('public', { recursive: true });
   await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
