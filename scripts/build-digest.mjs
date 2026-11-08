@@ -335,9 +335,9 @@ async function fetchIssuesPrs(since) {
 }
 
 /* ---------------- Docs : mainnet readiness (release-status, public-roadmap) ---------------- */
-// Les pages de docs.gnus.ai sont générées depuis le repo MkDocs GeniusVentures/documentation :
+// Les pages de docs.gnus.ai sont générées depuis le repo GeniusVentures/gitbook (about-gnus.ai/release-status.md, public-roadmap.md) :
 // on lit le Markdown source (les icônes ✅ 🔄 ⬜ y sont intactes) plutôt que le HTML rendu.
-const DOCS_REPO  = process.env.DOCS_REPO || 'GeniusVentures/documentation';
+const DOCS_REPO  = process.env.DOCS_REPO || 'GeniusVentures/gitbook';
 const DOC_PAGES  = (process.env.DOC_PAGES || 'release-status,public-roadmap').split(',').map(x => x.trim()).filter(Boolean);
 const DOCS_BASE  = process.env.DOCS_BASE || 'https://docs.gnus.ai/about-gnus.ai/';
 
@@ -360,25 +360,59 @@ function splitLabel(rest) {
   return { label: label.trim().slice(0, 140), target: target ? target.trim().slice(0, 80) : '' };
 }
 
+// « Complete », « Not launched », « Launch preparation in progress »… -> done / progress / todo / other
+export function classifyStatusText(t) {
+  if (/not (yet )?(launched|started|available|public|live)|planned|pending|tbd|upcoming|to do|\bearly\b/i.test(t)) return 'todo';
+  if (/in progress|preparation|underway|working|partial|ongoing|in development|\bwip\b/i.test(t)) return 'progress';
+  if (/complete|done|launched|\blive\b|deployed|available|ready|finished|shipped/i.test(t)) return 'done';
+  return 'other';
+}
+const isSeparatorRow = l => /^\|?[\s:|-]+\|?$/.test(l) && l.includes('-');
+const splitRow = l => l.replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+
 export function parseReadiness(md) {
   const sections = [];
-  let cur = { heading: '', level: 0, text: [], items: [] };
-  const push = () => { if (cur.heading || cur.text.length || cur.items.length) sections.push(cur); };
-  for (const raw of md.replace(/\r/g, '').split('\n')) {
-    const h = raw.match(/^(#{1,6})\s+(.*)$/);
-    if (h) { push(); cur = { heading: mdClean(h[2]), level: h[1].length, text: [], items: [] }; continue; }
-    const line = raw.trim();
-    if (!line || /^[-|: ]+$/.test(line) || /^(---|```)/.test(line)) continue;
-    if (line.startsWith('|')) {                                            // ligne de tableau
-      const cells = line.split('|').map(c => c.trim()).filter(Boolean);
+  let cur = { heading: '', level: 0, text: [], items: [], tableItems: [] };
+  let tbl = null;
+  const closeTable = () => {
+    if (!tbl) return;
+    const statusCol = tbl.header.findIndex(h => /status|state|phase status/i.test(h));
+    const iconRows = [];
+    for (const cells of tbl.rows) {
       const idx = cells.findIndex(c => detectStatus(c));
-      if (idx >= 0) {
+      if (idx >= 0) {                                                      // tableau à icônes ✅ 🔄 ⬜
         const st = detectStatus(cells[idx]);
         const others = [st.rest, ...cells.filter((_, i) => i !== idx)].filter(Boolean).join(' — ');
-        cur.items.push({ status: st.status, ...splitLabel(others) });
+        iconRows.push({ status: st.status, ...splitLabel(others) });
       }
+    }
+    if (iconRows.length) cur.items.push(...iconRows);
+    else if (statusCol >= 0) {                                             // tableau « Area | Status | Meaning »
+      for (const cells of tbl.rows) {
+        const statusText = mdClean(cells[statusCol] || '');
+        const label = mdClean(cells[statusCol === 0 ? 1 : 0] || '');
+        const detail = mdClean(cells.filter((_, i) => i !== statusCol && i !== (statusCol === 0 ? 1 : 0)).join(' ')).slice(0, 260);
+        if (label && statusText) cur.tableItems.push({ label: label.slice(0, 140), statusText: statusText.slice(0, 100), status: classifyStatusText(statusText), detail });
+      }
+    }
+    tbl = null;
+  };
+  const push = () => { closeTable(); if (cur.heading || cur.text.length || cur.items.length || cur.tableItems.length) sections.push(cur); };
+
+  for (const raw of md.replace(/\r/g, '').split('\n')) {
+    const h = raw.match(/^(#{1,6})\s+(.*)$/);
+    if (h) { push(); cur = { heading: mdClean(h[2]), level: h[1].length, text: [], items: [], tableItems: [] }; continue; }
+    const line = raw.trim();
+    if (!line) { closeTable(); continue; }
+    if (line.startsWith('|')) {
+      const cells = splitRow(line);
+      if (!tbl) tbl = { header: cells.map(mdClean), rows: [], sep: false };
+      else if (!tbl.sep && isSeparatorRow(line)) tbl.sep = true;
+      else if (tbl.sep) tbl.rows.push(cells);
       continue;
     }
+    closeTable();
+    if (/^(---|```)/.test(line)) continue;
     const body = line.replace(/^([-*+]|\d+[.)])\s+/, '');
     const st = detectStatus(body) || detectStatus(body.replace(/^\*\*/, ''));
     if (st) cur.items.push({ status: st.status, ...splitLabel(st.rest) });
@@ -386,15 +420,22 @@ export function parseReadiness(md) {
   }
   push();
 
-  const tracks = sections.filter(x => x.items.length >= 1).map(x => {
-    const n = st => x.items.filter(i => i.status === st).length;
-    const done = n('done'), progress = n('progress'), todo = n('todo'), total = x.items.length;
-    return { name: x.heading || 'Status', summary: x.text[0] || '', done, progress, todo, total,
-             percent: Math.round(100 * (done + 0.1 * progress) / total), items: x.items, note: x.text.slice(1, 3).join(' ') };
-  });
-  const notes = sections.filter(x => !x.items.length && x.text.length).slice(0, 8)
+  const all = sections.flatMap(x => x.text).join(' ');
+  const statusDate = (all.match(/Status date:?\s*([A-Za-z]+ \d{1,2}, \d{4})/i) || [])[1] || '';
+
+  const tracks = [];
+  for (const x of sections) {
+    if (x.items.length) {
+      const n = st => x.items.filter(i => i.status === st).length;
+      const done = n('done'), progress = n('progress'), todo = n('todo'), total = x.items.length;
+      tracks.push({ kind: 'track', name: x.heading || 'Status', summary: x.text[0] || '', done, progress, todo, total,
+        percent: Math.round(100 * (done + 0.1 * progress) / total), items: x.items, note: x.text.slice(1, 3).join(' ') });
+    }
+    if (x.tableItems.length) tracks.push({ kind: 'table', name: x.heading || 'Status', summary: x.text[0] || '', items: x.tableItems });
+  }
+  const notes = sections.filter(x => !x.items.length && !x.tableItems.length && x.text.length).slice(0, 8)
     .map(x => ({ heading: x.heading, lines: x.text.slice(0, 6) }));
-  return { tracks, notes };
+  return { statusDate, tracks, notes };
 }
 
 async function fetchDocs() {
@@ -402,8 +443,13 @@ async function fetchDocs() {
   const tree = await gh(`/repos/${DOCS_REPO}/git/trees/${repo.default_branch}`, { recursive: '1' });
   const pages = [];
   for (const key of DOC_PAGES) {
-    const f = (tree.tree || []).find(t => t.type === 'blob' && /\.md$/i.test(t.path) && t.path.toLowerCase().includes(key) && !t.path.startsWith('hdocs/'));
-    if (!f) { pages.push({ key, error: 'source file not found in docs repo' }); continue; }
+    const blobs = (tree.tree || []).filter(t => t.type === 'blob' && /\.md$/i.test(t.path));
+    const f = blobs.find(t => t.path.toLowerCase() === `about-gnus.ai/${key}.md`)
+           || blobs.find(t => t.path.toLowerCase().includes(key));
+    if (!f) {
+      const hint = blobs.filter(t => /status|roadmap/i.test(t.path)).slice(0, 6).map(t => t.path).join(', ');
+      pages.push({ key, error: `source file not found in ${DOCS_REPO}` + (hint ? ` (similar: ${hint})` : '')}); continue;
+    }
     const r = await fetch(`https://raw.githubusercontent.com/${DOCS_REPO}/${repo.default_branch}/${f.path.split('/').map(encodeURIComponent).join('/')}`);
     if (!r.ok) { pages.push({ key, error: `raw fetch ${r.status}` }); continue; }
     pages.push({ key, url: `${DOCS_BASE}${key}/`, source: f.path, ...parseReadiness(await r.text()) });
@@ -417,7 +463,7 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v8';
+  digest.builder = 'v9';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
