@@ -21,25 +21,74 @@
   ul{margin:6px 0 0;padding-left:18px}
   .stats{display:flex;flex-wrap:wrap;gap:8px 18px;font:14px system-ui,sans-serif;color:var(--mute);margin-top:6px}
   .stats b{color:var(--ink)}
+  h3{font:600 15px system-ui,sans-serif;margin:16px 0 6px}
+  h3 a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+  .trow{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+  .trow b{font:700 13px system-ui,sans-serif;letter-spacing:.02em}
+  .pct{font:700 13px system-ui,sans-serif;color:var(--accent);white-space:nowrap}
+  .segs{display:flex;gap:3px;margin:10px 0 6px}
+  .seg{flex:1;height:8px;border-radius:2px;background:var(--line)}
+  .seg.done{background:var(--accent)}.seg.progress{background:var(--accent);opacity:.45}
+  .legend{font:12px system-ui,sans-serif;color:var(--mute);margin-bottom:8px}
+  .it{font:14px/1.45 system-ui,sans-serif;padding:2px 0}.it .t{color:var(--mute);font-size:12px}
+  .note{font:13px/1.45 system-ui,sans-serif;color:var(--mute);border-left:2px solid var(--accent);padding-left:10px;margin-top:8px}
+  nav{font:14px system-ui,sans-serif;margin:0 0 18px}
+  nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
+  nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
+  .pr{display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--line);font:14px/1.4 system-ui,sans-serif}
+  .pr:last-child{border-bottom:0}
+  .tag{flex:none;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--mute)}
+  .tag.merged{color:#2e7d32;border-color:#2e7d32}.tag.opened{color:var(--accent);border-color:var(--accent)}
+  .pr a{color:var(--ink);text-decoration:none;font-weight:600}.pr span.m{color:var(--mute)}
 </style>
 </head>
 <body>
 <main>
   <h1>GitHub digest</h1>
   <p class="sub" id="meta">Loading…</p>
+  <nav><a href="./" aria-current="page">Digest</a><a href="liquidity.html">GNUS liquidity</a></nav>
+  <h2>Mainnet readiness</h2>
+  <div id="readiness"></div>
   <h2>This week</h2>
   <div class="card" id="week"></div>
+  <h2>Issues &amp; pull requests</h2>
+  <div class="card" id="prs"></div>
   <h2>Daily</h2>
   <div id="days"></div>
 </main>
 <script>
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
-const safeUrl = u => /^https:\/\/github\.com\//.test(u) ? u : null;   // les messages de commit ne sont jamais injectés en HTML
+const safeUrl = u => /^https:\/\/(github\.com|docs\.gnus\.ai)\//.test(u) ? u : null;   // les messages de commit ne sont jamais injectés en HTML
 
 fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   document.getElementById('meta').textContent =
     `${d.org} · updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}` +
     (d.ai ? ' · AI-written summaries (' + d.ai + ')' : d.aiError ? ' · AI unavailable: ' + d.aiError : '') + (d.builder ? ' · script ' + d.builder : ' · script v1');
+
+  const rd = document.getElementById('readiness'), R = d.readiness;
+  if (!R) rd.append(Object.assign(el('div', d.readinessError ? 'Could not load readiness (' + d.readinessError + ')' : 'No data yet.'), { className: 'card' }));
+  else for (const pg of R.pages) {
+    const h3 = el('h3'); const a = el('a', pg.key.replace(/-/g, ' ')); if (safeUrl(pg.url)) a.href = pg.url; h3.append(a); rd.append(h3);
+    if (pg.error) { rd.append(Object.assign(el('div', pg.error), { className: 'card' })); continue; }
+    for (const t of pg.tracks) {
+      const c = el('div', null, 'card');
+      const row = el('div', null, 'trow'); row.append(el('b', t.name), el('span', `~${t.percent}% · ${t.done}/${t.total} done`, 'pct')); c.append(row);
+      if (t.summary) c.append(el('div', t.summary, 'legend'));
+      const segs = el('div', null, 'segs'); for (const it of t.items) segs.append(el('span', null, 'seg ' + it.status)); c.append(segs);
+      c.append(el('div', `${t.done} done · ${t.progress} in progress · ${t.todo} to do (of ${t.total})`, 'legend'));
+      for (const it of t.items) {
+        const row2 = el('div', null, 'it'); row2.append(el('span', ({ done: '✅', progress: '🔄', todo: '⬜' })[it.status] + ' ' + it.label));
+        if (it.target) row2.append(el('span', ' → ' + it.target, 't')); c.append(row2);
+      }
+      if (t.note) c.append(el('div', t.note, 'note'));
+      rd.append(c);
+    }
+    if (!pg.tracks.length || pg.notes.length) {
+      const det = el('details'); det.append(el('summary', pg.tracks.length ? 'Notes' : 'Page content'));
+      for (const n of pg.notes) { det.append(el('div', n.heading, 'date')); for (const l of n.lines) det.append(el('div', l)); }
+      rd.append(det);
+    }
+  }
 
   const w = d.week, wk = document.getElementById('week');
   wk.append(el('div', `${w.from} → ${w.to}`, 'date'), el('div', w.summary || w.headline));
@@ -48,6 +97,26 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     const s = el('span', ` ${k}`); s.prepend(el('b', v)); st.append(s);
   }
   wk.append(st);
+
+  const prBox = document.getElementById('prs'), P = d.prs;
+  if (!P) { prBox.append(el('div', d.prsError ? 'Could not load issues and pull requests (' + d.prsError + ')' : 'No data yet.')); }
+  else {
+    const ps = el('div', null, 'stats');
+    for (const [k, v] of [['PRs merged', P.prsMerged], ['PRs opened', P.prsOpened], ['issues opened', P.issuesOpened], ['issues closed', P.issuesClosed], ['open PRs', P.openPrs], ['open issues', P.openIssues]]) {
+      const sp = el('span', ` ${k}`); sp.prepend(el('b', v)); ps.append(sp);
+    }
+    prBox.append(ps);
+    const list = el('div'); list.style.marginTop = '10px';
+    for (const it of P.items.slice(0, 15)) {
+      const row = el('div', null, 'pr');
+      const a = el('a', `${it.title}`); if (safeUrl(it.url)) a.href = it.url;
+      row.append(el('span', `${it.event} ${it.type === 'pr' ? 'PR' : 'issue'}`, 'tag ' + it.event), a,
+                 el('span', ` ${it.repo}#${it.number} · ${it.author}`, 'm'));
+      list.append(row);
+    }
+    if (!P.items.length) list.append(el('div', 'No issue or pull request activity this week.'));
+    prBox.append(list);
+  }
 
   const days = document.getElementById('days');
   for (const day of d.days) {
