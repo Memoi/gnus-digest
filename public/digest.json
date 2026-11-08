@@ -1,0 +1,591 @@
+{
+  "generatedAt": "2026-11-08T13:49:48.712Z",
+  "org": "GeniusVentures",
+  "timezone": "Europe/Zurich",
+  "week": {
+    "from": "2026-11-02",
+    "to": "2026-11-08",
+    "commits": 142,
+    "repos": 7,
+    "contributors": 4,
+    "releases": 22,
+    "topRepos": [
+      {
+        "name": "rlp_enodes",
+        "commits": 100
+      },
+      {
+        "name": "GeniusCognitiveSystem",
+        "commits": 15
+      },
+      {
+        "name": "SuperGenius",
+        "commits": 9
+      },
+      {
+        "name": "GeniusWallet",
+        "commits": 8
+      },
+      {
+        "name": "GeniusNetwork",
+        "commits": 6
+      }
+    ],
+    "byType": {
+      "fixed": 11,
+      "build": 105,
+      "added": 7,
+      "updated": 10,
+      "docs": 7,
+      "tests": 1,
+      "upgraded": 1
+    },
+    "headline": "142 commits by 4 contributors across 7 repos. Most active: rlp_enodes (100), GeniusCognitiveSystem (15), SuperGenius (9). 22 releases published."
+  },
+  "days": [
+    {
+      "date": "2026-11-08",
+      "repos": [],
+      "releases": [],
+      "headline": "A quiet day with no new code activity on GitHub.",
+      "commits": 0
+    },
+    {
+      "date": "2026-11-07",
+      "repos": [
+        {
+          "name": "GeniusNetwork",
+          "url": "https://github.com/GeniusVentures/GeniusNetwork",
+          "commits": 2,
+          "branches": [
+            "dev_persisprocresults"
+          ],
+          "items": [
+            {
+              "type": "added",
+              "label": "added",
+              "count": 1,
+              "text": "Added: macOS/Ubuntu CI runner provisioning scripts"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 1,
+              "text": "Updated: setup-macos: persist JAVA_HOME + LANG to login-shell profiles"
+            }
+          ]
+        },
+        {
+          "name": "SuperGenius",
+          "url": "https://github.com/GeniusVentures/SuperGenius",
+          "commits": 1,
+          "branches": [
+            "develop"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: force self-hosted runners in resolve-runners"
+            }
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "repo": "SuperGenius",
+          "name": "OSX develop Release build",
+          "tag": "OSX-develop-Release",
+          "url": "https://github.com/GeniusVentures/SuperGenius/releases/tag/OSX-develop-Release",
+          "date": "2026-11-07T02:42:05Z"
+        }
+      ],
+      "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed). Released SuperGenius OSX-develop-Release.",
+      "commits": 3
+    },
+    {
+      "date": "2026-11-06",
+      "repos": [
+        {
+          "name": "openapi-cpp-scaffolding",
+          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
+          "commits": 3,
+          "branches": [
+            "gsd/phase-20-neutral-capability-seams-behavior-preserving",
+            "gsd/scaffold-identity-regen-drift"
+          ],
+          "items": [
+            {
+              "type": "added",
+              "label": "added",
+              "count": 2,
+              "text": "Added: order placement and reference contracts; product resolver contract and service registration"
+            },
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 1,
+              "text": "Build/release: commit regeneration drift sitting in the working tree"
+            }
+          ]
+        },
+        {
+          "name": "rlp_enodes",
+          "url": "https://github.com/GeniusVentures/rlp_enodes",
+          "commits": 3,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 3,
+              "text": "Build/release: update Base bootstrap nodes [skip ci]"
+            }
+          ]
+        },
+        {
+          "name": "GeniusNetwork",
+          "url": "https://github.com/GeniusVentures/GeniusNetwork",
+          "commits": 1,
+          "branches": [
+            "dev_persisprocresults"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: post-fix CI triage for tag-build run 42116912132"
+            }
+          ]
+        }
+      ],
+      "releases": [],
+      "headline": "7 commits across 3 repos: openapi-cpp-scaffolding (added, build/release), rlp_enodes (build/release), GeniusNetwork (fixed).",
+      "commits": 7
+    },
+    {
+      "date": "2026-11-05",
+      "repos": [
+        {
+          "name": "rlp_enodes",
+          "url": "https://github.com/GeniusVentures/rlp_enodes",
+          "commits": 48,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 48,
+              "text": "Build/release: update Base bootstrap nodes [skip ci]"
+            }
+          ]
+        },
+        {
+          "name": "SuperGenius",
+          "url": "https://github.com/GeniusVentures/SuperGenius",
+          "commits": 1,
+          "branches": [
+            "dev_blockstore"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: serialize node shutdown with async init state machine"
+            }
+          ]
+        },
+        {
+          "name": "GeniusNetwork",
+          "url": "https://github.com/GeniusVentures/GeniusNetwork",
+          "commits": 1,
+          "branches": [
+            "dev_persisprocresults"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: network_config_private_network_test exit-time SegFault"
+            }
+          ]
+        }
+      ],
+      "releases": [],
+      "headline": "50 commits across 3 repos: rlp_enodes (build/release), SuperGenius (fixed), GeniusNetwork (fixed).",
+      "commits": 50
+    },
+    {
+      "date": "2026-11-04",
+      "repos": [
+        {
+          "name": "rlp_enodes",
+          "url": "https://github.com/GeniusVentures/rlp_enodes",
+          "commits": 46,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 46,
+              "text": "Build/release: update Base bootstrap nodes [skip ci]"
+            }
+          ]
+        },
+        {
+          "name": "SuperGenius",
+          "url": "https://github.com/GeniusVentures/SuperGenius",
+          "commits": 6,
+          "branches": [
+            "dev_blockstore"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 5,
+              "text": "Fixed: SC4 round 13 - capture macOS crash reports on the tag-build lane; SC4 round 13 - slow-host SC1 bound scaling + EvictDrain arm-before-Start (+3 more)"
+            },
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 1,
+              "text": "Build/release: SC4 round 11 - aarch64-Debug GTEST filter append, not replace"
+            }
+          ]
+        },
+        {
+          "name": "GeniusCognitiveSystem",
+          "url": "https://github.com/GeniusVentures/GeniusCognitiveSystem",
+          "commits": 1,
+          "branches": [
+            "develop"
+          ],
+          "items": [
+            {
+              "type": "docs",
+              "label": "docs",
+              "count": 1,
+              "text": "Docs: create phase plan"
+            }
+          ]
+        }
+      ],
+      "releases": [],
+      "headline": "53 commits across 3 repos: rlp_enodes (build/release), SuperGenius (fixed, build/release), GeniusCognitiveSystem (docs).",
+      "commits": 53
+    },
+    {
+      "date": "2026-11-03",
+      "repos": [
+        {
+          "name": "GeniusCognitiveSystem",
+          "url": "https://github.com/GeniusVentures/GeniusCognitiveSystem",
+          "commits": 14,
+          "branches": [
+            "develop"
+          ],
+          "items": [
+            {
+              "type": "added",
+              "label": "added",
+              "count": 3,
+              "text": "Added: room creator auto-joins their own room; v1.0.1 Coupling Remediation milestone (+1 more)"
+            },
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: carry MembersCubit into the members dialog route (UAT)"
+            },
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 1,
+              "text": "Test work: record UAT findings (provider crash fixed, D-02 creator-join question)"
+            },
+            {
+              "type": "docs",
+              "label": "docs",
+              "count": 6,
+              "text": "Docs: gather phase 4.1 context (room-session service); create milestone v1.0.1 roadmap (4 phases) (+4 more)"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 3,
+              "text": "Updated: merge d02a-creator-auto-join: room creator auto-joins their own room (D-02a); merge origin/develop (docs/SGFP4 + OSS-scanner CI + MIT license) into develop (+1 more)"
+            }
+          ]
+        },
+        {
+          "name": "GeniusWallet",
+          "url": "https://github.com/GeniusVentures/GeniusWallet",
+          "commits": 8,
+          "branches": [
+            "develop"
+          ],
+          "items": [
+            {
+              "type": "upgraded",
+              "label": "upgraded",
+              "count": 1,
+              "text": "Upgraded: mobile_scanner to 7 so the app runs on arm64 simulators"
+            },
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 2,
+              "text": "Build/release: make the dependency check script run on CMake 3.28; build the iOS app against the simulator SDK libraries"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 5,
+              "text": "Updated: stop running the dependency download check in CI; run the dependency download check in CI (+3 more)"
+            }
+          ]
+        },
+        {
+          "name": "rlp_enodes",
+          "url": "https://github.com/GeniusVentures/rlp_enodes",
+          "commits": 3,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 3,
+              "text": "Build/release: update Base bootstrap nodes [skip ci]"
+            }
+          ]
+        },
+        {
+          "name": "GeniusNetwork",
+          "url": "https://github.com/GeniusVentures/GeniusNetwork",
+          "commits": 2,
+          "branches": [
+            "dev_persisprocresults"
+          ],
+          "items": [
+            {
+              "type": "added",
+              "label": "added",
+              "count": 1,
+              "text": "Added: temurin JDK install"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 1,
+              "text": "Updated: ATL install"
+            }
+          ]
+        },
+        {
+          "name": "thirdparty",
+          "url": "https://github.com/GeniusVentures/thirdparty",
+          "commits": 1,
+          "branches": [
+            "dev_db_storage"
+          ],
+          "items": [
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 1,
+              "text": "Build/release: build with USE_RTTI=ON — Release librocksdb typeinfo for consumers"
+            }
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "repo": "SuperGenius",
+          "name": "iOS develop Release build",
+          "tag": "iOS-arm64-simulator-develop-Release",
+          "url": "https://github.com/GeniusVentures/SuperGenius/releases/tag/iOS-arm64-simulator-develop-Release",
+          "date": "2026-11-03T16:03:48Z"
+        },
+        {
+          "repo": "SuperGenius",
+          "name": "iOS develop Debug build",
+          "tag": "iOS-arm64-simulator-develop-Debug",
+          "url": "https://github.com/GeniusVentures/SuperGenius/releases/tag/iOS-arm64-simulator-develop-Debug",
+          "date": "2026-11-03T16:08:35Z"
+        },
+        {
+          "repo": "GeniusCognitiveSystem",
+          "name": "iOS develop Release build",
+          "tag": "iOS-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusCognitiveSystem/releases/tag/iOS-develop-Release",
+          "date": "2026-11-03T19:08:09Z"
+        },
+        {
+          "repo": "GeniusCognitiveSystem",
+          "name": "iOS develop Debug build",
+          "tag": "iOS-develop-Debug",
+          "url": "https://github.com/GeniusVentures/GeniusCognitiveSystem/releases/tag/iOS-develop-Debug",
+          "date": "2026-11-03T19:03:41Z"
+        },
+        {
+          "repo": "GeniusCognitiveSystem",
+          "name": "OSX develop Release build",
+          "tag": "OSX-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusCognitiveSystem/releases/tag/OSX-develop-Release",
+          "date": "2026-11-03T19:10:06Z"
+        },
+        {
+          "repo": "GeniusCognitiveSystem",
+          "name": "OSX develop Debug build",
+          "tag": "OSX-develop-Debug",
+          "url": "https://github.com/GeniusVentures/GeniusCognitiveSystem/releases/tag/OSX-develop-Debug",
+          "date": "2026-11-03T19:12:38Z"
+        },
+        {
+          "repo": "GeniusCognitiveSystem",
+          "name": "Linux develop Release build",
+          "tag": "Linux-x86_64-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusCognitiveSystem/releases/tag/Linux-x86_64-develop-Release",
+          "date": "2026-11-03T19:02:50Z"
+        },
+        {
+          "repo": "GeniusWallet",
+          "name": "iOS develop Release build",
+          "tag": "iOS-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusWallet/releases/tag/iOS-develop-Release",
+          "date": "2026-11-03T16:48:52Z"
+        },
+        {
+          "repo": "GeniusWallet",
+          "name": "Windows develop Release build",
+          "tag": "Windows-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusWallet/releases/tag/Windows-develop-Release",
+          "date": "2026-11-03T21:14:00Z"
+        },
+        {
+          "repo": "GeniusWallet",
+          "name": "OSX develop Release build",
+          "tag": "OSX-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusWallet/releases/tag/OSX-develop-Release",
+          "date": "2026-11-03T16:46:03Z"
+        },
+        {
+          "repo": "GeniusWallet",
+          "name": "Linux develop Release build",
+          "tag": "Linux-x86_64-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusWallet/releases/tag/Linux-x86_64-develop-Release",
+          "date": "2026-11-03T16:43:38Z"
+        },
+        {
+          "repo": "GeniusWallet",
+          "name": "Linux develop Release build",
+          "tag": "Linux-aarch64-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusWallet/releases/tag/Linux-aarch64-develop-Release",
+          "date": "2026-11-03T16:44:42Z"
+        },
+        {
+          "repo": "GeniusSDK",
+          "name": "iOS develop Release build",
+          "tag": "iOS-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusSDK/releases/tag/iOS-develop-Release",
+          "date": "2026-11-03T16:38:30Z"
+        },
+        {
+          "repo": "GeniusSDK",
+          "name": "iOS develop Debug build",
+          "tag": "iOS-develop-Debug",
+          "url": "https://github.com/GeniusVentures/GeniusSDK/releases/tag/iOS-develop-Debug",
+          "date": "2026-11-03T16:21:03Z"
+        },
+        {
+          "repo": "GeniusSDK",
+          "name": "iOS develop Release build",
+          "tag": "iOS-arm64-simulator-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusSDK/releases/tag/iOS-arm64-simulator-develop-Release",
+          "date": "2026-11-03T16:24:54Z"
+        },
+        {
+          "repo": "GeniusSDK",
+          "name": "iOS develop Debug build",
+          "tag": "iOS-arm64-simulator-develop-Debug",
+          "url": "https://github.com/GeniusVentures/GeniusSDK/releases/tag/iOS-arm64-simulator-develop-Debug",
+          "date": "2026-11-03T16:23:49Z"
+        },
+        {
+          "repo": "GeniusSDK",
+          "name": "Windows develop Release build",
+          "tag": "Windows-develop-Release",
+          "url": "https://github.com/GeniusVentures/GeniusSDK/releases/tag/Windows-develop-Release",
+          "date": "2026-11-03T16:20:12Z"
+        },
+        {
+          "repo": "zkLLVM",
+          "name": "iOS develop branch Release build",
+          "tag": "iOS-arm64-simulator-develop-Release",
+          "url": "https://github.com/GeniusVentures/zkLLVM/releases/tag/iOS-arm64-simulator-develop-Release",
+          "date": "2026-11-03T14:30:14Z"
+        },
+        {
+          "repo": "thirdparty",
+          "name": "iOS Simulator develop Release build",
+          "tag": "iOS-arm64-simulator-develop-Release",
+          "url": "https://github.com/GeniusVentures/thirdparty/releases/tag/iOS-arm64-simulator-develop-Release",
+          "date": "2026-11-03T12:20:22Z"
+        },
+        {
+          "repo": "thirdparty",
+          "name": "iOS Simulator develop Debug build",
+          "tag": "iOS-arm64-simulator-develop-Debug",
+          "url": "https://github.com/GeniusVentures/thirdparty/releases/tag/iOS-arm64-simulator-develop-Debug",
+          "date": "2026-11-03T12:01:14Z"
+        },
+        {
+          "repo": "thirdparty",
+          "name": "test_coldstorage_rtti",
+          "tag": "test_coldstorage_rtti",
+          "url": "https://github.com/GeniusVentures/thirdparty/releases/tag/test_coldstorage_rtti",
+          "date": "2026-11-02T23:35:54Z"
+        }
+      ],
+      "headline": "28 commits across 5 repos: GeniusCognitiveSystem (added, fixed), GeniusWallet (upgraded, build/release), rlp_enodes (build/release). Released SuperGenius iOS-arm64-simulator-develop-Release, SuperGenius iOS-arm64-simulator-develop-Debug, GeniusCognitiveSystem iOS-develop-Release, GeniusCognitiveSystem iOS-develop-Debug, GeniusCognitiveSystem OSX-develop-Release, GeniusCognitiveSystem OSX-develop-Debug, GeniusCognitiveSystem Linux-x86_64-develop-Release, GeniusWallet iOS-develop-Release, GeniusWallet Windows-develop-Release, GeniusWallet OSX-develop-Release, GeniusWallet Linux-x86_64-develop-Release, GeniusWallet Linux-aarch64-develop-Release, GeniusSDK iOS-develop-Release, GeniusSDK iOS-develop-Debug, GeniusSDK iOS-arm64-simulator-develop-Release, GeniusSDK iOS-arm64-simulator-develop-Debug, GeniusSDK Windows-develop-Release, zkLLVM iOS-arm64-simulator-develop-Release, thirdparty iOS-arm64-simulator-develop-Release, thirdparty iOS-arm64-simulator-develop-Debug, thirdparty test_coldstorage_rtti.",
+      "commits": 28
+    },
+    {
+      "date": "2026-11-02",
+      "repos": [
+        {
+          "name": "SuperGenius",
+          "url": "https://github.com/GeniusVentures/SuperGenius",
+          "commits": 1,
+          "branches": [
+            "dev_blockstore"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: SC4 round 9 - GC CID-encode robustness guards + full-wire teardown hygiene"
+            }
+          ]
+        }
+      ],
+      "releases": [],
+      "headline": "1 commit across 1 repo: SuperGenius (fixed).",
+      "commits": 1
+    }
+  ]
+}
