@@ -24,6 +24,10 @@ jobs:
           ORG: GeniusVentures
           DAYS: '7'
           USE_LLM: '1'        # '1' = résumés rédigés par un modèle gratuit (GitHub Models) ; '0' = règles seulement
+          # Fournisseur IA optionnel (Settings > Secrets and variables > Actions). Vide = GitHub Models.
+          LLM_URL: ${{ vars.LLM_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          LLM_KEY: ${{ secrets.LLM_API_KEY }}
       - name: Commit result
         run: |
           git config user.name  "digest-bot"
