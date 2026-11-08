@@ -39,7 +39,7 @@ const safeUrl = u => /^https:\/\/github\.com\//.test(u) ? u : null;   // les mes
 fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   document.getElementById('meta').textContent =
     `${d.org} · updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}` +
-    (d.ai ? ' · AI-written summaries' : d.aiError ? ' · AI unavailable: ' + d.aiError : '') + (d.builder ? ' · script ' + d.builder : ' · script v1');
+    (d.ai ? ' · AI-written summaries (' + d.ai + ')' : d.aiError ? ' · AI unavailable: ' + d.aiError : '') + (d.builder ? ' · script ' + d.builder : ' · script v1');
 
   const w = d.week, wk = document.getElementById('week');
   wk.append(el('div', `${w.from} → ${w.to}`, 'date'), el('div', w.summary || w.headline));
