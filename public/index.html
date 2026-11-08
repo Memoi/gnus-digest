@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub digest</title>
+<style>
+  :root{--bg:#f4f1ec;--panel:#fff;--ink:#22201c;--mute:#716b62;--line:#ddd7cc;--accent:#8a4b12}
+  @media (prefers-color-scheme:dark){:root{--bg:#1d1b18;--panel:#272420;--ink:#ece7de;--mute:#a39b8f;--line:#3a352e;--accent:#e0a367}}
+  *{box-sizing:border-box}
+  body{margin:0;padding:20px;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif}
+  main{max-width:760px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 2px}
+  .sub{color:var(--mute);font:13px system-ui,sans-serif;margin:0 0 22px}
+  h2{font:600 13px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:26px 0 8px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+  .date{font:600 13px system-ui,sans-serif;color:var(--mute);margin-bottom:4px}
+  details{margin-top:8px;font:14px/1.45 system-ui,sans-serif;color:var(--mute)}
+  summary{cursor:pointer;color:var(--accent)}
+  details a{color:inherit;font-weight:600}
+  ul{margin:6px 0 0;padding-left:18px}
+  .stats{display:flex;flex-wrap:wrap;gap:8px 18px;font:14px system-ui,sans-serif;color:var(--mute);margin-top:6px}
+  .stats b{color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+  <h1>GitHub digest</h1>
+  <p class="sub" id="meta">Loading…</p>
+  <h2>This week</h2>
+  <div class="card" id="week"></div>
+  <h2>Daily</h2>
+  <div id="days"></div>
+</main>
+<script>
+const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+const safeUrl = u => /^https:\/\/github\.com\//.test(u) ? u : null;   // les messages de commit ne sont jamais injectés en HTML
+
+fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
+  document.getElementById('meta').textContent =
+    `${d.org} · updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}`;
+
+  const w = d.week, wk = document.getElementById('week');
+  wk.append(el('div', `${w.from} → ${w.to}`, 'date'), el('div', w.summary || w.headline));
+  const st = el('div', null, 'stats');
+  for (const [k, v] of [['commits', w.commits], ['repos', w.repos], ['contributors', w.contributors], ['releases', w.releases]]) {
+    const s = el('span', ` ${k}`); s.prepend(el('b', v)); st.append(s);
+  }
+  wk.append(st);
+
+  const days = document.getElementById('days');
+  for (const day of d.days) {
+    const c = el('div', null, 'card');
+    c.append(el('div', new Date(day.date + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }), 'date'),
+             el('div', day.summary || day.headline));
+    if (day.repos.length) {
+      const det = el('details'); det.append(el('summary', 'Details'));
+      const ul = el('ul');
+      for (const r of day.repos) {
+        const li = el('li'), a = el('a', r.name); if (safeUrl(r.url)) a.href = r.url;
+        li.append(a, el('span', ` (${r.commits}): ` + r.items.map(i => i.text).join(' · ')));
+        if (r.branches && r.branches.length) li.append(el('span', ` [branches: ${r.branches.slice(0, 4).join(', ')}${r.branches.length > 4 ? ' +' + (r.branches.length - 4) : ''}]`));
+        ul.append(li);
+      }
+      det.append(ul); c.append(det);
+    }
+    days.append(c);
+  }
+}).catch(e => { document.getElementById('meta').textContent = 'Could not load digest.json (' + e.message + ')'; });
+</script>
+</body>
+</html>
