@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T14:39:11.208Z",
+  "generatedAt": "2026-11-08T14:42:51.576Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -500,5 +500,6 @@
       "automated": 0
     }
   ],
-  "aiError": "Unexpected token 'O', \"OK\r\n\" is not valid JSON"
+  "builder": "v3",
+  "aiError": "LLM HTTP 200, reply is not JSON: \"OK\\r\\n\""
 }
