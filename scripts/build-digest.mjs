@@ -77,13 +77,13 @@ async function fetchActivity(since) {
     const chunk = await Promise.all(active.slice(i, i + 5).map(async r => {
       const [commits, releases] = await Promise.all([
         fetchCommitsAllBranches(r.name, since),
-        gh(`/repos/${ORG}/${r.name}/releases`, { per_page: 5 }).catch(() => []),
+        gh(`/repos/${ORG}/${r.name}/releases`, { per_page: 50 }).catch(() => []),
       ]);
       return {
         name: r.name, url: r.html_url,
         commits,
         releases: releases.filter(x => x.published_at && new Date(x.published_at) >= since && !x.draft)
-          .map(x => ({ name: x.name || x.tag_name, tag: x.tag_name, url: x.html_url, date: x.published_at })),
+          .map(x => ({ name: x.name || x.tag_name, tag: x.tag_name, url: x.html_url, date: x.published_at, prerelease: !!x.prerelease })),
       };
     }));
     out.push(...chunk);
@@ -142,86 +142,122 @@ function summarizeRepoDay(commits) {
   return items;
 }
 
+const normSubject = m => cleanSubject(m).toLowerCase().replace(/\d+/g, '#');
+const isBuildRelease = r => r.prerelease || /-(Release|Debug)$/i.test(r.tag || '') || /-(Release|Debug)$/i.test(r.name || '');
+
 export function buildDigest(activity, now = new Date(), days = DAYS) {
-  // liste des jours (aujourd'hui en premier)
-  const keys = [];
+  const keys = [];                                   // jours, aujourd'hui en premier
   for (let i = 0; i < days; i++) keys.push(dayKey(new Date(now.getTime() - i * 86400000)));
 
-  const perDay = Object.fromEntries(keys.map(k => [k, { date: k, repos: [], releases: [] }]));
+  const perDay = Object.fromEntries(keys.map(k => [k, { date: k, repos: [], releases: [], ciBuilds: {} }]));
   const contributors = new Set();
-  const repoTotals = {};
+  const repoHuman = {};
+  let autoTotal = 0, ciTotal = 0, namedTotal = 0;
   const typeTotals = {};
 
   for (const repo of activity) {
+    // un commit est « automatique » s'il vient d'un bot, contient [skip ci], ou si son message se répète ≥ 5 fois
+    const freq = new Map();
+    for (const c of repo.commits) {
+      if (isNoise(c.message.split('\n')[0])) continue;
+      const n = normSubject(c.message); freq.set(n, (freq.get(n) || 0) + 1);
+    }
+    const isAuto = c => /\[bot\]$/i.test(c.author) || /\[(skip ci|ci skip)\]/i.test(c.message) || freq.get(normSubject(c.message)) >= 5;
+
     const byDay = {};
     for (const c of repo.commits) {
-      const first = c.message.split('\n')[0];
-      if (isNoise(first)) continue;
+      if (isNoise(c.message.split('\n')[0])) continue;
       const k = dayKey(c.date);
       if (!perDay[k]) continue;
-      (byDay[k] ||= []).push(c);
-      contributors.add(c.author);
+      const slot = (byDay[k] ||= { human: [], auto: [] });
+      if (isAuto(c)) slot.auto.push(c); else { slot.human.push(c); contributors.add(c.author); }
     }
-    for (const [k, commits] of Object.entries(byDay)) {
-      const items = summarizeRepoDay(commits);
-      const branches = [...new Set(commits.flatMap(c => c.branches || []))];
-      perDay[k].repos.push({ name: repo.name, url: repo.url, commits: commits.length, branches, items });
-      repoTotals[repo.name] = (repoTotals[repo.name] || 0) + commits.length;
-      for (const it of items) typeTotals[it.type] = (typeTotals[it.type] || 0) + it.count;
+    for (const [k, { human, auto }] of Object.entries(byDay)) {
+      const items = summarizeRepoDay(human);
+      if (auto.length) items.push({ type: 'automated', label: 'automated updates', count: auto.length,
+        text: `Automated updates (${plural(auto.length, 'commit')}), e.g. ${cleanSubject(auto[0].message)}` });
+      const branches = [...new Set([...human, ...auto].flatMap(c => c.branches || []))];
+      perDay[k].repos.push({ name: repo.name, url: repo.url, commits: human.length + auto.length,
+        human: human.length, automated: auto.length, branches, items });
+      repoHuman[repo.name] = (repoHuman[repo.name] || 0) + human.length;
+      autoTotal += auto.length;
+      for (const it of items) if (it.type !== 'automated') typeTotals[it.type] = (typeTotals[it.type] || 0) + it.count;
     }
     for (const r of repo.releases) {
       const k = dayKey(r.date);
-      if (perDay[k]) perDay[k].releases.push({ repo: repo.name, ...r });
+      if (!perDay[k]) continue;
+      if (isBuildRelease(r)) { perDay[k].ciBuilds[repo.name] = (perDay[k].ciBuilds[repo.name] || 0) + 1; ciTotal++; }
+      else { perDay[k].releases.push({ repo: repo.name, ...r }); namedTotal++; }
     }
   }
 
   const daysOut = keys.map(k => {
     const d = perDay[k];
-    d.repos.sort((a, b) => b.commits - a.commits);
-    const total = d.repos.reduce((s, r) => s + r.commits, 0);
-    if (!total && !d.releases.length) {
-      d.headline = 'A quiet day with no new code activity on GitHub.';
-    } else {
-      const parts = d.repos.slice(0, 3).map(r => `${r.name} (${r.items.slice(0, 2).map(i => i.label).join(', ')})`);
-      d.headline = `${plural(total, 'commit')} across ${plural(d.repos.length, 'repo')}` +
-        (parts.length ? `: ${parts.join(', ')}` : '') +
-        (d.releases.length ? `. Released ${d.releases.map(r => `${r.repo} ${r.tag}`).join(', ')}` : '') + '.';
-    }
-    d.commits = total;
+    d.repos.sort((a, b) => b.human - a.human || b.automated - a.automated);
+    const human = d.repos.reduce((s, r) => s + r.human, 0);
+    const auto = d.repos.reduce((s, r) => s + r.automated, 0);
+    const humanRepos = d.repos.filter(r => r.human > 0);
+    const autoRepos = d.repos.filter(r => r.automated > 0);
+    const builds = Object.entries(d.ciBuilds);
+    const buildCount = builds.reduce((s, [, n]) => s + n, 0);
+    const bits = [];
+    if (human) bits.push(`${plural(human, 'commit')} across ${plural(humanRepos.length, 'repo')}: ` +
+      humanRepos.slice(0, 3).map(r => `${r.name} (${r.items.filter(i => i.type !== 'automated').slice(0, 2).map(i => i.label).join(', ')})`).join(', ') +
+      (humanRepos.length > 3 ? ` +${humanRepos.length - 3} more` : '') + '.');
+    if (auto) bits.push(`${plural(auto, 'automated commit')} (${autoRepos.map(r => r.name).join(', ')}).`);
+    if (d.releases.length) bits.push(`Released ${d.releases.slice(0, 4).map(r => `${r.repo} ${r.tag}`).join(', ')}` +
+      `${d.releases.length > 4 ? ` +${d.releases.length - 4} more` : ''}.`);
+    if (buildCount) bits.push(`${plural(buildCount, 'CI build')} published (${builds.map(([r, n]) => `${r} ×${n}`).join(', ')}).`);
+    d.headline = bits.length ? bits.join(' ') : 'A quiet day with no new code activity on GitHub.';
+    d.commits = human; d.automated = auto;
     return d;
   });
 
-  const topRepos = Object.entries(repoTotals).sort((a, b) => b[1] - a[1]);
-  const totalCommits = topRepos.reduce((s, [, n]) => s + n, 0);
-  const allReleases = daysOut.flatMap(d => d.releases);
+  const topRepos = Object.entries(repoHuman).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
+  const humanTotal = topRepos.reduce((s, [, n]) => s + n, 0);
   const week = {
     from: keys[keys.length - 1], to: keys[0],
-    commits: totalCommits, repos: topRepos.length, contributors: contributors.size,
-    releases: allReleases.length,
+    commits: humanTotal, automated: autoTotal, repos: topRepos.length, contributors: contributors.size,
+    releases: namedTotal, ciBuilds: ciTotal,
     topRepos: topRepos.slice(0, 5).map(([name, commits]) => ({ name, commits })),
     byType: typeTotals,
-    headline: totalCommits
-      ? `${plural(totalCommits, 'commit')} by ${plural(contributors.size, 'contributor')} across ${plural(topRepos.length, 'repo')}. ` +
-        `Most active: ${topRepos.slice(0, 3).map(([n, c]) => `${n} (${c})`).join(', ')}.` +
-        (allReleases.length ? ` ${plural(allReleases.length, 'release')} published.` : '')
-      : 'No code activity on GitHub this week.',
+    headline: (humanTotal
+      ? `${plural(humanTotal, 'commit')} by ${plural(contributors.size, 'contributor')} across ${plural(topRepos.length, 'repo')}. ` +
+        `Most active: ${topRepos.slice(0, 3).map(([n, c]) => `${n} (${c})`).join(', ')}.`
+      : 'No manual commits this week.') +
+      (autoTotal ? ` Plus ${plural(autoTotal, 'automated commit')}.` : '') +
+      (namedTotal ? ` ${plural(namedTotal, 'release')} published.` : '') +
+      (ciTotal ? ` ${plural(ciTotal, 'CI build')} published.` : ''),
   };
   return { generatedAt: now.toISOString(), org: ORG, timezone: TZ, week, days: daysOut };
 }
 
 /* ---------------- IA gratuite optionnelle (GitHub Models) ---------------- */
 async function polishWithLLM(digest) {
+  // charge utile compacte (le niveau gratuit limite la taille d'entrée)
+  const payload = {
+    week: { ...digest.week, byType: undefined },
+    days: digest.days.filter(d => d.repos.length || d.releases.length || Object.keys(d.ciBuilds).length).map(d => ({
+      date: d.date,
+      repos: d.repos.slice(0, 4).map(r => ({ repo: r.name, manual: r.human, automated: r.automated,
+        changes: r.items.filter(i => i.type !== 'automated').slice(0, 4).map(i => i.text.slice(0, 110)) })),
+      releases: d.releases.slice(0, 5).map(r => `${r.repo} ${r.tag}`),
+      ciBuilds: Object.values(d.ciBuilds).reduce((a, b) => a + b, 0) })) };
   const res = await fetch('https://models.github.ai/inference/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${TOKEN}` },
     body: JSON.stringify({
       model: process.env.LLM_MODEL || 'openai/gpt-4.1-mini', temperature: 0.2,
       messages: [
-        { role: 'system', content: 'You write a short GitHub digest, always in English, for non-developers. For each day write 1-2 sentences (no jargon, no commit hashes). Also write a 3-sentence weekly summary. Reply ONLY with JSON: {"week":"...","days":{"YYYY-MM-DD":"..."}}.' },
-        { role: 'user', content: JSON.stringify({ week: digest.week, days: digest.days.map(d => ({ date: d.date, repos: d.repos.map(r => ({ repo: r.name, items: r.items.map(i => i.text) })), releases: d.releases.map(r => `${r.repo} ${r.tag}`) })) }) },
+        { role: 'system', content: 'You write a short GitHub digest, always in English, for non-developers. ' +
+          'For each day write 1-2 plain sentences describing what the team did (no jargon, no commit hashes, no run IDs). ' +
+          'Ignore automated commits and CI builds unless nothing else happened (then mention them in a few words). ' +
+          'Also write a 3-sentence summary of the week. Never invent facts that are not in the data. ' +
+          'Reply ONLY with JSON: {"week":"...","days":{"YYYY-MM-DD":"..."}}.' },
+        { role: 'user', content: JSON.stringify(payload) },
       ] }),
   });
-  if (!res.ok) throw new Error(`LLM ${res.status}`);
+  if (!res.ok) throw new Error(`LLM ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const txt = (await res.json()).choices[0].message.content.replace(/```json|```/g, '').trim();
   const j = JSON.parse(txt);
   digest.week.summary = j.week;
@@ -236,7 +272,8 @@ async function main() {
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
   if (process.env.USE_LLM === '1') {
-    try { digest = await polishWithLLM(digest); } catch (e) { console.warn('LLM step skipped:', e.message); }
+    try { digest = await polishWithLLM(digest); digest.ai = process.env.LLM_MODEL || 'openai/gpt-4.1-mini'; console.log('AI summaries added'); }
+    catch (e) { digest.aiError = String(e.message).slice(0, 200); console.warn('LLM step skipped:', e.message); }
   }
   await mkdir('public', { recursive: true });
   await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
