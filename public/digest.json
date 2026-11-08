@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T15:03:17.030Z",
+  "generatedAt": "2026-11-08T19:04:54.280Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -43,7 +43,7 @@
       "upgraded": 1
     },
     "headline": "42 commits by 3 contributors across 6 repos. Most active: GeniusCognitiveSystem (15), SuperGenius (9), GeniusWallet (8). Plus 100 automated commits. 1 release published. 40 CI builds published.",
-    "summary": "Over the past week the team delivered dozens of improvements across six projects, adding new features, fixing bugs, and refining testing setups. They also published one release and ran many automated checks to keep everything stable. Overall the work boosted functionality, reliability, and documentation for the products."
+    "summary": "Throughout the week the team delivered a mix of new features, bug fixes, and documentation updates across multiple projects. They improved test setup, added order handling and room‑creation capabilities, and upgraded key components for better compatibility. A new third‑party library release was also published."
   },
   "days": [
     {
@@ -108,7 +108,7 @@
       "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed). 1 CI build published (SuperGenius ×1).",
       "commits": 3,
       "automated": 0,
-      "summary": "The team added scripts to set up testing environments on macOS and Ubuntu and updated the macOS setup to keep important settings. They also fixed a problem that forced certain testing machines to be used."
+      "summary": "The team added new setup scripts to help the system run tests on macOS and Ubuntu, and adjusted the configuration so important settings are saved automatically. They also fixed an issue that forced the system to use the correct test runners."
     },
     {
       "date": "2026-11-06",
@@ -180,7 +180,7 @@
       "headline": "4 commits across 2 repos: openapi-cpp-scaffolding (added, build/release), GeniusNetwork (fixed). 3 automated commits (rlp_enodes).",
       "commits": 4,
       "automated": 3,
-      "summary": "New contract definitions for order placement and product services were added, and some build files were cleaned up. A testing issue in the network code was also fixed."
+      "summary": "Developers added new features for handling orders and product information, and updated the build process to keep things in sync. They also corrected a problem that affected the automated testing workflow."
     },
     {
       "date": "2026-11-05",
@@ -245,7 +245,7 @@
       "headline": "2 commits across 2 repos: SuperGenius (fixed), GeniusNetwork (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 48,
-      "summary": "They fixed a shutdown process issue and repaired a crash that occurred during a network test."
+      "summary": "The team fixed a bug that caused the system to shut down incorrectly and resolved a crash that occurred during a network test."
     },
     {
       "date": "2026-11-04",
@@ -316,7 +316,7 @@
       "headline": "7 commits across 2 repos: SuperGenius (fixed, build/release), GeniusCognitiveSystem (docs). 46 automated commits (rlp_enodes).",
       "commits": 7,
       "automated": 46,
-      "summary": "Crash reporting on macOS was improved and test settings were refined, while a new planning document was created for the cognitive system project."
+      "summary": "They improved crash reporting on macOS and addressed performance issues on slower machines. Documentation was added to outline the next development phase."
     },
     {
       "date": "2026-11-03",
@@ -475,7 +475,7 @@
       "headline": "25 commits across 4 repos: GeniusCognitiveSystem (added, fixed), GeniusWallet (upgraded, build/release), GeniusNetwork (added, updated) +1 more. 3 automated commits (rlp_enodes). Released thirdparty test_coldstorage_rtti. 39 CI builds published (SuperGenius ×2, GeniusCognitiveSystem ×12, GeniusWallet ×6, GeniusSDK ×16, zkLLVM ×1, thirdparty ×2).",
       "commits": 25,
       "automated": 3,
-      "summary": "Several new features and fixes were added across projects, including automatic room joining, UI improvements, an upgraded mobile scanner library, and updated build scripts, and a test library update was released."
+      "summary": "The team added new functionality so that a room creator automatically joins their own room, fixed several user interface issues, documented test results and upcoming milestones, and upgraded a scanning component for better compatibility while improving the build process and adding a new Java development kit. They also published a new release for a third‑party library."
     },
     {
       "date": "2026-11-02",
@@ -504,10 +504,155 @@
       "headline": "1 commit across 1 repo: SuperGenius (fixed).",
       "commits": 1,
       "automated": 0,
-      "summary": "The team strengthened code robustness and cleaned up shutdown procedures in one of the core components."
+      "summary": "They fixed a robustness issue and cleaned up the shutdown process for better reliability."
     }
   ],
-  "builder": "v6",
+  "builder": "v8",
+  "prs": {
+    "prsOpened": 1,
+    "prsMerged": 10,
+    "prsClosed": 0,
+    "issuesOpened": 0,
+    "issuesClosed": 0,
+    "items": [
+      {
+        "type": "pr",
+        "event": "opened",
+        "repo": "AsyncIOManager",
+        "number": 14,
+        "title": "Updated HTTP for token prices",
+        "url": "https://github.com/GeniusVentures/AsyncIOManager/pull/14",
+        "author": "itsafuu",
+        "draft": false,
+        "date": "2026-11-04T20:14:57Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "GeniusNetwork",
+        "number": 14,
+        "title": "Merge pull request #13 from GeniusVentures/main",
+        "url": "https://github.com/GeniusVentures/GeniusNetwork/pull/14",
+        "author": "Super-Genius",
+        "draft": false,
+        "date": "2026-11-03T18:30:47Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "GeniusNetwork",
+        "number": 13,
+        "title": "docs back to develop",
+        "url": "https://github.com/GeniusVentures/GeniusNetwork/pull/13",
+        "author": "Super-Genius",
+        "draft": false,
+        "date": "2026-11-03T18:30:09Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "GeniusNetwork",
+        "number": 12,
+        "title": "Develop",
+        "url": "https://github.com/GeniusVentures/GeniusNetwork/pull/12",
+        "author": "Super-Genius",
+        "draft": false,
+        "date": "2026-11-03T18:28:48Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "GeniusWallet",
+        "number": 295,
+        "title": "Run the wallet in the iOS Simulator on Apple Silicon",
+        "url": "https://github.com/GeniusVentures/GeniusWallet/pull/295",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-03T16:37:52Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "GeniusSDK",
+        "number": 48,
+        "title": "Build GeniusSDK for the arm64 iOS Simulator",
+        "url": "https://github.com/GeniusVentures/GeniusSDK/pull/48",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-03T16:18:06Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "GeniusWallet",
+        "number": 296,
+        "title": "Burn a job's cost in GNUS, not in Minions",
+        "url": "https://github.com/GeniusVentures/GeniusWallet/pull/296",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-03T16:11:04Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "SuperGenius",
+        "number": 402,
+        "title": "Build SuperGenius for the arm64 iOS Simulator",
+        "url": "https://github.com/GeniusVentures/SuperGenius/pull/402",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-03T14:52:01Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "zkLLVM",
+        "number": 9,
+        "title": "Build zkLLVM for the arm64 iOS Simulator",
+        "url": "https://github.com/GeniusVentures/zkLLVM/pull/9",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-03T13:22:51Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "thirdparty",
+        "number": 123,
+        "title": "Add an arm64 iOS Simulator build",
+        "url": "https://github.com/GeniusVentures/thirdparty/pull/123",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-03T11:19:56Z"
+      },
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "wallet-core",
+        "number": 10,
+        "title": "Install the simulator Rust lib for --arch-abi=arm64-simulator",
+        "url": "https://github.com/GeniusVentures/wallet-core/pull/10",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-03T11:19:45Z"
+      }
+    ],
+    "openPrs": 23,
+    "openIssues": 210
+  },
+  "readiness": {
+    "fetchedAt": "2026-11-08T19:04:58.899Z",
+    "pages": [
+      {
+        "key": "release-status",
+        "error": "source file not found in docs repo"
+      },
+      {
+        "key": "public-roadmap",
+        "error": "source file not found in docs repo"
+      }
+    ]
+  },
   "aiModel": "openai/gpt-oss-120b",
   "ai": "openai/gpt-oss-120b"
 }
