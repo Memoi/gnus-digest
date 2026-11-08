@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T14:42:51.576Z",
+  "generatedAt": "2026-11-08T14:44:59.990Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -500,6 +500,6 @@
       "automated": 0
     }
   ],
-  "builder": "v3",
-  "aiError": "LLM HTTP 200, reply is not JSON: \"OK\\r\\n\""
+  "builder": "v4",
+  "aiError": "LLM HTTP 200 from https://models.github.ai/inference/chat/completions (redirected=false, type=text/plain), not JSON: \"OK\\r\\n\""
 }
