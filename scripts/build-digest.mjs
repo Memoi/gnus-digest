@@ -259,7 +259,11 @@ async function polishWithLLM(digest) {
       ] }),
   });
   if (!res.ok) throw new Error(`LLM ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  const txt = (await res.json()).choices?.[0]?.message?.content || '';
+  const raw = await res.text();
+  let body;
+  try { body = JSON.parse(raw); }
+  catch { throw new Error(`LLM HTTP ${res.status}, reply is not JSON: ${JSON.stringify(raw.slice(0, 160))}`); }
+  const txt = body.choices?.[0]?.message?.content || '';
   let gotWeek = false, gotDays = 0;
   for (const raw of txt.split('\n')) {
     const m = raw.replace(/^[\s\-*•]+/, '').replace(/\*\*/g, '').match(/^(WEEK|\d{4}-\d{2}-\d{2})\s*:\s*(.+)$/i);
@@ -277,6 +281,7 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
+  digest.builder = 'v3';
   if (process.env.USE_LLM === '1') {
     try { digest = await polishWithLLM(digest); digest.ai = process.env.LLM_MODEL || 'openai/gpt-4.1-mini'; console.log('AI summaries added'); }
     catch (e) { digest.aiError = String(e.message).slice(0, 200); console.warn('LLM step skipped:', e.message); }
