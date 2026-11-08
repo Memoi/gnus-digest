@@ -38,12 +38,13 @@ const safeUrl = u => /^https:\/\/github\.com\//.test(u) ? u : null;   // les mes
 
 fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   document.getElementById('meta').textContent =
-    `${d.org} · updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}`;
+    `${d.org} · updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}` +
+    (d.ai ? ' · AI-written summaries' : d.aiError ? ' · AI unavailable: ' + d.aiError : '');
 
   const w = d.week, wk = document.getElementById('week');
   wk.append(el('div', `${w.from} → ${w.to}`, 'date'), el('div', w.summary || w.headline));
   const st = el('div', null, 'stats');
-  for (const [k, v] of [['commits', w.commits], ['repos', w.repos], ['contributors', w.contributors], ['releases', w.releases]]) {
+  for (const [k, v] of [['commits', w.commits], ['automated commits', w.automated], ['repos', w.repos], ['contributors', w.contributors], ['releases', w.releases], ['CI builds', w.ciBuilds]]) {
     const s = el('span', ` ${k}`); s.prepend(el('b', v)); st.append(s);
   }
   wk.append(st);
