@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-08T14:44:59.990Z",
+  "generatedAt": "2026-11-08T14:59:44.490Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -500,6 +500,6 @@
       "automated": 0
     }
   ],
-  "builder": "v4",
-  "aiError": "LLM HTTP 200 from https://models.github.ai/inference/chat/completions (redirected=false, type=text/plain), not JSON: \"OK\\r\\n\""
+  "builder": "v5",
+  "aiError": "LLM 404: {\"error\":{\"message\":\"The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.\",\"type\":\"invalid_request_error\",\"code\":\"model_not_found\"}}\n"
 }
