@@ -1,14 +1,14 @@
 name: Daily GitHub digest
- 
+
 on:
   schedule:
     - cron: '30 5 * * *'      # tous les jours à 05:30 UTC
   workflow_dispatch:          # lancement manuel possible depuis l'onglet Actions
- 
+
 permissions:
   contents: write             # pour committer public/digest.json
-  models: read              # à décommenter seulement si USE_LLM = '1' (IA gratuite GitHub Models)
- 
+  models: read                # IA gratuite GitHub Models (utilisée si USE_LLM = '1')
+
 jobs:
   digest:
     runs-on: ubuntu-24.04
@@ -23,11 +23,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ORG: GeniusVentures
           DAYS: '7'
-          USE_LLM: '1'        # '1' = reformulation par un modèle gratuit (optionnel)
+          USE_LLM: '1'        # '1' = résumés rédigés par un modèle gratuit (GitHub Models) ; '0' = règles seulement
       - name: Commit result
         run: |
           git config user.name  "digest-bot"
           git config user.email "digest-bot@users.noreply.github.com"
           git add public/digest.json
           git diff --cached --quiet || (git commit -m "chore: update digest" && git push)
- 
