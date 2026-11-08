@@ -253,15 +253,21 @@ async function polishWithLLM(digest) {
           'For each day write 1-2 plain sentences describing what the team did (no jargon, no commit hashes, no run IDs). ' +
           'Ignore automated commits and CI builds unless nothing else happened (then mention them in a few words). ' +
           'Also write a 3-sentence summary of the week. Never invent facts that are not in the data. ' +
-          'Reply ONLY with JSON: {"week":"...","days":{"YYYY-MM-DD":"..."}}.' },
+          'Answer in plain text only, no markdown, no JSON, exactly one line per item: first a line "WEEK: <summary>", ' +
+          'then one line "YYYY-MM-DD: <summary>" for each day present in the data.' },
         { role: 'user', content: JSON.stringify(payload) },
       ] }),
   });
   if (!res.ok) throw new Error(`LLM ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  const txt = (await res.json()).choices[0].message.content.replace(/```json|```/g, '').trim();
-  const j = JSON.parse(txt);
-  digest.week.summary = j.week;
-  for (const d of digest.days) if (j.days?.[d.date]) d.summary = j.days[d.date];
+  const txt = (await res.json()).choices?.[0]?.message?.content || '';
+  let gotWeek = false, gotDays = 0;
+  for (const raw of txt.split('\n')) {
+    const m = raw.replace(/^[\s\-*•]+/, '').replace(/\*\*/g, '').match(/^(WEEK|\d{4}-\d{2}-\d{2})\s*:\s*(.+)$/i);
+    if (!m) continue;
+    if (m[1].toUpperCase() === 'WEEK') { digest.week.summary = m[2].trim(); gotWeek = true; }
+    else { const d = digest.days.find(x => x.date === m[1]); if (d) { d.summary = m[2].trim(); gotDays++; } }
+  }
+  if (!gotWeek && !gotDays) throw new Error('unexpected model reply: ' + JSON.stringify(txt.slice(0, 120)));
   return digest;
 }
 
