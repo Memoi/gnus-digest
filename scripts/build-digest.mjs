@@ -243,10 +243,14 @@ async function polishWithLLM(digest) {
         changes: r.items.filter(i => i.type !== 'automated').slice(0, 4).map(i => i.text.slice(0, 110)) })),
       releases: d.releases.slice(0, 5).map(r => `${r.repo} ${r.tag}`),
       ciBuilds: Object.values(d.ciBuilds).reduce((a, b) => a + b, 0) })) };
-  const res = await fetch('https://models.github.ai/inference/chat/completions', {
+  // Fournisseur configurable : GitHub Models par défaut, ou toute API compatible OpenAI (LLM_URL + LLM_KEY + LLM_MODEL)
+  const url = process.env.LLM_URL || 'https://models.github.ai/inference/chat/completions';
+  const key = process.env.LLM_KEY || TOKEN;
+  const isGitHub = /(^|\.)github\.ai\//.test(url) || url.includes('models.github.ai');
+  const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'gnus-digest', Authorization: `Bearer ${TOKEN}` },
+    headers: { 'Content-Type': 'application/json', 'User-Agent': 'gnus-digest', Authorization: `Bearer ${key}`,
+      ...(isGitHub ? { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } : {}) },
     body: JSON.stringify({
       model: process.env.LLM_MODEL || 'openai/gpt-4.1-mini', temperature: 0.2,
       messages: [
@@ -282,7 +286,7 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v4';
+  digest.builder = 'v5';
   if (process.env.USE_LLM === '1') {
     try { digest = await polishWithLLM(digest); digest.ai = process.env.LLM_MODEL || 'openai/gpt-4.1-mini'; console.log('AI summaries added'); }
     catch (e) { digest.aiError = String(e.message).slice(0, 400); console.warn('LLM step skipped:', e.message); }
