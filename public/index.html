@@ -118,7 +118,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   if (!P) { prBox.append(el('div', d.prsError ? 'Could not load issues and pull requests (' + d.prsError + ')' : 'No data yet.')); }
   else {
     const ps = el('div', null, 'stats');
-    for (const [k, v] of [['PRs merged', P.prsMerged], ['PRs opened', P.prsOpened], ['issues opened', P.issuesOpened], ['issues closed', P.issuesClosed], ['open PRs', P.openPrs], ['open issues', P.openIssues]]) {
+    for (const [k, v] of [['PRs merged (7d)', P.prsMerged], ['PRs opened (7d)', P.prsOpened], ['issues opened (7d)', P.issuesOpened], ['issues closed (7d)', P.issuesClosed], ['open PRs', P.openPrs], ['open issues', P.openIssues], ['closed issues (total)', P.closedIssuesTotal], ['merged PRs (total)', P.mergedPrsTotal]]) {
       const sp = el('span', ` ${k}`); sp.prepend(el('b', v)); ps.append(sp);
     }
     prBox.append(ps);
