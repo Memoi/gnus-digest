@@ -32,6 +32,10 @@
   .legend{font:12px system-ui,sans-serif;color:var(--mute);margin-bottom:8px}
   .it{font:14px/1.45 system-ui,sans-serif;padding:2px 0}.it .t{color:var(--mute);font-size:12px}
   .note{font:13px/1.45 system-ui,sans-serif;color:var(--mute);border-left:2px solid var(--accent);padding-left:10px;margin-top:8px}
+  .badge{display:inline-block;font:600 12px system-ui,sans-serif;padding:1px 8px;border-radius:10px;border:1px solid var(--line);color:var(--mute);margin-right:8px}
+  .badge.done{color:#2e7d32;border-color:#2e7d32}.badge.progress{color:var(--accent);border-color:var(--accent)}
+  .srow{padding:8px 0;border-bottom:1px solid var(--line);font:14px/1.45 system-ui,sans-serif}.srow:last-child{border-bottom:0}
+  .srow .d{color:var(--mute);font-size:13px;margin-top:2px}
   nav{font:14px system-ui,sans-serif;margin:0 0 18px}
   nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
   nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
@@ -70,7 +74,19 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   else for (const pg of R.pages) {
     const h3 = el('h3'); const a = el('a', pg.key.replace(/-/g, ' ')); if (safeUrl(pg.url)) a.href = pg.url; h3.append(a); rd.append(h3);
     if (pg.error) { rd.append(Object.assign(el('div', pg.error), { className: 'card' })); continue; }
+    if (pg.statusDate) rd.append(el('div', 'Status date: ' + pg.statusDate, 'legend'));
     for (const t of pg.tracks) {
+      if (t.kind === 'table') {
+        const tc = el('div', null, 'card');
+        tc.append(el('div', t.name, 'date'));
+        for (const it of t.items) {
+          const r = el('div', null, 'srow');
+          r.append(el('span', it.statusText, 'badge ' + it.status), el('span', it.label));
+          if (it.detail) r.append(el('div', it.detail, 'd'));
+          tc.append(r);
+        }
+        rd.append(tc); continue;
+      }
       const c = el('div', null, 'card');
       const row = el('div', null, 'trow'); row.append(el('b', t.name), el('span', `~${t.percent}% · ${t.done}/${t.total} done`, 'pct')); c.append(row);
       if (t.summary) c.append(el('div', t.summary, 'legend'));
