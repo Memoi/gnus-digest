@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-08T19:53:49.370Z",
+  "generatedAt": "2026-11-09T14:10:37.388Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
-    "from": "2026-11-02",
-    "to": "2026-11-08",
-    "commits": 42,
+    "from": "2026-11-03",
+    "to": "2026-11-09",
+    "commits": 41,
     "automated": 100,
     "repos": 6,
     "contributors": 3,
@@ -18,7 +18,7 @@
       },
       {
         "name": "SuperGenius",
-        "commits": 9
+        "commits": 8
       },
       {
         "name": "GeniusWallet",
@@ -34,7 +34,7 @@
       }
     ],
     "byType": {
-      "fixed": 11,
+      "fixed": 10,
       "build": 5,
       "added": 7,
       "updated": 10,
@@ -42,10 +42,19 @@
       "tests": 1,
       "upgraded": 1
     },
-    "headline": "42 commits by 3 contributors across 6 repos. Most active: GeniusCognitiveSystem (15), SuperGenius (9), GeniusWallet (8). Plus 100 automated commits. 1 release published. 40 CI builds published.",
-    "summary": "Throughout the week the team delivered a range of improvements, adding new features, fixing bugs, and updating documentation across several projects. They introduced new setup scripts to support testing on macOS and Ubuntu and upgraded key components such as the scanner library and Java tools. One third‑party library was released, marking the only official release of the period."
+    "headline": "41 commits by 3 contributors across 6 repos. Most active: GeniusCognitiveSystem (15), SuperGenius (8), GeniusWallet (8). Plus 100 automated commits. 1 release published. 40 CI builds published.",
+    "summary": "Across the week the team delivered new features, fixed several bugs, and prepared documentation for upcoming work. They also updated dependencies and build processes to improve stability. A release of a third‑party library was published."
   },
   "days": [
+    {
+      "date": "2026-11-09",
+      "repos": [],
+      "releases": [],
+      "ciBuilds": {},
+      "headline": "A quiet day with no new code activity on GitHub.",
+      "commits": 0,
+      "automated": 0
+    },
     {
       "date": "2026-11-08",
       "repos": [],
@@ -108,7 +117,7 @@
       "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed). 1 CI build published (SuperGenius ×1).",
       "commits": 3,
       "automated": 0,
-      "summary": "The team added new setup scripts to help the testing system run on macOS and Ubuntu and ensured important settings are saved. They also fixed a problem that forced the use of internal testing machines."
+      "summary": "The team added new setup scripts for macOS and Ubuntu testing environments and adjusted settings to keep them persistent. They also fixed a problem to make sure the correct testing machines are used."
     },
     {
       "date": "2026-11-06",
@@ -180,7 +189,7 @@
       "headline": "4 commits across 2 repos: openapi-cpp-scaffolding (added, build/release), GeniusNetwork (fixed). 3 automated commits (rlp_enodes).",
       "commits": 4,
       "automated": 3,
-      "summary": "They added new features for handling orders and product information in the API scaffolding. They also repaired a testing issue in the network component."
+      "summary": "Developers added new order handling features and registered related services. They also corrected a problem in the automated testing process."
     },
     {
       "date": "2026-11-05",
@@ -245,7 +254,7 @@
       "headline": "2 commits across 2 repos: SuperGenius (fixed), GeniusNetwork (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 48,
-      "summary": "They fixed a problem that caused the system to shut down incorrectly. They also repaired a crash that occurred during a network test."
+      "summary": "The team fixed how a node shuts down and resolved a crash in a network test."
     },
     {
       "date": "2026-11-04",
@@ -316,7 +325,7 @@
       "headline": "7 commits across 2 repos: SuperGenius (fixed, build/release), GeniusCognitiveSystem (docs). 46 automated commits (rlp_enodes).",
       "commits": 7,
       "automated": 46,
-      "summary": "They addressed crashes and performance issues in the system and refined testing filters. They also drafted a planning document for the next development phase."
+      "summary": "They addressed crash reporting for macOS builds and refined test settings, and prepared a planning document for the next phase."
     },
     {
       "date": "2026-11-03",
@@ -475,36 +484,7 @@
       "headline": "25 commits across 4 repos: GeniusCognitiveSystem (added, fixed), GeniusWallet (upgraded, build/release), GeniusNetwork (added, updated) +1 more. 3 automated commits (rlp_enodes). Released thirdparty test_coldstorage_rtti. 39 CI builds published (SuperGenius ×2, GeniusCognitiveSystem ×12, GeniusWallet ×6, GeniusSDK ×16, zkLLVM ×1, thirdparty ×2).",
       "commits": 25,
       "automated": 3,
-      "summary": "The team added a feature that lets a room creator automatically join their own room, fixed some interface issues, and documented the next development steps. They also upgraded the scanner library in the wallet app, improved build scripts, added a Java development kit for the network component, and released an updated third‑party library."
-    },
-    {
-      "date": "2026-11-02",
-      "repos": [
-        {
-          "name": "SuperGenius",
-          "url": "https://github.com/GeniusVentures/SuperGenius",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "dev_blockstore"
-          ],
-          "items": [
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: SC4 round 9 - GC CID-encode robustness guards + full-wire teardown hygiene"
-            }
-          ]
-        }
-      ],
-      "releases": [],
-      "ciBuilds": {},
-      "headline": "1 commit across 1 repo: SuperGenius (fixed).",
-      "commits": 1,
-      "automated": 0,
-      "summary": "They fixed safeguards to make the system more reliable during shutdown."
+      "summary": "The team introduced a feature that lets a room creator automatically join their own room, fixed several bugs, and documented testing results and future plans. They also upgraded a mobile scanning component, improved build scripts, and added new development tools. A new third‑party library build was released."
     }
   ],
   "builder": "v11",
@@ -643,7 +623,7 @@
     "mergedPrsTotal": 803
   },
   "readiness": {
-    "fetchedAt": "2026-11-08T19:53:55.400Z",
+    "fetchedAt": "2026-11-09T14:10:45.725Z",
     "pages": [
       {
         "key": "release-status",
