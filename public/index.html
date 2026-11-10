@@ -42,6 +42,13 @@
   .grid2 .card{margin-bottom:0}
   svg.chart{width:100%;height:auto;color:var(--accent);display:block;margin:6px 0 2px}
   .arrow{color:var(--mute);margin:0 6px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+  .chip{font:12px system-ui,sans-serif;border:1px solid var(--line);border-radius:12px;padding:1px 9px;color:var(--mute)}
+  .chip b{color:var(--ink)}
+  .big{font:700 22px system-ui,sans-serif}
+  .big small{font:13px system-ui,sans-serif;color:var(--mute);font-weight:400}
+  ul.hl{margin:8px 0 0;padding-left:18px;font:13px/1.45 system-ui,sans-serif;color:var(--mute)}
+  .dom{font:600 12px system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin:10px 0 2px}
   nav{font:14px system-ui,sans-serif;margin:0 0 18px}
   nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
   nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
@@ -62,6 +69,8 @@
   <div id="readiness"></div>
   <h2>This week</h2>
   <div class="card" id="week"></div>
+  <h2>Activity by domain</h2>
+  <div class="grid2" id="domains"></div>
   <h2>Issues &amp; pull requests</h2>
   <div class="card" id="prs"></div>
   <h2>Trends</h2>
@@ -211,6 +220,20 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   for (const [title, key] of [['Commits (rolling 7 days)', 'commits'], ['Open issues', 'openIssues'], ['Open PRs', 'openPrs'], ['Merged PRs (total)', 'mergedPrs']])
     tr.append(spark(title, T.map(p => ({ date: p.date, v: p[key] }))));
 
+  const domBox = document.getElementById('domains');
+  for (const g of (w.domains || [])) {
+    const c = el('div', null, 'card');
+    c.append(el('div', g.name, 'date'));
+    const big = el('div', String(g.commits), 'big'); big.append(el('small', ` commit${g.commits === 1 ? '' : 's'}` + (g.automated ? ` · +${g.automated} automated` : '')));
+    c.append(big);
+    const chips = el('div', null, 'chips');
+    for (const r of g.repos) { const ch = el('span', null, 'chip'); ch.append(el('b', r.name), document.createTextNode(` ${r.commits}`)); chips.append(ch); }
+    c.append(chips);
+    if (g.highlights.length) { const ul = el('ul', null, 'hl'); for (const t of g.highlights.slice(0, 3)) ul.append(el('li', t)); c.append(ul); }
+    domBox.append(c);
+  }
+  if (!(w.domains || []).length) domBox.append(Object.assign(el('div', 'No activity to group this week.'), { className: 'card' }));
+
   const days = document.getElementById('days');
   for (const day of d.days) {
     const c = el('div', null, 'card');
@@ -218,14 +241,20 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
              el('div', day.summary || day.headline));
     if (day.repos.length) {
       const det = el('details'); det.append(el('summary', 'Details'));
-      const ul = el('ul');
-      for (const r of day.repos) {
-        const li = el('li'), a = el('a', r.name); if (safeUrl(r.url)) a.href = r.url;
-        li.append(a, el('span', ` (${r.commits}): ` + r.items.map(i => i.text).join(' · ')));
-        if (r.branches && r.branches.length) li.append(el('span', ` [branches: ${r.branches.slice(0, 4).join(', ')}${r.branches.length > 4 ? ' +' + (r.branches.length - 4) : ''}]`));
-        ul.append(li);
+      const byDom = new Map();
+      for (const r of day.repos) { const k = r.domain || 'Other'; if (!byDom.has(k)) byDom.set(k, []); byDom.get(k).push(r); }
+      for (const [dom, repos] of byDom) {
+        det.append(el('div', dom, 'dom'));
+        const ul = el('ul');
+        for (const r of repos) {
+          const li = el('li'), a = el('a', r.name); if (safeUrl(r.url)) a.href = r.url;
+          li.append(a, el('span', ` (${r.commits}): ` + r.items.map(i => i.text).join(' · ')));
+          if (r.branches && r.branches.length) li.append(el('span', ` [branches: ${r.branches.slice(0, 4).join(', ')}${r.branches.length > 4 ? ' +' + (r.branches.length - 4) : ''}]`));
+          ul.append(li);
+        }
+        det.append(ul);
       }
-      det.append(ul); c.append(det);
+      c.append(det);
     }
     days.append(c);
   }
