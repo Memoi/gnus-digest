@@ -356,16 +356,26 @@ const DOC_PAGES  = (process.env.DOC_PAGES || 'release-status,public-roadmap').sp
 const DOCS_BASE  = process.env.DOCS_BASE || 'https://docs.gnus.ai/about-gnus.ai/';
 const STALE_DAYS = Number(process.env.STALE_DAYS || 30);   // au-delà, la page signale une information possiblement périmée
 
-// Objectifs trimestriels cités dans la doc (« Q2 2026 »), marqués « passed » si le trimestre est terminé
+// Objectifs trimestriels cités dans la doc (« Q2 2026 »), analysés LIGNE PAR LIGNE.
+// - une étape déjà terminée ([x], ✅) est de l'historique : ignorée ;
+// - une étape non terminée ([ ], ⬜, 🔄) dont le trimestre est passé est signalée ;
+// - une phrase libre n'est retenue que si elle parle d'objectif / lancement / date.
+const quarterEnd = l => { const m = l.match(/Q([1-4]) (\d{4})/); return new Date(Date.UTC(+m[2], +m[1] * 3, 0)); };
 export function findTargets(md, now = new Date()) {
   const out = new Map();
-  for (const para of md.replace(/\r/g, '').split(/\n\s*\n/)) {          // un paragraphe complet, pas une seule ligne
-    for (const m of para.matchAll(/\bQ([1-4])\s*(20\d{2})\b/g)) {
-      const label = `Q${m[1]} ${m[2]}`;
-      if (out.has(label)) continue;
-      const end = new Date(Date.UTC(+m[2], +m[1] * 3, 0));      // dernier jour du trimestre
-      out.set(label, { label, passed: end < now, line: cut(mdClean(para), 900) });
-    }
+  for (const raw of md.replace(/\r/g, '').split('\n')) {
+    const line = raw.trim();
+    if (!line || /^[-|: ]+$/.test(line)) continue;
+    const body = line.replace(/^([-*+]|\d+[.)])\s+/, '');
+    const st = detectStatus(body) || detectStatus(body.replace(/^\*\*/, ''));
+    if (st && st.status === 'done') continue;
+    const text = mdClean(st ? st.rest : body);
+    const labels = [...new Set([...text.matchAll(/\bQ([1-4])\s*(20\d{2})\b/g)].map(m => `Q${m[1]} ${m[2]}`))];
+    if (!labels.length) continue;
+    if (!st && !/target|deadline|planned|expected|original|launch|date|announced/i.test(text)) continue;
+    const key = text.toLowerCase();
+    if (out.has(key)) continue;                                  // même phrase déjà vue
+    out.set(key, { label: labels[0], labels, passed: labels.some(l => quarterEnd(l) < now), line: cut(text, 900) });
   }
   return [...out.values()];
 }
@@ -565,7 +575,7 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v14';
+  digest.builder = 'v15';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
