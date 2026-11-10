@@ -476,6 +476,8 @@ export function parseReadiness(md) {
   return { statusDate, tracks, notes };
 }
 
+export const calendarDaysAgo = (d, now = new Date()) => Math.round((Date.parse(dayKey(now)) - Date.parse(dayKey(d))) / 86400000);
+
 async function fetchDocs() {
   const repo = await gh(`/repos/${DOCS_REPO}`);
   const tree = await gh(`/repos/${DOCS_REPO}/git/trees/${repo.default_branch}`, { recursive: '1' });
@@ -494,9 +496,10 @@ async function fetchDocs() {
     const parsed = parseReadiness(text);
     let lastEdited = null;
     try { const cm = await gh(`/repos/${DOCS_REPO}/commits`, { path: f.path, per_page: 1 }); lastEdited = cm[0]?.commit?.committer?.date || null; } catch {}
-    const sd = parsed.statusDate ? new Date(parsed.statusDate) : null;
-    const statusAgeDays = sd && !isNaN(sd) ? Math.floor((Date.now() - sd) / 86400000) : null;
-    const editedAgeDays = lastEdited ? Math.floor((Date.now() - new Date(lastEdited)) / 86400000) : null;
+    // écart en JOURS CALENDAIRES (date contre date), pas en heures écoulées : deux mentions du même jour donnent le même nombre
+    const sd = parsed.statusDate ? new Date(parsed.statusDate + ' 12:00 UTC') : null;
+    const statusAgeDays = sd && !isNaN(sd) ? calendarDaysAgo(sd) : null;
+    const editedAgeDays = lastEdited ? calendarDaysAgo(new Date(lastEdited)) : null;
     pages.push({ key, url: `${DOCS_BASE}${key}/`, source: f.path, ...parsed, lastEdited, statusAgeDays, editedAgeDays,
       stale: (statusAgeDays ?? editedAgeDays ?? 0) > STALE_DAYS, targets: findTargets(text) });
   }
@@ -562,7 +565,7 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v13';
+  digest.builder = 'v14';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
