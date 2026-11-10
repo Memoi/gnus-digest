@@ -56,6 +56,8 @@
   .note{color:var(--mute);font-size:13px;margin-top:22px}
   select{font:inherit;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
   @media (max-width:640px){
+    .bar.cmpbar{flex-direction:row;flex-wrap:nowrap;gap:8px}
+    .cmpbar button{width:auto;flex:1}
     body{padding:10px;font-size:14px}
     h1{font-size:19px}
     h2{margin:18px 0 6px;font-size:15px}
@@ -87,6 +89,17 @@
   <h1>DEX pool depth (Uniswap / PancakeSwap)</h1>
   <p class="sub">How much buying (or selling) it would actually take to reach each price level. Data is read live from the blockchain, nothing to update.</p>
 
+  <h2>All networks at a glance</h2>
+  <div class="bar cmpbar" style="align-items:center">
+    <span class="sub" style="margin:0">Compare at ±</span>
+    <input id="cmpPct" value="10" inputmode="decimal" style="width:80px" aria-label="Percent move">
+    <span class="sub" style="margin:0">%</span>
+    <button id="cmpGo">Compare</button>
+  </div>
+  <div class="wrap"><table id="cmp"><thead><tr><th>Network</th><th>Pool</th><th>Price</th><th>Pool balance</th><th>Buy +X%</th><th>Sell −X%</th><th>Block</th></tr></thead><tbody id="cmpBody"></tbody></table></div>
+  <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value of tokens to sell to push it down by X%. Each network's default pool; fees included.</p>
+
+  <h2>Pool explorer</h2>
   <div class="bar">
     <select id="chain" aria-label="Network"><option value="ethereum">Ethereum</option><option value="polygon">Polygon</option><option value="base">Base</option><option value="bsc">BNB Chain</option></select>
     <input id="addr" value="0xf10e8ccdb3f065bf24afa14d08cc6336d4a9a281" spellcheck="false" aria-label="Pool address">
@@ -183,10 +196,14 @@ const ifCL = new Interface(['function latestRoundData() view returns (uint80,int
 
 const $ = id => document.getElementById(id);
 const setStatus = (t, err) => { $('status').textContent = t; $('status').className = err ? 'err' : ''; };
-let blockTag = 'latest';
+// Chaque chargement de pool reçoit un contexte {chain, addr, urls, block, status} : plusieurs réseaux peuvent charger en parallèle.
+const cleanSym = x => String(x).replace(/[^\w.$\- ]/g, '').slice(0, 24) || '?';   // les symboles viennent de la chaîne : jamais de HTML
+const POOLS = {};                                                                   // cache : « réseau:adresse » -> pool lu
+const mainCtx = () => ({ chain: $('chain').value, addr: $('addr').value,
+  urls: $('rpcs').value.split('\n').map(x => x.trim()).filter(Boolean), block: 'latest', status: setStatus });
 
-async function rpc(method, params){
-  const urls = $('rpcs').value.split('\n').map(s=>s.trim()).filter(Boolean);
+async function rpc(method, params, ctx){
+  const urls = ctx.urls;
   const errs = [];
   for (const url of urls){
     try{
@@ -201,12 +218,12 @@ async function rpc(method, params){
     (location.protocol==='file:' ? '' : ' (page not opened locally: open the file from your PC)'));
 }
 
-async function multicall(calls){
+async function multicall(calls, ctx){
   const out = [];
   for (let i=0;i<calls.length;i+=200){
     const chunk = calls.slice(i,i+200);
     const data = ifMC.encodeFunctionData('aggregate3',[chunk.map(c=>[c.target,true,c.iface.encodeFunctionData(c.fn,c.args||[])])]);
-    const res = await rpc('eth_call',[{to:MC3,data},blockTag]);
+    const res = await rpc('eth_call',[{to:MC3,data},ctx.block],ctx);
     const dec = ifMC.decodeFunctionResult('aggregate3',res)[0];
     dec.forEach((r,j)=>{
       const c = chunk[j];
@@ -231,25 +248,25 @@ async function llamaPrices(slug, addrs){
   return out;
 }
 
-async function loadPool(){
-  const addr = getAddress($('addr').value.trim().toLowerCase());
-  blockTag = await rpc('eth_blockNumber',[]);
+async function loadPool(ctx){
+  const addr = getAddress(ctx.addr.trim().toLowerCase());
+  ctx.block = await rpc('eth_blockNumber',[],ctx);
 
-  setStatus('Reading pool…');
+  ctx.status('Reading pool…');
   const [t0,t1,fee,spacing,liq,slot0a,res,slot0b,fac,stab] = await multicall([
     {target:addr,iface:ifV3,fn:'token0'},{target:addr,iface:ifV3,fn:'token1'},
     {target:addr,iface:ifV3,fn:'fee'},{target:addr,iface:ifV3,fn:'tickSpacing'},
     {target:addr,iface:ifV3,fn:'liquidity'},{target:addr,iface:ifV3,fn:'slot0'},
     {target:addr,iface:ifV2,fn:'getReserves'},
     {target:addr,iface:ifV3b,fn:'slot0'},
-    {target:addr,iface:ifV2x,fn:'factory'},{target:addr,iface:ifV2x,fn:'stable'}]);
+    {target:addr,iface:ifV2x,fn:'factory'},{target:addr,iface:ifV2x,fn:'stable'}], ctx);
   const slot0 = slot0a || slot0b;
   if (!t0 || !t1) throw new Error("Not a Uniswap v2/v3 pool (token0/token1 not found). A v4 pool needs a different contract.");
   const v3 = !!slot0;
   if (!v3 && !res) throw new Error('Pool not recognised (neither slot0 nor getReserves).');
 
   const tok0 = t0[0], tok1 = t1[0];
-  const q0 = CH().quotes[tok0.toLowerCase()], q1 = CH().quotes[tok1.toLowerCase()];
+  const q0 = CHAINS[ctx.chain].quotes[tok0.toLowerCase()], q1 = CHAINS[ctx.chain].quotes[tok1.toLowerCase()];
   const calls = [
     {target:tok0,iface:ifErc,fn:'decimals'},{target:tok0,iface:ifErc,fn:'symbol'},
     {target:tok1,iface:ifErc,fn:'decimals'},{target:tok1,iface:ifErc,fn:'symbol'},
@@ -258,19 +275,19 @@ async function loadPool(){
   [q0,q1].forEach((q,k)=>{ if (q && q.feed){ fIdx[k] = calls.length; calls.push({target:q.feed.toLowerCase(),iface:ifCL,fn:'latestRoundData'}); } });
   let feeIdx = null;
   if (!v3 && fac){ feeIdx = calls.length; calls.push({target:fac[0],iface:ifFac,fn:'getFee',args:[addr, stab ? stab[0] : false]}); }
-  const R = await multicall(calls);
+  const R = await multicall(calls, ctx);
   const [d0,s0,d1,s1,b0,b1] = R;
   const usdOf = (q,k) => !q ? null : (q.feed ? (R[fIdx[k]] ? num(R[fIdx[k]][1])/1e8 : null) : (q.usd ?? null));
   const S = {
     addr, v3, tok0, tok1, dec0: d0?num(d0[0]):18, dec1: d1?num(d1[0]):18,
-    sym0: s0?s0[0]:'T0', sym1: s1?s1[0]:'T1',
+    sym0: cleanSym(s0?s0[0]:'T0'), sym1: cleanSym(s1?s1[0]:'T1'),
     isQ0: !!q0, isQ1: !!q1, usd0: usdOf(q0,0), usd1: usdOf(q1,1),
-    bal0: b0?num(b0[0]):0, bal1: b1?num(b1[0]):0, block: parseInt(blockTag,16),
-    fee: v3 ? num(fee[0])/1e6 : ((feeIdx != null && R[feeIdx]) ? num(R[feeIdx][0])/10000 : (CH().v2fee || 0.003)),
+    bal0: b0?num(b0[0]):0, bal1: b1?num(b1[0]):0, block: parseInt(ctx.block,16),
+    fee: v3 ? num(fee[0])/1e6 : ((feeIdx != null && R[feeIdx]) ? num(R[feeIdx][0])/10000 : (CHAINS[ctx.chain].v2fee || 0.003)),
     stable: !!(stab && stab[0])
   };
   if (S.usd0 == null || S.usd1 == null){
-    const ps = await llamaPrices(CH().llama, [tok0, tok1]);
+    const ps = await llamaPrices(CHAINS[ctx.chain].llama, [tok0, tok1]);
     if (S.usd0 == null) S.usd0 = ps[tok0.toLowerCase()] ?? null;
     if (S.usd1 == null) S.usd1 = ps[tok1.toLowerCase()] ?? null;
   }
@@ -280,19 +297,19 @@ async function loadPool(){
     S.tickCur = slot0.tick;
     S.L = num(liq[0]);
     S.spacing = spacing[0];
-    S.ticks = await loadTicks(addr, S.spacing);
+    S.ticks = await loadTicks(addr, S.spacing, ctx);
   } else {
     S.r0 = num(res[0]); S.r1 = num(res[1]);
   }
   return S;
 }
 
-async function loadTicks(addr, spacing){
-  setStatus('Reading tick bitmap…');
+async function loadTicks(addr, spacing, ctx){
+  ctx.status('Reading tick bitmap…');
   const wmin = Math.floor(-887272/spacing) >> 8, wmax = Math.floor(887272/spacing) >> 8;
   const words = [];
   for (let w=wmin; w<=wmax; w++) words.push(w);
-  const bm = await multicall(words.map(w=>({target:addr,iface:ifV3,fn:'tickBitmap',args:[w]})));
+  const bm = await multicall(words.map(w=>({target:addr,iface:ifV3,fn:'tickBitmap',args:[w]})), ctx);
   const init = [];
   bm.forEach((r,idx)=>{
     if (!r) return;
@@ -300,8 +317,8 @@ async function loadTicks(addr, spacing){
     if (word === 0n) return;
     for (let b=0;b<256;b++) if ((word >> BigInt(b)) & 1n) init.push((words[idx]*256 + b)*spacing);
   });
-  setStatus(`Reading ${init.length} initialized ticks…`);
-  const data = await multicall(init.map(t=>({target:addr,iface:ifV3,fn:'ticks',args:[t]})));
+  ctx.status(`Reading ${init.length} initialized ticks…`);
+  const data = await multicall(init.map(t=>({target:addr,iface:ifV3,fn:'ticks',args:[t]})), ctx);
   const ticks = init.map((t,i)=>({tick:t, net: data[i] ? num(data[i].liquidityNet) : 0}));
   ticks.sort((a,b)=>a.tick-b.tick);
   return ticks;
@@ -340,15 +357,14 @@ function fmt(n){
 }
 const usd = n => n==null ? '' : '$'+fmt(n);
 
-function render(S){
-  const a0 = S.tok0.toLowerCase(), a1 = S.tok1.toLowerCase();
+// Valeurs dérivées d'un pool (token de base / de référence, prix, décimales…)
+function derive(S){
   let baseIsT0;
   if (S.isQ0 !== S.isQ1) baseIsT0 = S.isQ1;                         // the configured quote token is the quote
   else if ((S.usd0 != null) !== (S.usd1 != null)) baseIsT0 = S.usd0 == null; // the priced token is the quote
   else baseIsT0 = true;
   const baseSym = baseIsT0 ? S.sym0 : S.sym1, quoteSym = baseIsT0 ? S.sym1 : S.sym0;
   const quoteUsd = baseIsT0 ? S.usd1 : S.usd0;
-
   const rawFactor = Math.pow(10, S.dec0 - S.dec1);
   const Praw = S.v3 ? S.sqrtCur*S.sqrtCur : S.r1/S.r0;
   const Pcur = Praw * rawFactor;
@@ -356,6 +372,29 @@ function render(S){
   const baseUsd = quoteUsd!=null ? basePrice*quoteUsd : null;
   const dBase = baseIsT0 ? S.dec0 : S.dec1, dQuote = baseIsT0 ? S.dec1 : S.dec0;
   const feeMul = 1/(1-S.fee);
+  return { baseIsT0, baseSym, quoteSym, quoteUsd, rawFactor, basePrice, baseUsd, dBase, dQuote, feeMul };
+}
+
+// Coût pour déplacer le prix de `pct` % (pct > 0 : acheter la base ; pct < 0 : la vendre)
+function calcRow(S, D, pct){
+  const { baseIsT0, rawFactor, basePrice, dBase, dQuote, feeMul } = D;
+  const tBase = basePrice*(1+pct/100);
+  const tP = baseIsT0 ? tBase : 1/tBase;
+  const tRaw = tP/rawFactor;
+  const w = S.v3 ? walkV3(S, Math.sqrt(tRaw)) : walkV2(S, tRaw);
+  const g0 = w.in0*feeMul, g1 = w.in1*feeMul;
+  let r;
+  if (pct > 0){
+    r = {pct, tBase, quote:(baseIsT0?g1:g0)/10**dQuote, base:(baseIsT0?w.out0:w.out1)/10**dBase};
+  } else {
+    r = {pct, tBase, base:(baseIsT0?g0:g1)/10**dBase, quote:(baseIsT0?w.out1:w.out0)/10**dQuote};
+  }
+  return Object.assign(r,{crossed:w.crossed,noLiq:w.noLiq});
+}
+
+function render(S){
+  const D = derive(S);
+  const { baseIsT0, baseSym, quoteSym, quoteUsd, rawFactor, basePrice, baseUsd, dBase, dQuote, feeMul } = D;
 
   const mapPair = (a0v, a1v) => baseIsT0 ? [a0v, a1v] : [a1v, a0v];
   const pairStr = (v0, v1) => {
@@ -378,20 +417,7 @@ function render(S){
   ].map(([k,v])=>`<div><b>${k}</b><span>${v}</span></div>`).join('');
 
   const levels = [...new Set($('lv').value.split(',').map(s=>parseFloat(s)).filter(x=>isFinite(x) && x!==0 && x>-100))].sort((x,y)=>x-y);
-  const rows = levels.map(pct=>{
-    const tBase = basePrice*(1+pct/100);
-    const tP = baseIsT0 ? tBase : 1/tBase;
-    const tRaw = tP/rawFactor;
-    const w = S.v3 ? walkV3(S, Math.sqrt(tRaw)) : walkV2(S, tRaw);
-    const g0 = w.in0*feeMul, g1 = w.in1*feeMul;
-    let r;
-    if (pct > 0){ // acheter la base
-      r = {pct, tBase, quote:(baseIsT0?g1:g0)/10**dQuote, base:(baseIsT0?w.out0:w.out1)/10**dBase};
-    } else {      // vendre la base
-      r = {pct, tBase, base:(baseIsT0?g0:g1)/10**dBase, quote:(baseIsT0?w.out1:w.out0)/10**dQuote};
-    }
-    return Object.assign(r,{crossed:w.crossed,noLiq:w.noLiq});
-  });
+  const rows = levels.map(pct => calcRow(S, D, pct));
 
   const buys = rows.filter(r=>r.pct>0), sells = rows.filter(r=>r.pct<0).reverse();
   const bar = (val,max,cls)=>`<td class="viz"><div class="bg"><div class="fill" style="width:${max>0?Math.max(2,val/max*100):0}%"></div></div></td>`;
@@ -426,13 +452,63 @@ function render(S){
   });
 }
 
+/* ---------------- comparaison de tous les réseaux ---------------- */
+function mkCell(label, main, sub, cls){
+  const td = document.createElement('td'); td.dataset.label = label; if (cls) td.className = cls;
+  td.textContent = main;
+  if (sub) { const d = document.createElement('div'); d.className = 'sub'; d.style.margin = '0'; d.textContent = sub; td.append(d); }
+  return td;
+}
+function compareCells(c, S, pct){
+  const D = derive(S), up = calcRow(S, D, pct), dn = calcRow(S, D, -pct);
+  const { baseSym, quoteSym, quoteUsd, basePrice, baseUsd } = D;
+  const hasUsd = quoteUsd != null;
+  const bBal = (D.baseIsT0 ? S.bal0 : S.bal1) / 10**D.dBase, qBal = (D.baseIsT0 ? S.bal1 : S.bal0) / 10**D.dQuote;
+  const tvl = (bBal*basePrice + qBal);
+  const money = (qty, valueQuote) => hasUsd ? usd(valueQuote*quoteUsd) : `${fmt(valueQuote)} ${quoteSym}`;
+  return [
+    mkCell('Network', c.label, null, 'pct'),
+    mkCell('Pool', `${baseSym}/${quoteSym}`, `${S.v3 ? 'v3' : 'v2'} · fee ${+(S.fee*100).toFixed(3)}%${S.stable ? ' · stable curve' : ''}`),
+    mkCell('Price', hasUsd ? usd(baseUsd) : `${fmt(basePrice)} ${quoteSym}`, hasUsd ? `${fmt(basePrice)} ${quoteSym}` : null),
+    mkCell('Pool balance', money(0, tvl), `${fmt(bBal)} ${baseSym}`),
+    up.noLiq ? mkCell(`Buy +${pct}%`, 'Not enough liquidity') : mkCell(`Buy +${pct}%`, money(0, up.quote), `${fmt(up.base)} ${baseSym} received`),
+    dn.noLiq ? mkCell(`Sell −${pct}%`, 'Not enough liquidity') : mkCell(`Sell −${pct}%`, hasUsd ? usd(dn.base*baseUsd) : `${fmt(dn.base)} ${baseSym}`, `${fmt(dn.base)} ${baseSym} sold`),
+    mkCell('Block', S.block.toLocaleString('en-US'), null),
+  ];
+}
+async function compareAll(){
+  const pct = Math.abs(parseFloat($('cmpPct').value)) || 10;
+  const body = $('cmpBody'); body.textContent = '';
+  $('cmpGo').disabled = true;
+  const jobs = Object.entries(CHAINS).map(([k, c]) => {
+    const tr = document.createElement('tr');
+    tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Loading…'), { colSpan: 6 }));
+    body.append(tr);
+    return (async () => {
+      try{
+        const key = k + ':' + c.addr.toLowerCase();
+        const S = POOLS[key] || (POOLS[key] = await loadPool({ chain: k, addr: c.addr, urls: c.rpcs, block: 'latest', status: () => {} }));
+        tr.textContent = ''; tr.append(...compareCells(c, S, pct));
+      }catch(e){
+        tr.textContent = ''; tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Error: ' + (e.message || e)), { colSpan: 6 }));
+      }
+    })();
+  });
+  await Promise.all(jobs);
+  $('cmpGo').disabled = false;
+}
+$('cmpGo').onclick = () => { for (const k of Object.keys(POOLS)) delete POOLS[k]; compareAll(); };
+
 async function go(){
   $('go').disabled = true;
   try{
-    const S = await loadPool();
+    const ctx = mainCtx();
+    const S = await loadPool(ctx);
+    POOLS[ctx.chain + ':' + ctx.addr.trim().toLowerCase()] = S;
     window.POOL = S;
     render(S);
     setStatus('Up to date (block '+S.block.toLocaleString('en-US')+').');
+    if (!window.cmpStarted) { window.cmpStarted = true; compareAll(); }
   }catch(e){
     console.error(e);
     setStatus('Error: '+(e.message||e), true);
