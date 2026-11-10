@@ -1,0 +1,10 @@
+{
+  "_help": "Première règle qui correspond gagne. '*' = joker. Un repo sans règle va dans 'Other'. Modifie librement ce fichier.",
+  "domains": [
+    { "name": "Cognitive system (AI)", "repos": ["GeniusCognitiveSystem", "*Cognitive*", "*swarm*"] },
+    { "name": "Wallet & apps",         "repos": ["GeniusWallet", "*Wallet*"] },
+    { "name": "SDK & developer tools", "repos": ["GeniusSDK", "*SDK*", "openapi-cpp-scaffolding", "AsyncIOManager", "thirdparty"] },
+    { "name": "Docs & website",        "repos": ["gitbook", "documentation", "*docs*", "*website*"] },
+    { "name": "Blockchain & network",  "repos": ["SuperGenius", "GeniusNetwork", "rlp_enodes", "zkLLVM", "*contracts*"] }
+  ]
+}
