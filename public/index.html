@@ -117,11 +117,16 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   const prBox = document.getElementById('prs'), P = d.prs;
   if (!P) { prBox.append(el('div', d.prsError ? 'Could not load issues and pull requests (' + d.prsError + ')' : 'No data yet.')); }
   else {
-    const ps = el('div', null, 'stats');
-    for (const [k, v] of [['PRs merged (7d)', P.prsMerged], ['PRs opened (7d)', P.prsOpened], ['issues opened (7d)', P.issuesOpened], ['issues closed (7d)', P.issuesClosed], ['open PRs', P.openPrs], ['open issues', P.openIssues], ['closed issues (total)', P.closedIssuesTotal], ['merged PRs (total)', P.mergedPrsTotal]]) {
-      const sp = el('span', ` ${k}`); sp.prepend(el('b', v)); ps.append(sp);
+    const groups = [
+      ['Last 7 days', [['PRs opened', P.prsOpened], ['PRs merged', P.prsMerged], ['issues opened', P.issuesOpened], ['issues closed', P.issuesClosed]]],
+      ['Right now (all ages)', [['open PRs', P.openPrs], ['open issues', P.openIssues]]],
+      ['Since the beginning', [['merged PRs', P.mergedPrsTotal], ['closed issues', P.closedIssuesTotal]]]];
+    for (const [title, stats] of groups) {
+      prBox.append(el('div', title, 'legend'));
+      const ps = el('div', null, 'stats'); ps.style.marginBottom = '8px';
+      for (const [k, v] of stats) { const sp = el('span', ` ${k}`); sp.prepend(el('b', v)); ps.append(sp); }
+      prBox.append(ps);
     }
-    prBox.append(ps);
     const list = el('div'); list.style.marginTop = '10px';
     for (const it of P.items.slice(0, 15)) {
       const row = el('div', null, 'pr');
