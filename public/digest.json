@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T11:10:26.529Z",
+  "generatedAt": "2026-11-10T11:25:43.986Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -38,7 +38,7 @@
       "docs": 1
     },
     "headline": "23 commits by 3 contributors across 4 repos. Most active: openapi-cpp-scaffolding (10), SuperGenius (8), GeniusNetwork (4). Plus 97 automated commits. 2 CI builds published.",
-    "summary": "The team improved security by hashing passwords and stopped showing them in plain text, while also expanding order handling features. They set up new testing scripts for macOS and Ubuntu and fixed several stability problems across the projects. Additionally, they added documentation for upcoming work and refined build and test processes."
+    "summary": "Over the week, the three contributors focused on improving security, expanding order handling features, and stabilizing the build and testing infrastructure across four projects. They added new scripts for automated testing environments, fixed several crashes and segmentation faults, and enhanced documentation. Overall, the work increased reliability and prepared the codebase for future development."
   },
   "days": [
     {
@@ -74,7 +74,7 @@
       "headline": "2 commits across 1 repo: openapi-cpp-scaffolding (fixed, test work).",
       "commits": 2,
       "automated": 0,
-      "summary": "The team secured user passwords by storing them as hashes, stopped displaying them in plain text, and added tests to confirm the changes work."
+      "summary": "The team secured user accounts by storing passwords as hashes, added an email index, and removed plain‑text password display. They also added a test to verify these changes work correctly."
     },
     {
       "date": "2026-11-09",
@@ -119,7 +119,7 @@
       "headline": "5 commits across 1 repo: openapi-cpp-scaffolding (added, fixed). 2 CI builds published (SuperGenius ×2).",
       "commits": 5,
       "automated": 0,
-      "summary": "They broadened how order references are looked up, continued the password security improvements, and added tests to verify everything functions correctly."
+      "summary": "They broadened how order references are looked up and reported, and continued the password‑hashing and email‑index improvements with accompanying tests."
     },
     {
       "date": "2026-11-08",
@@ -181,7 +181,7 @@
       "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed).",
       "commits": 3,
       "automated": 0,
-      "summary": "They created scripts to set up testing machines for macOS and Ubuntu, ensured environment settings are saved, and fixed a problem with the automated testing system."
+      "summary": "New scripts were added to set up automated testing machines for macOS and Ubuntu, and environment settings were made persistent. A configuration issue was fixed to ensure self‑hosted testing machines are used."
     },
     {
       "date": "2026-11-06",
@@ -255,7 +255,7 @@
       "headline": "4 commits across 2 repos: openapi-cpp-scaffolding (added, build/release), GeniusNetwork (fixed). 3 automated commits (rlp_enodes).",
       "commits": 4,
       "automated": 3,
-      "summary": "They introduced new features for placing orders and handling product information, cleaned up a build issue, and fixed a problem that occurred after a build."
+      "summary": "The API scaffolding received new features for handling order placement and product information. A build‑related issue in the network project was also resolved."
     },
     {
       "date": "2026-11-05",
@@ -320,7 +320,7 @@
       "headline": "2 commits across 2 repos: SuperGenius (fixed), GeniusNetwork (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 48,
-      "summary": "They fixed a problem with shutting down a node and resolved a crash that happened during a network test."
+      "summary": "A bug in the shutdown process of one component was fixed, and a crash in a network configuration test was eliminated."
     },
     {
       "date": "2026-11-04",
@@ -391,13 +391,13 @@
       "headline": "7 commits across 2 repos: SuperGenius (fixed, build/release), GeniusCognitiveSystem (docs). 46 automated commits (rlp_enodes).",
       "commits": 7,
       "automated": 46,
-      "summary": "They improved crash reporting on macOS, refined how certain tests are run, and wrote a planning document for the next phase."
+      "summary": "Crash‑reporting for macOS builds was improved and test filters were adjusted for a specific build configuration. Documentation outlining a phase plan was also created."
     }
   ],
-  "builder": "v11",
+  "builder": "v12",
   "prs": {
     "prsOpened": 5,
-    "prsMerged": 10,
+    "prsMerged": 8,
     "prsClosed": 0,
     "issuesOpened": 0,
     "issuesClosed": 0,
@@ -500,28 +500,6 @@
         "author": "braianxde",
         "draft": false,
         "date": "2026-11-03T13:22:51Z"
-      },
-      {
-        "type": "pr",
-        "event": "merged",
-        "repo": "thirdparty",
-        "number": 123,
-        "title": "Add an arm64 iOS Simulator build",
-        "url": "https://github.com/GeniusVentures/thirdparty/pull/123",
-        "author": "braianxde",
-        "draft": false,
-        "date": "2026-11-03T11:19:56Z"
-      },
-      {
-        "type": "pr",
-        "event": "merged",
-        "repo": "wallet-core",
-        "number": 10,
-        "title": "Install the simulator Rust lib for --arch-abi=arm64-simulator",
-        "url": "https://github.com/GeniusVentures/wallet-core/pull/10",
-        "author": "braianxde",
-        "draft": false,
-        "date": "2026-11-03T11:19:45Z"
       }
     ],
     "openPrs": 23,
@@ -530,7 +508,7 @@
     "mergedPrsTotal": 803
   },
   "readiness": {
-    "fetchedAt": "2026-11-10T11:10:35.124Z",
+    "fetchedAt": "2026-11-10T11:25:51.169Z",
     "pages": [
       {
         "key": "release-status",
@@ -601,6 +579,17 @@
               "GCS determines what cognitive work to perform, which experts or tools to use, what memory and policy apply, and how answers are checked.",
               "GNUS / SuperGenius supplies the optional distributed execution, peer networking, processing, trust, and settlement infrastructure."
             ]
+          }
+        ],
+        "lastEdited": "2026-10-08T20:38:00Z",
+        "statusAgeDays": 33,
+        "editedAgeDays": 32,
+        "stale": true,
+        "targets": [
+          {
+            "label": "Q2 2026",
+            "passed": true,
+            "line": "The original Q2 2026 public-launch target passed. That date is not an outstanding deadline for finishing the mainnet implementation. GNUS.ai chose to coordinate public activation with GCS, Genius AI B"
           }
         ]
       },
@@ -750,10 +739,64 @@
               "See Platform Status for the distinction between implementation, public activation, and separate EVM token contracts."
             ]
           }
+        ],
+        "lastEdited": "2026-10-08T20:38:00Z",
+        "statusAgeDays": null,
+        "editedAgeDays": 32,
+        "stale": true,
+        "targets": [
+          {
+            "label": "Q2 2026",
+            "passed": true,
+            "line": "SuperGenius mainnet implementation is complete; public mainnet has not launched. GNUS.ai is deliberately coordinating public activation with Genius Cognitive System (GCS), Genius AI Boss, and other in"
+          },
+          {
+            "label": "Q1 2026",
+            "passed": true,
+            "line": "- [x] Q1 2026 — SuperGenius Blockchain Beta Phase 3."
+          },
+          {
+            "label": "Q4 2025",
+            "passed": true,
+            "line": "- [x] Q4 2025 — SuperGenius Blockchain Beta Phase 2 and Security Audits."
+          },
+          {
+            "label": "Q3 2025",
+            "passed": true,
+            "line": "- [x] Q2–Q3 2025 — SuperGenius Blockchain Beta Phase 1 and Security Audits."
+          },
+          {
+            "label": "Q2 2025",
+            "passed": true,
+            "line": "- [x] Q1–Q2 2025 — SuperGenius Blockchain Alpha Phases."
+          },
+          {
+            "label": "Q4 2024",
+            "passed": true,
+            "line": "- [x] Q4 2024 — Official Test Net Launch and release to the public; earlier roadmap reported 200+ games and other apps integrated."
+          },
+          {
+            "label": "Q1 2024",
+            "passed": true,
+            "line": "- [x] Q1 2024 — Customer portal complete; presale customers could redeem or buy GNUS tokens for AI/ML processing."
+          }
         ]
       }
     ]
   },
+  "changes": {
+    "since": null
+  },
+  "trend": [
+    {
+      "date": "2026-11-10",
+      "commits": 23,
+      "openIssues": 210,
+      "openPrs": 23,
+      "closedIssues": 393,
+      "mergedPrs": 803
+    }
+  ],
   "aiModel": "openai/gpt-oss-120b",
   "ai": "openai/gpt-oss-120b"
 }
