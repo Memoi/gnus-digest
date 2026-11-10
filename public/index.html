@@ -36,6 +36,12 @@
   .badge.done{color:#2e7d32;border-color:#2e7d32}.badge.progress{color:var(--accent);border-color:var(--accent)}
   .srow{padding:8px 0;border-bottom:1px solid var(--line);font:14px/1.45 system-ui,sans-serif}.srow:last-child{border-bottom:0}
   .srow .d{color:var(--mute);font-size:13px;margin-top:2px}
+  .warn{border-left:3px solid #c0392b}
+  .warn .w{font:600 14px system-ui,sans-serif;color:#c0392b;margin-bottom:4px}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+  .grid2 .card{margin-bottom:0}
+  svg.chart{width:100%;height:auto;color:var(--accent);display:block;margin:6px 0 2px}
+  .arrow{color:var(--mute);margin:0 6px}
   nav{font:14px system-ui,sans-serif;margin:0 0 18px}
   nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
   nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
@@ -52,11 +58,14 @@
   <p class="sub" id="meta">Loading…</p>
   <nav><a href="./" aria-current="page">Digest</a><a href="liquidity.html">GNUS liquidity</a></nav>
   <h2>Mainnet readiness</h2>
+  <div id="changes"></div>
   <div id="readiness"></div>
   <h2>This week</h2>
   <div class="card" id="week"></div>
   <h2>Issues &amp; pull requests</h2>
   <div class="card" id="prs"></div>
+  <h2>Trends</h2>
+  <div class="grid2" id="trends"></div>
   <h2>Daily</h2>
   <div id="days"></div>
 </main>
@@ -64,17 +73,76 @@
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
 const safeUrl = u => /^https:\/\/(github\.com|docs\.gnus\.ai)\//.test(u) ? u : null;   // les messages de commit ne sont jamais injectés en HTML
 
+// courbe simple (SVG) : pts = [{date, v}]
+function spark(title, pts) {
+  const card = el('div', null, 'card'); card.append(el('div', title, 'date'));
+  const v = pts.filter(p => p.v != null);
+  if (v.length < 2) { card.append(el('div', `Not enough history yet (${v.length} day${v.length === 1 ? '' : 's'}). The chart builds up daily.`, 'legend')); return card; }
+  const W = 300, H = 70, pad = 6, vals = v.map(p => p.v), min = Math.min(...vals), max = Math.max(...vals);
+  const X = i => pad + i * (W - 2 * pad) / (v.length - 1), Y = x => H - pad - (x - min) / ((max - min) || 1) * (H - 2 * pad);
+  const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('class', 'chart'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', title);
+  const line = document.createElementNS(NS, 'polyline');
+  line.setAttribute('points', v.map((p, i) => `${X(i).toFixed(1)},${Y(p.v).toFixed(1)}`).join(' '));
+  line.setAttribute('fill', 'none'); line.setAttribute('stroke', 'currentColor'); line.setAttribute('stroke-width', '2');
+  const dot = document.createElementNS(NS, 'circle');
+  dot.setAttribute('cx', X(v.length - 1)); dot.setAttribute('cy', Y(v[v.length - 1].v)); dot.setAttribute('r', '3.5'); dot.setAttribute('fill', 'currentColor');
+  svg.append(line, dot); card.append(svg);
+  card.append(el('div', `${v[0].date} → ${v[v.length - 1].date} · now ${v[v.length - 1].v} (min ${min}, max ${max})`, 'legend'));
+  return card;
+}
+const fmtDate = s => s ? new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+
 fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   document.getElementById('meta').textContent =
     `${d.org} · updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}` +
     (d.ai ? ' · AI-written summaries (' + d.ai + ')' : d.aiError ? ' · AI unavailable: ' + d.aiError : '') + (d.builder ? ' · script ' + d.builder : ' · script v1');
+
+  // ---- changements depuis la semaine dernière
+  const chBox = document.getElementById('changes'), C = d.changes;
+  if (C) {
+    const card = el('div', null, 'card');
+    if (!C.since) card.append(el('div', 'Change tracking started today. Comparisons with the previous week will appear after the next daily updates.', 'legend'));
+    else {
+      card.append(el('div', `Changes since ${C.since}`, 'date'));
+      let any = false;
+      const badge = (t, st) => el('span', t, 'badge ' + (st || ''));
+      if (C.readiness) {
+        for (const it of C.readiness.items) {
+          any = true; const r = el('div', null, 'srow');
+          if (it.type === 'status') r.append(badge(it.from, it.fromStatus), el('span', '→', 'arrow'), badge(it.to, it.toStatus), el('span', it.label));
+          else if (it.type === 'added') r.append(el('span', 'New', 'badge'), badge(it.to, it.toStatus), el('span', it.label));
+          else r.append(el('span', 'Removed', 'badge'), el('span', it.label));
+          r.append(el('div', it.page.replace(/-/g, ' ') + ' · ' + it.section, 'd')); card.append(r);
+        }
+        for (const t of C.readiness.trackDeltas) { any = true; const r = el('div', `${t.name}: ${t.from}% → ${t.to}%`, 'srow'); card.append(r); }
+        if (!C.readiness.items.length && !C.readiness.trackDeltas.length) card.append(el('div', 'No change in the readiness status.', 'srow'));
+      } else card.append(el('div', 'Readiness comparison is not available for this period.', 'srow'));
+      for (const m of C.metrics) { any = true; card.append(el('div', `${m.label}: ${m.from} → ${m.to} (${m.delta > 0 ? '+' : ''}${m.delta})`, 'srow')); }
+    }
+    chBox.append(card);
+  }
 
   const rd = document.getElementById('readiness'), R = d.readiness;
   if (!R) rd.append(Object.assign(el('div', d.readinessError ? 'Could not load readiness (' + d.readinessError + ')' : 'No data yet.'), { className: 'card' }));
   else for (const pg of R.pages) {
     const h3 = el('h3'); const a = el('a', pg.key.replace(/-/g, ' ')); if (safeUrl(pg.url)) a.href = pg.url; h3.append(a); rd.append(h3);
     if (pg.error) { rd.append(Object.assign(el('div', pg.error), { className: 'card' })); continue; }
-    if (pg.statusDate) rd.append(el('div', 'Status date: ' + pg.statusDate, 'legend'));
+    const fresh = [];
+    if (pg.statusDate) fresh.push(`Status date: ${pg.statusDate}` + (pg.statusAgeDays != null ? ` (${pg.statusAgeDays} days ago)` : ''));
+    if (pg.lastEdited) fresh.push(`source last edited ${fmtDate(pg.lastEdited)} (${pg.editedAgeDays} days ago)`);
+    if (fresh.length) rd.append(el('div', fresh.join(' · '), 'legend'));
+    if (pg.stale) {
+      const w = el('div', null, 'card warn'); w.append(el('div', 'This page may be outdated', 'w'),
+        el('div', `The status information is more than 30 days old. Treat it as possibly outdated and check the original page.`));
+      rd.append(w);
+    }
+    const past = (pg.targets || []).filter(t => t.passed);
+    if (past.length) {
+      const w = el('div', null, 'card warn'); w.append(el('div', 'Targets mentioned in the docs that are already in the past', 'w'));
+      for (const t of past) w.append(el('div', `${t.label} — ${t.line}`, 'it'));
+      rd.append(w);
+    }
     for (const t of pg.tracks) {
       if (t.kind === 'table') {
         const tc = el('div', null, 'card');
@@ -138,6 +206,10 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     if (!P.items.length) list.append(el('div', 'No issue or pull request activity this week.'));
     prBox.append(list);
   }
+
+  const tr = document.getElementById('trends'), T = d.trend || [];
+  for (const [title, key] of [['Commits (rolling 7 days)', 'commits'], ['Open issues', 'openIssues'], ['Open PRs', 'openPrs'], ['Merged PRs (total)', 'mergedPrs']])
+    tr.append(spark(title, T.map(p => ({ date: p.date, v: p[key] }))));
 
   const days = document.getElementById('days');
   for (const day of d.days) {
