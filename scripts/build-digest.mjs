@@ -145,7 +145,30 @@ function summarizeRepoDay(commits) {
 const normSubject = m => cleanSubject(m).toLowerCase().replace(/\d+/g, '#');
 const isBuildRelease = r => r.prerelease || /-(Release|Debug)$/i.test(r.tag || '') || /-(Release|Debug)$/i.test(r.name || '');
 
-export function buildDigest(activity, now = new Date(), days = DAYS) {
+/* ---------------- Domaines (regroupement des repos) ---------------- */
+// Première règle qui correspond gagne ; « * » = joker. Modifiable sans toucher au code : config/domains.json
+export const DEFAULT_DOMAINS = [
+  { name: 'Cognitive system (AI)',  repos: ['GeniusCognitiveSystem', '*Cognitive*', '*swarm*'] },
+  { name: 'Wallet & apps',          repos: ['GeniusWallet', '*Wallet*'] },
+  { name: 'SDK & developer tools',  repos: ['GeniusSDK', '*SDK*', 'openapi-cpp-scaffolding', 'AsyncIOManager', 'thirdparty'] },
+  { name: 'Docs & website',         repos: ['gitbook', 'documentation', '*docs*', '*website*'] },
+  { name: 'Blockchain & network',   repos: ['SuperGenius', 'GeniusNetwork', 'rlp_enodes', 'zkLLVM', '*contracts*'] },
+];
+const globToRe = pat => new RegExp('^' + pat.split('*').map(x => x.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('.*') + '$', 'i');
+export function domainOf(repoName, cfg = DEFAULT_DOMAINS) {
+  for (const d of cfg) for (const pat of d.repos) if (globToRe(pat).test(repoName)) return d.name;
+  return 'Other';
+}
+async function loadDomains() {
+  try {
+    const j = JSON.parse(await readFile('config/domains.json', 'utf8'));
+    const arr = Array.isArray(j) ? j : j.domains;
+    if (Array.isArray(arr) && arr.every(d => d && d.name && Array.isArray(d.repos))) return arr;
+  } catch {}
+  return DEFAULT_DOMAINS;
+}
+
+export function buildDigest(activity, now = new Date(), days = DAYS, domains = DEFAULT_DOMAINS) {
   const keys = [];                                   // jours, aujourd'hui en premier
   for (let i = 0; i < days; i++) keys.push(dayKey(new Date(now.getTime() - i * 86400000)));
 
@@ -177,7 +200,7 @@ export function buildDigest(activity, now = new Date(), days = DAYS) {
       if (auto.length) items.push({ type: 'automated', label: 'automated updates', count: auto.length,
         text: `Automated updates (${plural(auto.length, 'commit')}), e.g. ${cleanSubject(auto[0].message)}` });
       const branches = [...new Set([...human, ...auto].flatMap(c => c.branches || []))];
-      perDay[k].repos.push({ name: repo.name, url: repo.url, commits: human.length + auto.length,
+      perDay[k].repos.push({ name: repo.name, domain: domainOf(repo.name, domains), url: repo.url, commits: human.length + auto.length,
         human: human.length, automated: auto.length, branches, items });
       repoHuman[repo.name] = (repoHuman[repo.name] || 0) + human.length;
       autoTotal += auto.length;
@@ -201,9 +224,20 @@ export function buildDigest(activity, now = new Date(), days = DAYS) {
     const builds = Object.entries(d.ciBuilds);
     const buildCount = builds.reduce((s, [, n]) => s + n, 0);
     const bits = [];
-    if (human) bits.push(`${plural(human, 'commit')} across ${plural(humanRepos.length, 'repo')}: ` +
-      humanRepos.slice(0, 3).map(r => `${r.name} (${r.items.filter(i => i.type !== 'automated').slice(0, 2).map(i => i.label).join(', ')})`).join(', ') +
-      (humanRepos.length > 3 ? ` +${humanRepos.length - 3} more` : '') + '.');
+    // regroupement par domaine
+    const byDom = new Map();
+    for (const r of d.repos) {
+      const g = byDom.get(r.domain) || { name: r.domain, commits: 0, automated: 0, repos: [], labels: [] };
+      g.commits += r.human; g.automated += r.automated;
+      g.repos.push({ name: r.name, commits: r.human, automated: r.automated });
+      for (const it of r.items) if (it.type !== 'automated' && !g.labels.includes(it.label)) g.labels.push(it.label);
+      byDom.set(r.domain, g);
+    }
+    d.domains = [...byDom.values()].sort((a, b) => b.commits - a.commits || b.automated - a.automated);
+    const humanDoms = d.domains.filter(g => g.commits > 0);
+    if (human) bits.push(`${plural(human, 'commit')} across ${plural(humanRepos.length, 'repo')} in ${plural(humanDoms.length, 'domain')}: ` +
+      humanDoms.slice(0, 3).map(g => `${g.name} (${g.labels.slice(0, 2).join(', ')})`).join(', ') +
+      (humanDoms.length > 3 ? ` +${humanDoms.length - 3} more` : '') + '.');
     if (auto) bits.push(`${plural(auto, 'automated commit')} (${autoRepos.map(r => r.name).join(', ')}).`);
     if (d.releases.length) bits.push(`Released ${d.releases.slice(0, 4).map(r => `${r.repo} ${r.tag}`).join(', ')}` +
       `${d.releases.length > 4 ? ` +${d.releases.length - 4} more` : ''}.`);
@@ -220,6 +254,20 @@ export function buildDigest(activity, now = new Date(), days = DAYS) {
     commits: humanTotal, automated: autoTotal, repos: topRepos.length, contributors: contributors.size,
     releases: namedTotal, ciBuilds: ciTotal,
     topRepos: topRepos.slice(0, 5).map(([name, commits]) => ({ name, commits })),
+    domains: (() => {
+      const wk = new Map();
+      for (const d of daysOut) for (const r of d.repos) {                  // jours du plus récent au plus ancien
+        const g = wk.get(r.domain) || { name: r.domain, commits: 0, automated: 0, repos: new Map(), highlights: [] };
+        g.commits += r.human; g.automated += r.automated;
+        const rr = g.repos.get(r.name) || { name: r.name, commits: 0 }; rr.commits += r.human; g.repos.set(r.name, rr);
+        for (const it of r.items) if (it.type !== 'automated' && g.highlights.length < 4) {
+          const t = `${r.name}: ${it.text}`.slice(0, 170); if (!g.highlights.includes(t)) g.highlights.push(t);
+        }
+        wk.set(r.domain, g);
+      }
+      return [...wk.values()].map(g => ({ ...g, repos: [...g.repos.values()].sort((a, b) => b.commits - a.commits) }))
+        .sort((a, b) => b.commits - a.commits || b.automated - a.automated);
+    })(),
     byType: typeTotals,
     headline: (humanTotal
       ? `${plural(humanTotal, 'commit')} by ${plural(contributors.size, 'contributor')} across ${plural(topRepos.length, 'repo')}. ` +
@@ -247,7 +295,7 @@ async function polishWithLLM(digest) {
     week: { ...digest.week, byType: undefined },
     days: digest.days.filter(d => d.repos.length || d.releases.length || Object.keys(d.ciBuilds).length).map(d => ({
       date: d.date,
-      repos: d.repos.slice(0, 4).map(r => ({ repo: r.name, manual: r.human, automated: r.automated,
+      repos: d.repos.slice(0, 4).map(r => ({ repo: r.name, domain: r.domain, manual: r.human, automated: r.automated,
         changes: r.items.filter(i => i.type !== 'automated').slice(0, 4).map(i => i.text.slice(0, 110)) })),
       releases: d.releases.slice(0, 5).map(r => `${r.repo} ${r.tag}`),
       ciBuilds: Object.values(d.ciBuilds).reduce((a, b) => a + b, 0) })) };
@@ -574,8 +622,9 @@ async function main() {
   const now = new Date();
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
-  let digest = buildDigest(activity, now);
-  digest.builder = 'v15';
+  const domains = await loadDomains();
+  let digest = buildDigest(activity, now, DAYS, domains);
+  digest.builder = 'v16';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
