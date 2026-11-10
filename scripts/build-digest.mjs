@@ -359,12 +359,12 @@ const STALE_DAYS = Number(process.env.STALE_DAYS || 30);   // au-delà, la page 
 // Objectifs trimestriels cités dans la doc (« Q2 2026 »), marqués « passed » si le trimestre est terminé
 export function findTargets(md, now = new Date()) {
   const out = new Map();
-  for (const line of md.split('\n')) {
-    for (const m of line.matchAll(/\bQ([1-4])\s*(20\d{2})\b/g)) {
+  for (const para of md.replace(/\r/g, '').split(/\n\s*\n/)) {          // un paragraphe complet, pas une seule ligne
+    for (const m of para.matchAll(/\bQ([1-4])\s*(20\d{2})\b/g)) {
       const label = `Q${m[1]} ${m[2]}`;
       if (out.has(label)) continue;
       const end = new Date(Date.UTC(+m[2], +m[1] * 3, 0));      // dernier jour du trimestre
-      out.set(label, { label, passed: end < now, line: mdClean(line).slice(0, 200) });
+      out.set(label, { label, passed: end < now, line: cut(mdClean(para), 900) });
     }
   }
   return [...out.values()];
@@ -377,6 +377,15 @@ const STATUS_RULES = [
 ];
 const mdClean = t => t.replace(/!\[[^\]]*\]\([^)]*\)/g, '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
   .replace(/[*_`]+/g, '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+// coupe proprement (fin de phrase ou de mot) et n'ajoute « … » que si le texte est réellement raccourci
+export function cut(t, n) {
+  if (t.length <= n) return t;
+  const head = t.slice(0, n);
+  const end = Math.max(head.lastIndexOf('. '), head.lastIndexOf('! '), head.lastIndexOf('? '));
+  if (end > n * 0.6) return head.slice(0, end + 1);
+  return head.slice(0, head.lastIndexOf(' ')).trimEnd() + '…';
+}
 
 export function detectStatus(text) {
   const t = text.trim();
@@ -420,7 +429,7 @@ export function parseReadiness(md) {
       for (const cells of tbl.rows) {
         const statusText = mdClean(cells[statusCol] || '');
         const label = mdClean(cells[statusCol === 0 ? 1 : 0] || '');
-        const detail = mdClean(cells.filter((_, i) => i !== statusCol && i !== (statusCol === 0 ? 1 : 0)).join(' ')).slice(0, 260);
+        const detail = cut(mdClean(cells.filter((_, i) => i !== statusCol && i !== (statusCol === 0 ? 1 : 0)).join(' ')), 900);
         if (label && statusText) cur.tableItems.push({ label: label.slice(0, 140), statusText: statusText.slice(0, 100), status: classifyStatusText(statusText), detail });
       }
     }
@@ -445,7 +454,7 @@ export function parseReadiness(md) {
     const body = line.replace(/^([-*+]|\d+[.)])\s+/, '');
     const st = detectStatus(body) || detectStatus(body.replace(/^\*\*/, ''));
     if (st) cur.items.push({ status: st.status, ...splitLabel(st.rest) });
-    else { const t = mdClean(body); if (t) cur.text.push(t.slice(0, 260)); }
+    else { const t = mdClean(body); if (t) cur.text.push(cut(t, 700)); }
   }
   push();
 
@@ -553,7 +562,7 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v12';
+  digest.builder = 'v13';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
