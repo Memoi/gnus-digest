@@ -1,6 +1,6 @@
 // Génère public/digest.json : résumé quotidien + hebdomadaire de l'activité GitHub d'une organisation.
 // Node 20+, aucune dépendance. Résumé 100 % règles (gratuit) ; IA gratuite optionnelle (USE_LLM=1).
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 
 const ORG    = process.env.ORG || 'GeniusVentures';
@@ -354,6 +354,21 @@ async function fetchIssuesPrs(since) {
 const DOCS_REPO  = process.env.DOCS_REPO || 'GeniusVentures/gitbook';
 const DOC_PAGES  = (process.env.DOC_PAGES || 'release-status,public-roadmap').split(',').map(x => x.trim()).filter(Boolean);
 const DOCS_BASE  = process.env.DOCS_BASE || 'https://docs.gnus.ai/about-gnus.ai/';
+const STALE_DAYS = Number(process.env.STALE_DAYS || 30);   // au-delà, la page signale une information possiblement périmée
+
+// Objectifs trimestriels cités dans la doc (« Q2 2026 »), marqués « passed » si le trimestre est terminé
+export function findTargets(md, now = new Date()) {
+  const out = new Map();
+  for (const line of md.split('\n')) {
+    for (const m of line.matchAll(/\bQ([1-4])\s*(20\d{2})\b/g)) {
+      const label = `Q${m[1]} ${m[2]}`;
+      if (out.has(label)) continue;
+      const end = new Date(Date.UTC(+m[2], +m[1] * 3, 0));      // dernier jour du trimestre
+      out.set(label, { label, passed: end < now, line: mdClean(line).slice(0, 200) });
+    }
+  }
+  return [...out.values()];
+}
 
 const STATUS_RULES = [
   ['done',     /^(✅|☑️?|✔️?|\[x\]|:white_check_mark:|:heavy_check_mark:)\s*/i],
@@ -466,9 +481,70 @@ async function fetchDocs() {
     }
     const r = await fetch(`https://raw.githubusercontent.com/${DOCS_REPO}/${repo.default_branch}/${f.path.split('/').map(encodeURIComponent).join('/')}`);
     if (!r.ok) { pages.push({ key, error: `raw fetch ${r.status}` }); continue; }
-    pages.push({ key, url: `${DOCS_BASE}${key}/`, source: f.path, ...parseReadiness(await r.text()) });
+    const text = await r.text();
+    const parsed = parseReadiness(text);
+    let lastEdited = null;
+    try { const cm = await gh(`/repos/${DOCS_REPO}/commits`, { path: f.path, per_page: 1 }); lastEdited = cm[0]?.commit?.committer?.date || null; } catch {}
+    const sd = parsed.statusDate ? new Date(parsed.statusDate) : null;
+    const statusAgeDays = sd && !isNaN(sd) ? Math.floor((Date.now() - sd) / 86400000) : null;
+    const editedAgeDays = lastEdited ? Math.floor((Date.now() - new Date(lastEdited)) / 86400000) : null;
+    pages.push({ key, url: `${DOCS_BASE}${key}/`, source: f.path, ...parsed, lastEdited, statusAgeDays, editedAgeDays,
+      stale: (statusAgeDays ?? editedAgeDays ?? 0) > STALE_DAYS, targets: findTargets(text) });
   }
   return { fetchedAt: new Date().toISOString(), pages };
+}
+
+/* ---------------- Historique et changements ---------------- */
+const HISTORY_FILE = 'public/history.json';
+const HISTORY_MAX  = 180;                       // jours conservés
+
+async function loadHistory() {
+  try { const j = JSON.parse(await readFile(HISTORY_FILE, 'utf8')); return Array.isArray(j) ? j : []; }
+  catch { return []; }
+}
+
+export function makeSnapshot(digest, date) {
+  const w = digest.week, P = digest.prs || {};
+  return {
+    date, commits: w.commits, automated: w.automated, contributors: w.contributors, repos: w.repos,
+    openPrs: P.openPrs ?? null, openIssues: P.openIssues ?? null, closedIssues: P.closedIssuesTotal ?? null, mergedPrs: P.mergedPrsTotal ?? null,
+    readiness: digest.readiness ? digest.readiness.pages.filter(p => !p.error).map(p => ({ key: p.key,
+      tracks: p.tracks.map(t => ({ name: t.name, kind: t.kind, percent: t.percent ?? null,
+        items: t.items.map(i => ({ label: i.label.slice(0, 100), status: i.status, statusText: i.statusText || '' })) })) })) : null,
+  };
+}
+
+// Référence de comparaison : l'instantané le plus proche d'il y a 7 jours (ou le plus ancien disponible)
+export function pickBaseline(history, today, daysBack = 7) {
+  const older = history.filter(h => h.date < today).sort((a, b) => a.date.localeCompare(b.date));
+  if (!older.length) return null;
+  const target = new Date(Date.parse(today) - daysBack * 86400000).toISOString().slice(0, 10);
+  const ok = older.filter(h => h.date <= target);
+  return ok.length ? ok[ok.length - 1] : older[0];
+}
+
+export function compareSnapshots(prev, cur) {
+  const out = { readiness: null, metrics: [] };
+  if (prev.readiness && cur.readiness) {
+    const idx = snap => { const m = new Map();
+      for (const p of snap.readiness) for (const t of p.tracks) for (const i of t.items) m.set(`${p.key}|${t.name}|${i.label}`, { page: p.key, section: t.name, ...i }); return m; };
+    const a = idx(prev), b = idx(cur), items = [];
+    const txt = i => i.statusText || i.status;
+    for (const [k, v] of b) {
+      const o = a.get(k);
+      if (!o) items.push({ type: 'added', page: v.page, section: v.section, label: v.label, to: txt(v), toStatus: v.status });
+      else if (o.status !== v.status || o.statusText !== v.statusText)
+        items.push({ type: 'status', page: v.page, section: v.section, label: v.label, from: txt(o), fromStatus: o.status, to: txt(v), toStatus: v.status });
+    }
+    for (const [k, v] of a) if (!b.has(k)) items.push({ type: 'removed', page: v.page, section: v.section, label: v.label, from: txt(v), fromStatus: v.status });
+    const pc = snap => { const m = new Map(); for (const p of snap.readiness) for (const t of p.tracks) if (t.percent != null) m.set(`${p.key}|${t.name}`, { name: t.name, percent: t.percent }); return m; };
+    const pa = pc(prev), pb = pc(cur), trackDeltas = [];
+    for (const [k, v] of pb) { const o = pa.get(k); if (o && o.percent !== v.percent) trackDeltas.push({ name: v.name, from: o.percent, to: v.percent }); }
+    out.readiness = { items, trackDeltas };
+  }
+  for (const [key, label] of [['openIssues', 'Open issues'], ['openPrs', 'Open PRs'], ['closedIssues', 'Closed issues (total)'], ['mergedPrs', 'Merged PRs (total)']])
+    if (prev[key] != null && cur[key] != null && prev[key] !== cur[key]) out.metrics.push({ key, label, from: prev[key], to: cur[key], delta: cur[key] - prev[key] });
+  return out;
 }
 
 /* ---------------- main ---------------- */
@@ -477,11 +553,21 @@ async function main() {
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   let digest = buildDigest(activity, now);
-  digest.builder = 'v11';
+  digest.builder = 'v12';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
   catch (e) { digest.readinessError = String(e.message).slice(0, 200); console.warn('Docs step skipped:', e.message); }
+
+  // historique : comparaison avec il y a ~7 jours + tendances
+  const history = await loadHistory();
+  const today = makeSnapshot(digest, dayKey(now));
+  const base = pickBaseline(history, today.date);
+  digest.changes = base ? { since: base.date, ...compareSnapshots(base, today) } : { since: null };
+  const kept = history.filter(h => h.date !== today.date).concat(today).slice(-HISTORY_MAX);
+  digest.trend = kept.map(h => ({ date: h.date, commits: h.commits, openIssues: h.openIssues, openPrs: h.openPrs, closedIssues: h.closedIssues, mergedPrs: h.mergedPrs }));
+  await mkdir('public', { recursive: true });
+  await writeFile(HISTORY_FILE, JSON.stringify(kept));
   if (process.env.USE_LLM === '1') {
     try { digest = await polishWithLLM(digest); digest.ai = digest.aiModel; console.log('AI summaries added'); }
     catch (e) { digest.aiError = String(e.message).slice(0, 400); console.warn('LLM step skipped:', e.message); }
