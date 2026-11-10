@@ -140,7 +140,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     const past = (pg.targets || []).filter(t => t.passed);
     if (past.length) {
       const w = el('div', null, 'card warn'); w.append(el('div', 'Targets mentioned in the docs that are already in the past', 'w'));
-      for (const t of past) w.append(el('div', `${t.label} — ${t.line}`, 'it'));
+      for (const t of past) w.append(el('div', t.line.startsWith(t.label) ? t.line : `${t.label} — ${t.line}`, 'it'));
       rd.append(w);
     }
     for (const t of pg.tracks) {
