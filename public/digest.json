@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T11:41:24.016Z",
+  "generatedAt": "2026-11-10T11:45:07.864Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -38,7 +38,7 @@
       "docs": 1
     },
     "headline": "23 commits by 3 contributors across 4 repos. Most active: openapi-cpp-scaffolding (10), SuperGenius (8), GeniusNetwork (4). Plus 97 automated commits. 2 CI builds published.",
-    "summary": "Over the week the team added new features, fixed security and stability problems, and prepared scripts and documentation to improve their development workflow. Three contributors made 23 changes across four projects, focusing on user security, order handling, and build environment reliability. The work also included fixing crashes and test failures to keep the system stable."
+    "summary": "The team focused on improving security, expanding order handling, and strengthening testing infrastructure across several projects. They fixed several bugs, added new documentation, and set up new CI runners for macOS and Ubuntu. Overall, the week saw steady progress with multiple enhancements and stability improvements."
   },
   "days": [
     {
@@ -74,7 +74,7 @@
       "headline": "2 commits across 1 repo: openapi-cpp-scaffolding (fixed, test work).",
       "commits": 2,
       "automated": 0,
-      "summary": "The team added password hashing and an email index for new users and confirmed the changes work with a new test."
+      "summary": "The team improved user security by encrypting passwords and adding email lookup, and they added tests to confirm these changes work correctly."
     },
     {
       "date": "2026-11-09",
@@ -119,7 +119,7 @@
       "headline": "5 commits across 1 repo: openapi-cpp-scaffolding (added, fixed). 2 CI builds published (SuperGenius ×2).",
       "commits": 5,
       "automated": 0,
-      "summary": "They broadened order lookup capabilities, fixed the same password and email improvements, and added tests to verify the updates."
+      "summary": "They expanded how orders are tracked and added reporting features, while also enhancing password security and testing the updates."
     },
     {
       "date": "2026-11-08",
@@ -181,7 +181,7 @@
       "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed).",
       "commits": 3,
       "automated": 0,
-      "summary": "New scripts were created to set up build machines for macOS and Ubuntu, and settings were adjusted to keep environment variables; a runner configuration issue was also fixed."
+      "summary": "New automated testing machines for macOS and Ubuntu were set up, and configuration scripts were updated to support them."
     },
     {
       "date": "2026-11-06",
@@ -255,7 +255,7 @@
       "headline": "4 commits across 2 repos: openapi-cpp-scaffolding (added, build/release), GeniusNetwork (fixed). 3 automated commits (rlp_enodes).",
       "commits": 4,
       "automated": 3,
-      "summary": "They introduced order placement and product resolution features and cleaned up a build‑system issue, while also fixing a problem with CI triage."
+      "summary": "New features for handling orders and product information were added, and a CI issue related to tag builds was fixed."
     },
     {
       "date": "2026-11-05",
@@ -320,7 +320,7 @@
       "headline": "2 commits across 2 repos: SuperGenius (fixed), GeniusNetwork (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 48,
-      "summary": "The team fixed the node shutdown process and resolved a crash in a network configuration test."
+      "summary": "They fixed a shutdown process issue and resolved a crash in a network test."
     },
     {
       "date": "2026-11-04",
@@ -391,10 +391,10 @@
       "headline": "7 commits across 2 repos: SuperGenius (fixed, build/release), GeniusCognitiveSystem (docs). 46 automated commits (rlp_enodes).",
       "commits": 7,
       "automated": 46,
-      "summary": "They addressed macOS crash reporting and a performance issue, and added a planning document for the cognitive system project."
+      "summary": "The team addressed macOS crash reporting, adjusted build settings, and added a planning document for the cognitive system."
     }
   ],
-  "builder": "v14",
+  "builder": "v15",
   "prs": {
     "prsOpened": 5,
     "prsMerged": 8,
@@ -508,7 +508,7 @@
     "mergedPrsTotal": 803
   },
   "readiness": {
-    "fetchedAt": "2026-11-10T11:41:31.572Z",
+    "fetchedAt": "2026-11-10T11:45:14.685Z",
     "pages": [
       {
         "key": "release-status",
@@ -588,6 +588,9 @@
         "targets": [
           {
             "label": "Q2 2026",
+            "labels": [
+              "Q2 2026"
+            ],
             "passed": true,
             "line": "The original Q2 2026 public-launch target passed. That date is not an outstanding deadline for finishing the mainnet implementation. GNUS.ai chose to coordinate public activation with GCS, Genius AI Boss, and other applications so the network can launch with useful workloads rather than as infrastructure alone."
           }
@@ -747,38 +750,19 @@
         "targets": [
           {
             "label": "Q2 2026",
+            "labels": [
+              "Q2 2026"
+            ],
             "passed": true,
             "line": "SuperGenius mainnet implementation is complete; public mainnet has not launched. GNUS.ai is deliberately coordinating public activation with Genius Cognitive System (GCS), Genius AI Boss, and other initial applications. The original Q2 2026 public-launch target passed; it is not evidence that core mainnet implementation is unfinished. No replacement public-launch date has been announced."
           },
           {
-            "label": "Q1 2026",
+            "label": "Q2 2026",
+            "labels": [
+              "Q2 2026"
+            ],
             "passed": true,
-            "line": "- [x] As of October 2026 — SuperGenius mainnet implementation complete; public activation held for application readiness. - [ ] Q2 2026 (original target) — Public SuperGenius mainnet launch. The date passed; the coordinated public release has not occurred. - [x] Q1 2026 — SuperGenius Blockchain Beta Phase 3. - [x] Q4 2025 — SuperGenius Blockchain Beta Phase 2 and Security Audits. - [x] Q2–Q3 2025 — SuperGenius Blockchain Beta Phase 1 and Security Audits. - [x] Q1–Q2 2025 — SuperGenius Blockchain Alpha Phases. - [x] Q4 2024 — Official Test Net Launch and release to the public; earlier roadmap reported 200+ games and other apps integrated. - [x] Q1 2024 — Customer portal complete; presale customers could redeem or buy GNUS tokens for AI/ML processing. - [x] October 2023 — App user interface development; app enters beta."
-          },
-          {
-            "label": "Q4 2025",
-            "passed": true,
-            "line": "- [x] As of October 2026 — SuperGenius mainnet implementation complete; public activation held for application readiness. - [ ] Q2 2026 (original target) — Public SuperGenius mainnet launch. The date passed; the coordinated public release has not occurred. - [x] Q1 2026 — SuperGenius Blockchain Beta Phase 3. - [x] Q4 2025 — SuperGenius Blockchain Beta Phase 2 and Security Audits. - [x] Q2–Q3 2025 — SuperGenius Blockchain Beta Phase 1 and Security Audits. - [x] Q1–Q2 2025 — SuperGenius Blockchain Alpha Phases. - [x] Q4 2024 — Official Test Net Launch and release to the public; earlier roadmap reported 200+ games and other apps integrated. - [x] Q1 2024 — Customer portal complete; presale customers could redeem or buy GNUS tokens for AI/ML processing. - [x] October 2023 — App user interface development; app enters beta."
-          },
-          {
-            "label": "Q3 2025",
-            "passed": true,
-            "line": "- [x] As of October 2026 — SuperGenius mainnet implementation complete; public activation held for application readiness. - [ ] Q2 2026 (original target) — Public SuperGenius mainnet launch. The date passed; the coordinated public release has not occurred. - [x] Q1 2026 — SuperGenius Blockchain Beta Phase 3. - [x] Q4 2025 — SuperGenius Blockchain Beta Phase 2 and Security Audits. - [x] Q2–Q3 2025 — SuperGenius Blockchain Beta Phase 1 and Security Audits. - [x] Q1–Q2 2025 — SuperGenius Blockchain Alpha Phases. - [x] Q4 2024 — Official Test Net Launch and release to the public; earlier roadmap reported 200+ games and other apps integrated. - [x] Q1 2024 — Customer portal complete; presale customers could redeem or buy GNUS tokens for AI/ML processing. - [x] October 2023 — App user interface development; app enters beta."
-          },
-          {
-            "label": "Q2 2025",
-            "passed": true,
-            "line": "- [x] As of October 2026 — SuperGenius mainnet implementation complete; public activation held for application readiness. - [ ] Q2 2026 (original target) — Public SuperGenius mainnet launch. The date passed; the coordinated public release has not occurred. - [x] Q1 2026 — SuperGenius Blockchain Beta Phase 3. - [x] Q4 2025 — SuperGenius Blockchain Beta Phase 2 and Security Audits. - [x] Q2–Q3 2025 — SuperGenius Blockchain Beta Phase 1 and Security Audits. - [x] Q1–Q2 2025 — SuperGenius Blockchain Alpha Phases. - [x] Q4 2024 — Official Test Net Launch and release to the public; earlier roadmap reported 200+ games and other apps integrated. - [x] Q1 2024 — Customer portal complete; presale customers could redeem or buy GNUS tokens for AI/ML processing. - [x] October 2023 — App user interface development; app enters beta."
-          },
-          {
-            "label": "Q4 2024",
-            "passed": true,
-            "line": "- [x] As of October 2026 — SuperGenius mainnet implementation complete; public activation held for application readiness. - [ ] Q2 2026 (original target) — Public SuperGenius mainnet launch. The date passed; the coordinated public release has not occurred. - [x] Q1 2026 — SuperGenius Blockchain Beta Phase 3. - [x] Q4 2025 — SuperGenius Blockchain Beta Phase 2 and Security Audits. - [x] Q2–Q3 2025 — SuperGenius Blockchain Beta Phase 1 and Security Audits. - [x] Q1–Q2 2025 — SuperGenius Blockchain Alpha Phases. - [x] Q4 2024 — Official Test Net Launch and release to the public; earlier roadmap reported 200+ games and other apps integrated. - [x] Q1 2024 — Customer portal complete; presale customers could redeem or buy GNUS tokens for AI/ML processing. - [x] October 2023 — App user interface development; app enters beta."
-          },
-          {
-            "label": "Q1 2024",
-            "passed": true,
-            "line": "- [x] As of October 2026 — SuperGenius mainnet implementation complete; public activation held for application readiness. - [ ] Q2 2026 (original target) — Public SuperGenius mainnet launch. The date passed; the coordinated public release has not occurred. - [x] Q1 2026 — SuperGenius Blockchain Beta Phase 3. - [x] Q4 2025 — SuperGenius Blockchain Beta Phase 2 and Security Audits. - [x] Q2–Q3 2025 — SuperGenius Blockchain Beta Phase 1 and Security Audits. - [x] Q1–Q2 2025 — SuperGenius Blockchain Alpha Phases. - [x] Q4 2024 — Official Test Net Launch and release to the public; earlier roadmap reported 200+ games and other apps integrated. - [x] Q1 2024 — Customer portal complete; presale customers could redeem or buy GNUS tokens for AI/ML processing. - [x] October 2023 — App user interface development; app enters beta."
+            "line": "Q2 2026 (original target) — Public SuperGenius mainnet launch. The date passed; the coordinated public release has not occurred."
           }
         ]
       }
