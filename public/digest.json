@@ -1,59 +1,125 @@
 {
-  "generatedAt": "2026-11-09T14:10:37.388Z",
+  "generatedAt": "2026-11-10T11:01:39.018Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
-    "from": "2026-11-03",
-    "to": "2026-11-09",
-    "commits": 41,
-    "automated": 100,
-    "repos": 6,
+    "from": "2026-11-04",
+    "to": "2026-11-10",
+    "commits": 23,
+    "automated": 97,
+    "repos": 4,
     "contributors": 3,
-    "releases": 1,
-    "ciBuilds": 40,
+    "releases": 0,
+    "ciBuilds": 2,
     "topRepos": [
       {
-        "name": "GeniusCognitiveSystem",
-        "commits": 15
+        "name": "openapi-cpp-scaffolding",
+        "commits": 10
       },
       {
         "name": "SuperGenius",
         "commits": 8
       },
       {
-        "name": "GeniusWallet",
-        "commits": 8
-      },
-      {
         "name": "GeniusNetwork",
-        "commits": 6
+        "commits": 4
       },
       {
-        "name": "openapi-cpp-scaffolding",
-        "commits": 3
+        "name": "GeniusCognitiveSystem",
+        "commits": 1
       }
     ],
     "byType": {
-      "fixed": 10,
-      "build": 5,
-      "added": 7,
-      "updated": 10,
-      "docs": 7,
-      "tests": 1,
-      "upgraded": 1
+      "added": 6,
+      "build": 2,
+      "fixed": 11,
+      "tests": 2,
+      "updated": 1,
+      "docs": 1
     },
-    "headline": "41 commits by 3 contributors across 6 repos. Most active: GeniusCognitiveSystem (15), SuperGenius (8), GeniusWallet (8). Plus 100 automated commits. 1 release published. 40 CI builds published.",
-    "summary": "Across the week the team delivered new features, fixed several bugs, and prepared documentation for upcoming work. They also updated dependencies and build processes to improve stability. A release of a third‑party library was published."
+    "headline": "23 commits by 3 contributors across 4 repos. Most active: openapi-cpp-scaffolding (10), SuperGenius (8), GeniusNetwork (4). Plus 97 automated commits. 2 CI builds published.",
+    "summary": "This week the team focused on strengthening security, adding new ordering features, and fixing several bugs across their projects. They also prepared scripts to make their testing environment run more smoothly on different operating systems. Overall, three contributors made steady progress on four codebases."
   },
   "days": [
     {
-      "date": "2026-11-09",
-      "repos": [],
+      "date": "2026-11-10",
+      "repos": [
+        {
+          "name": "openapi-cpp-scaffolding",
+          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
+          "commits": 2,
+          "human": 2,
+          "automated": 0,
+          "branches": [
+            "qa/scaffold-main"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: hash passwords on user create, write email index, stop plaintext echo"
+            },
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 1,
+              "text": "Test work: pin users_create roundtrip — hash, email index, no plaintext echo"
+            }
+          ]
+        }
+      ],
       "releases": [],
       "ciBuilds": {},
-      "headline": "A quiet day with no new code activity on GitHub.",
-      "commits": 0,
-      "automated": 0
+      "headline": "2 commits across 1 repo: openapi-cpp-scaffolding (fixed, test work).",
+      "commits": 2,
+      "automated": 0,
+      "summary": "The team finished securing user accounts by encrypting passwords and ensuring email data is correctly recorded, and they verified these changes with tests."
+    },
+    {
+      "date": "2026-11-09",
+      "repos": [
+        {
+          "name": "openapi-cpp-scaffolding",
+          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
+          "commits": 5,
+          "human": 5,
+          "automated": 0,
+          "branches": [
+            "gsd/phase-21-ownership-moves-enforcement-gates",
+            "gsd/phase-22-contract-surgery-expand-migrate",
+            "qa/persona-walkthrough-fixset"
+          ],
+          "items": [
+            {
+              "type": "added",
+              "label": "added",
+              "count": 3,
+              "text": "Added: widen order reference lookup to status result; report sink transition outcome via out-parameter (+1 more)"
+            },
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: hash passwords on user create, write email index, stop plaintext echo"
+            },
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 1,
+              "text": "Test work: pin users_create roundtrip — hash, email index, no plaintext echo"
+            }
+          ]
+        }
+      ],
+      "releases": [],
+      "ciBuilds": {
+        "SuperGenius": 2
+      },
+      "headline": "5 commits across 1 repo: openapi-cpp-scaffolding (added, fixed). 2 CI builds published (SuperGenius ×2).",
+      "commits": 5,
+      "automated": 0,
+      "summary": "They expanded the system’s ability to track order statuses and continued improving password security and email handling, confirming the updates with tests."
     },
     {
       "date": "2026-11-08",
@@ -111,13 +177,11 @@
         }
       ],
       "releases": [],
-      "ciBuilds": {
-        "SuperGenius": 1
-      },
-      "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed). 1 CI build published (SuperGenius ×1).",
+      "ciBuilds": {},
+      "headline": "3 commits across 2 repos: GeniusNetwork (added, updated), SuperGenius (fixed).",
       "commits": 3,
       "automated": 0,
-      "summary": "The team added new setup scripts for macOS and Ubuntu testing environments and adjusted settings to keep them persistent. They also fixed a problem to make sure the correct testing machines are used."
+      "summary": "The team created scripts to set up testing machines on macOS and Ubuntu and adjusted settings so important environment details are retained, and they fixed a problem with their custom testing machines."
     },
     {
       "date": "2026-11-06",
@@ -130,6 +194,8 @@
           "automated": 0,
           "branches": [
             "gsd/phase-20-neutral-capability-seams-behavior-preserving",
+            "gsd/phase-21-ownership-moves-enforcement-gates",
+            "gsd/phase-22-contract-surgery-expand-migrate",
             "gsd/scaffold-identity-regen-drift"
           ],
           "items": [
@@ -189,7 +255,7 @@
       "headline": "4 commits across 2 repos: openapi-cpp-scaffolding (added, build/release), GeniusNetwork (fixed). 3 automated commits (rlp_enodes).",
       "commits": 4,
       "automated": 3,
-      "summary": "Developers added new order handling features and registered related services. They also corrected a problem in the automated testing process."
+      "summary": "They introduced new features for placing orders and linking products, and they also repaired a build‑related issue in another project."
     },
     {
       "date": "2026-11-05",
@@ -254,7 +320,7 @@
       "headline": "2 commits across 2 repos: SuperGenius (fixed), GeniusNetwork (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 48,
-      "summary": "The team fixed how a node shuts down and resolved a crash in a network test."
+      "summary": "The team repaired a shutdown process to work correctly and fixed a crash that occurred during a network configuration test."
     },
     {
       "date": "2026-11-04",
@@ -325,166 +391,7 @@
       "headline": "7 commits across 2 repos: SuperGenius (fixed, build/release), GeniusCognitiveSystem (docs). 46 automated commits (rlp_enodes).",
       "commits": 7,
       "automated": 46,
-      "summary": "They addressed crash reporting for macOS builds and refined test settings, and prepared a planning document for the next phase."
-    },
-    {
-      "date": "2026-11-03",
-      "repos": [
-        {
-          "name": "GeniusCognitiveSystem",
-          "url": "https://github.com/GeniusVentures/GeniusCognitiveSystem",
-          "commits": 14,
-          "human": 14,
-          "automated": 0,
-          "branches": [
-            "develop"
-          ],
-          "items": [
-            {
-              "type": "added",
-              "label": "added",
-              "count": 3,
-              "text": "Added: room creator auto-joins their own room; v1.0.1 Coupling Remediation milestone (+1 more)"
-            },
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: carry MembersCubit into the members dialog route (UAT)"
-            },
-            {
-              "type": "tests",
-              "label": "test work",
-              "count": 1,
-              "text": "Test work: record UAT findings (provider crash fixed, D-02 creator-join question)"
-            },
-            {
-              "type": "docs",
-              "label": "docs",
-              "count": 6,
-              "text": "Docs: gather phase 4.1 context (room-session service); create milestone v1.0.1 roadmap (4 phases) (+4 more)"
-            },
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 3,
-              "text": "Updated: merge d02a-creator-auto-join: room creator auto-joins their own room (D-02a); merge origin/develop (docs/SGFP4 + OSS-scanner CI + MIT license) into develop (+1 more)"
-            }
-          ]
-        },
-        {
-          "name": "GeniusWallet",
-          "url": "https://github.com/GeniusVentures/GeniusWallet",
-          "commits": 8,
-          "human": 8,
-          "automated": 0,
-          "branches": [
-            "develop"
-          ],
-          "items": [
-            {
-              "type": "upgraded",
-              "label": "upgraded",
-              "count": 1,
-              "text": "Upgraded: mobile_scanner to 7 so the app runs on arm64 simulators"
-            },
-            {
-              "type": "build",
-              "label": "build/release",
-              "count": 2,
-              "text": "Build/release: make the dependency check script run on CMake 3.28; build the iOS app against the simulator SDK libraries"
-            },
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 5,
-              "text": "Updated: stop running the dependency download check in CI; run the dependency download check in CI (+3 more)"
-            }
-          ]
-        },
-        {
-          "name": "GeniusNetwork",
-          "url": "https://github.com/GeniusVentures/GeniusNetwork",
-          "commits": 2,
-          "human": 2,
-          "automated": 0,
-          "branches": [
-            "dev_persisprocresults"
-          ],
-          "items": [
-            {
-              "type": "added",
-              "label": "added",
-              "count": 1,
-              "text": "Added: temurin JDK install"
-            },
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 1,
-              "text": "Updated: ATL install"
-            }
-          ]
-        },
-        {
-          "name": "thirdparty",
-          "url": "https://github.com/GeniusVentures/thirdparty",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "dev_db_storage"
-          ],
-          "items": [
-            {
-              "type": "build",
-              "label": "build/release",
-              "count": 1,
-              "text": "Build/release: build with USE_RTTI=ON — Release librocksdb typeinfo for consumers"
-            }
-          ]
-        },
-        {
-          "name": "rlp_enodes",
-          "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 3,
-          "human": 0,
-          "automated": 3,
-          "branches": [
-            "main"
-          ],
-          "items": [
-            {
-              "type": "automated",
-              "label": "automated updates",
-              "count": 3,
-              "text": "Automated updates (3 commits), e.g. update Base bootstrap nodes [skip ci]"
-            }
-          ]
-        }
-      ],
-      "releases": [
-        {
-          "repo": "thirdparty",
-          "name": "test_coldstorage_rtti",
-          "tag": "test_coldstorage_rtti",
-          "url": "https://github.com/GeniusVentures/thirdparty/releases/tag/test_coldstorage_rtti",
-          "date": "2026-11-02T23:35:54Z",
-          "prerelease": false
-        }
-      ],
-      "ciBuilds": {
-        "SuperGenius": 2,
-        "GeniusCognitiveSystem": 12,
-        "GeniusWallet": 6,
-        "GeniusSDK": 16,
-        "zkLLVM": 1,
-        "thirdparty": 2
-      },
-      "headline": "25 commits across 4 repos: GeniusCognitiveSystem (added, fixed), GeniusWallet (upgraded, build/release), GeniusNetwork (added, updated) +1 more. 3 automated commits (rlp_enodes). Released thirdparty test_coldstorage_rtti. 39 CI builds published (SuperGenius ×2, GeniusCognitiveSystem ×12, GeniusWallet ×6, GeniusSDK ×16, zkLLVM ×1, thirdparty ×2).",
-      "commits": 25,
-      "automated": 3,
-      "summary": "The team introduced a feature that lets a room creator automatically join their own room, fixed several bugs, and documented testing results and future plans. They also upgraded a mobile scanning component, improved build scripts, and added new development tools. A new third‑party library build was released."
+      "summary": "They addressed crashes on macOS during certain builds, adjusted test filters, and added documentation outlining their project phases."
     }
   ],
   "builder": "v11",
@@ -623,7 +530,7 @@
     "mergedPrsTotal": 803
   },
   "readiness": {
-    "fetchedAt": "2026-11-09T14:10:45.725Z",
+    "fetchedAt": "2026-11-10T11:01:46.717Z",
     "pages": [
       {
         "key": "release-status",
