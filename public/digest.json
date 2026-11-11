@@ -1,63 +1,50 @@
 {
-  "generatedAt": "2026-11-10T23:49:30.565Z",
+  "generatedAt": "2026-11-11T12:52:22.159Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
     "from": "2026-11-05",
     "to": "2026-11-11",
-    "commits": 20,
+    "commits": 35,
     "automated": 51,
-    "repos": 4,
+    "repos": 6,
     "contributors": 3,
     "releases": 0,
     "ciBuilds": 2,
     "topRepos": [
       {
+        "name": "GeniusNetwork",
+        "commits": 13
+      },
+      {
         "name": "openapi-cpp-scaffolding",
-        "commits": 10
+        "commits": 12
       },
       {
         "name": "SuperGenius",
         "commits": 4
       },
       {
-        "name": "GeniusNetwork",
-        "commits": 4
+        "name": "CIDocker",
+        "commits": 2
       },
       {
-        "name": "gnus-dashboard",
+        "name": "GeniusSDK",
         "commits": 2
       }
     ],
     "domains": [
       {
-        "name": "SDK & developer tools",
-        "commits": 10,
-        "automated": 0,
-        "repos": [
-          {
-            "name": "openapi-cpp-scaffolding",
-            "commits": 10
-          }
-        ],
-        "highlights": [
-          "openapi-cpp-scaffolding: Added: expose RegisterService on IServiceLocator; rotating refresh tokens (D-03/D-04/D-05)",
-          "openapi-cpp-scaffolding: Fixed: hash passwords on user create, write email index, stop plaintext echo",
-          "openapi-cpp-scaffolding: Test work (3 commits), e.g. assert no password fields leak in login/refresh user objects; refresh rotation suite + CORS allow-list append (D-12)",
-          "openapi-cpp-scaffolding: Docs: document rotating refresh token in identity spec"
-        ]
-      },
-      {
         "name": "Blockchain & network",
-        "commits": 8,
+        "commits": 17,
         "automated": 51,
         "repos": [
           {
-            "name": "SuperGenius",
-            "commits": 4
+            "name": "GeniusNetwork",
+            "commits": 13
           },
           {
-            "name": "GeniusNetwork",
+            "name": "SuperGenius",
             "commits": 4
           },
           {
@@ -66,48 +53,233 @@
           }
         ],
         "highlights": [
-          "SuperGenius: Fixed: force self-hosted runners in build-release-tags resolve-runners (mirror develop 669cb821b); force self-hosted runners in resolve-runners",
-          "GeniusNetwork: Added: macOS/Ubuntu CI runner provisioning scripts",
-          "GeniusNetwork: Updated: setup-macos: persist JAVA_HOME + LANG to login-shell profiles",
-          "SuperGenius: Fixed: force self-hosted runners in resolve-runners"
+          "GeniusNetwork: Test work: milestone audit PASSED - 3/3 requirements, 7/7 phases, 5/5 integration seams, 1/1 E2E f…; VERIFICATION PASSED - TEST-02 4/4 criteria verified go",
+          "GeniusNetwork: Build/release: remove REQUIREMENTS.md for v1.1 milestone; archive v1.1 milestone files (rocksdb-backup ws)",
+          "GeniusNetwork: Docs: record session - phase 12 verification gate closed; UAT complete - 17/17 pass; CI run 42905264387 accepted as evidence (user ruling 2026-11… (+1 more",
+          "GeniusNetwork: Upgraded: SuperGenius - CI self-hosted runner forcing on dev_blockstore (cmake.yml cherry-pi…"
+        ]
+      },
+      {
+        "name": "SDK & developer tools",
+        "commits": 14,
+        "automated": 0,
+        "repos": [
+          {
+            "name": "openapi-cpp-scaffolding",
+            "commits": 12
+          },
+          {
+            "name": "GeniusSDK",
+            "commits": 2
+          }
+        ],
+        "highlights": [
+          "openapi-cpp-scaffolding: Added: plumb Idempotency-Key into RequestContext",
+          "openapi-cpp-scaffolding: Fixed: look Idempotency-Key up by header name, not enum",
+          "GeniusSDK: Added: GeniusSDKGetPayoutAddress (SDK-PAYOUT)",
+          "GeniusSDK: Updated: expose task ids, task results and payout address over the C API"
         ]
       },
       {
         "name": "Other",
-        "commits": 2,
+        "commits": 4,
         "automated": 0,
         "repos": [
+          {
+            "name": "CIDocker",
+            "commits": 2
+          },
           {
             "name": "gnus-dashboard",
             "commits": 2
           }
         ],
         "highlights": [
+          "CIDocker: Updated: CI script to run on self hosted; alma linux docker with commonly used items",
           "gnus-dashboard: Fixed: design pass: gnus.ai design language, guided job submission, WCAG contrast fixes"
         ]
       }
     ],
     "byType": {
-      "fixed": 10,
-      "added": 3,
-      "tests": 4,
-      "docs": 1,
-      "build": 1,
-      "updated": 1
+      "tests": 6,
+      "build": 3,
+      "docs": 5,
+      "upgraded": 1,
+      "added": 5,
+      "updated": 4,
+      "fixed": 11
     },
-    "headline": "20 commits by 3 contributors across 4 repos. Most active: openapi-cpp-scaffolding (10), SuperGenius (4), GeniusNetwork (4). Plus 51 automated commits. 2 CI builds published.",
-    "summary": "The team made a range of improvements across their SDK, dashboard, and blockchain tools. They focused on security enhancements, accessibility fixes, and better build automation. Over the week they delivered several fixes, added new testing, and improved documentation."
+    "headline": "35 commits by 3 contributors across 6 repos. Most active: GeniusNetwork (13), openapi-cpp-scaffolding (12), SuperGenius (4). Plus 51 automated commits. 2 CI builds published.",
+    "summary": "The team made 35 code updates across six projects, with three contributors doing most of the work. They completed a major milestone audit for the network project and added new features such as payout address handling and idempotency support. They also fixed several bugs, improved documentation, and updated development scripts."
   },
   "days": [
     {
       "date": "2026-11-11",
-      "repos": [],
+      "repos": [
+        {
+          "name": "GeniusNetwork",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/GeniusNetwork",
+          "commits": 7,
+          "human": 7,
+          "automated": 0,
+          "branches": [
+            "dev_persisprocresults"
+          ],
+          "items": [
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 2,
+              "text": "Test work: milestone audit PASSED - 3/3 requirements, 7/7 phases, 5/5 integration seams, 1/1 E2E f…; VERIFICATION PASSED - TEST-02 4/4 criteria verified goal-backward (CI 42905264387 + com…"
+            },
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 2,
+              "text": "Build/release: remove REQUIREMENTS.md for v1.1 milestone; archive v1.1 milestone files (rocksdb-backup ws)"
+            },
+            {
+              "type": "docs",
+              "label": "docs",
+              "count": 3,
+              "text": "Docs: record session - phase 12 verification gate closed; UAT complete - 17/17 pass; CI run 42905264387 accepted as evidence (user ruling 2026-11… (+1 more)"
+            }
+          ]
+        },
+        {
+          "name": "CIDocker",
+          "domain": "Other",
+          "url": "https://github.com/GeniusVentures/CIDocker",
+          "commits": 2,
+          "human": 2,
+          "automated": 0,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 2,
+              "text": "Updated: CI script to run on self hosted; alma linux docker with commonly used items"
+            }
+          ]
+        },
+        {
+          "name": "openapi-cpp-scaffolding",
+          "domain": "SDK & developer tools",
+          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
+          "commits": 2,
+          "human": 2,
+          "automated": 0,
+          "branches": [
+            "qa/persona-walkthrough-fixset"
+          ],
+          "items": [
+            {
+              "type": "added",
+              "label": "added",
+              "count": 1,
+              "text": "Added: plumb Idempotency-Key into RequestContext"
+            },
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: look Idempotency-Key up by header name, not enum"
+            }
+          ]
+        },
+        {
+          "name": "GeniusSDK",
+          "domain": "SDK & developer tools",
+          "url": "https://github.com/GeniusVentures/GeniusSDK",
+          "commits": 2,
+          "human": 2,
+          "automated": 0,
+          "branches": [
+            "glm/dashboard-bridge-api",
+            "glm/payout-address"
+          ],
+          "items": [
+            {
+              "type": "added",
+              "label": "added",
+              "count": 1,
+              "text": "Added: GeniusSDKGetPayoutAddress (SDK-PAYOUT)"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 1,
+              "text": "Updated: expose task ids, task results and payout address over the C API"
+            }
+          ]
+        }
+      ],
       "releases": [],
       "ciBuilds": {},
-      "domains": [],
-      "headline": "A quiet day with no new code activity on GitHub.",
-      "commits": 0,
-      "automated": 0
+      "domains": [
+        {
+          "name": "Blockchain & network",
+          "commits": 7,
+          "automated": 0,
+          "repos": [
+            {
+              "name": "GeniusNetwork",
+              "commits": 7,
+              "automated": 0
+            }
+          ],
+          "labels": [
+            "test work",
+            "build/release",
+            "docs"
+          ]
+        },
+        {
+          "name": "SDK & developer tools",
+          "commits": 4,
+          "automated": 0,
+          "repos": [
+            {
+              "name": "openapi-cpp-scaffolding",
+              "commits": 2,
+              "automated": 0
+            },
+            {
+              "name": "GeniusSDK",
+              "commits": 2,
+              "automated": 0
+            }
+          ],
+          "labels": [
+            "added",
+            "fixed",
+            "updated"
+          ]
+        },
+        {
+          "name": "Other",
+          "commits": 2,
+          "automated": 0,
+          "repos": [
+            {
+              "name": "CIDocker",
+              "commits": 2,
+              "automated": 0
+            }
+          ],
+          "labels": [
+            "updated"
+          ]
+        }
+      ],
+      "headline": "13 commits across 4 repos in 3 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, fixed), Other (updated).",
+      "commits": 13,
+      "automated": 0,
+      "summary": "A milestone audit was successfully passed, unnecessary requirement files were removed, and a session was recorded for documentation; they also added idempotency‑key support, introduced a payout address function, and updated the SDK to expose task details."
     },
     {
       "date": "2026-11-10",
@@ -147,6 +319,31 @@
               "label": "docs",
               "count": 1,
               "text": "Docs: document rotating refresh token in identity spec"
+            }
+          ]
+        },
+        {
+          "name": "GeniusNetwork",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/GeniusNetwork",
+          "commits": 2,
+          "human": 2,
+          "automated": 0,
+          "branches": [
+            "dev_persisprocresults"
+          ],
+          "items": [
+            {
+              "type": "upgraded",
+              "label": "upgraded",
+              "count": 1,
+              "text": "Upgraded: SuperGenius - CI self-hosted runner forcing on dev_blockstore (cmake.yml cherry-pi…"
+            },
+            {
+              "type": "docs",
+              "label": "docs",
+              "count": 1,
+              "text": "Docs: OSX-only rerun 42130985363 fully green - all triaged failures were load flakes"
             }
           ]
         },
@@ -212,6 +409,28 @@
           ]
         },
         {
+          "name": "Blockchain & network",
+          "commits": 4,
+          "automated": 0,
+          "repos": [
+            {
+              "name": "GeniusNetwork",
+              "commits": 2,
+              "automated": 0
+            },
+            {
+              "name": "SuperGenius",
+              "commits": 2,
+              "automated": 0
+            }
+          ],
+          "labels": [
+            "upgraded",
+            "docs",
+            "fixed"
+          ]
+        },
+        {
           "name": "Other",
           "commits": 2,
           "automated": 0,
@@ -225,27 +444,12 @@
           "labels": [
             "fixed"
           ]
-        },
-        {
-          "name": "Blockchain & network",
-          "commits": 2,
-          "automated": 0,
-          "repos": [
-            {
-              "name": "SuperGenius",
-              "commits": 2,
-              "automated": 0
-            }
-          ],
-          "labels": [
-            "fixed"
-          ]
         }
       ],
-      "headline": "11 commits across 3 repos in 3 domains: SDK & developer tools (added, fixed), Other (fixed), Blockchain & network (fixed).",
-      "commits": 11,
+      "headline": "13 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (upgraded, docs), Other (fixed).",
+      "commits": 13,
       "automated": 0,
-      "summary": "They added new service registration features and improved token security, fixed password handling, added tests, and updated documentation in their SDK. They also refined the dashboard design for accessibility and fixed a build configuration issue for a blockchain component."
+      "summary": "The team introduced a service registration feature and rotating refresh tokens, fixed password storage bugs, and documented the token rotation process; they also updated the blockchain project’s build setup and refined the dashboard design for better accessibility."
     },
     {
       "date": "2026-11-09",
@@ -301,7 +505,7 @@
       "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work). 2 CI builds published (SuperGenius ×2).",
       "commits": 2,
       "automated": 0,
-      "summary": "They fixed how passwords are stored, ensured email indexing works, and added tests to verify these changes."
+      "summary": "Password handling was improved by adding hashing and removing plain‑text exposure, and a related test was added to confirm the changes."
     },
     {
       "date": "2026-11-08",
@@ -390,30 +594,11 @@
       "headline": "3 commits across 2 repos in 1 domain: Blockchain & network (added, updated).",
       "commits": 3,
       "automated": 0,
-      "summary": "They created scripts to set up build machines on macOS and Ubuntu and improved environment setup, and also fixed a runner configuration problem in another project."
+      "summary": "New scripts were added to set up testing environments on macOS and Ubuntu, and a configuration file was updated to keep certain settings persistent."
     },
     {
       "date": "2026-11-06",
       "repos": [
-        {
-          "name": "openapi-cpp-scaffolding",
-          "domain": "SDK & developer tools",
-          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "gsd/scaffold-identity-regen-drift"
-          ],
-          "items": [
-            {
-              "type": "build",
-              "label": "build/release",
-              "count": 1,
-              "text": "Build/release: commit regeneration drift sitting in the working tree"
-            }
-          ]
-        },
         {
           "name": "GeniusNetwork",
           "domain": "Blockchain & network",
@@ -430,6 +615,25 @@
               "label": "fixed",
               "count": 1,
               "text": "Fixed: post-fix CI triage for tag-build run 42116912132"
+            }
+          ]
+        },
+        {
+          "name": "openapi-cpp-scaffolding",
+          "domain": "SDK & developer tools",
+          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
+          "commits": 1,
+          "human": 1,
+          "automated": 0,
+          "branches": [
+            "gsd/scaffold-identity-regen-drift"
+          ],
+          "items": [
+            {
+              "type": "build",
+              "label": "build/release",
+              "count": 1,
+              "text": "Build/release: commit regeneration drift sitting in the working tree"
             }
           ]
         },
@@ -495,30 +699,11 @@
       "headline": "2 commits across 2 repos in 2 domains: Blockchain & network (fixed), SDK & developer tools (build/release). 3 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 3,
-      "summary": "They cleaned up build artifacts and fixed a continuous integration issue for a network component."
+      "summary": "They addressed a post‑fix issue in the automated testing process and cleaned up a build‑related drift in the scaffolding tool."
     },
     {
       "date": "2026-11-05",
       "repos": [
-        {
-          "name": "SuperGenius",
-          "domain": "Blockchain & network",
-          "url": "https://github.com/GeniusVentures/SuperGenius",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "dev_blockstore"
-          ],
-          "items": [
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: serialize node shutdown with async init state machine"
-            }
-          ]
-        },
         {
           "name": "GeniusNetwork",
           "domain": "Blockchain & network",
@@ -535,6 +720,25 @@
               "label": "fixed",
               "count": 1,
               "text": "Fixed: network_config_private_network_test exit-time SegFault"
+            }
+          ]
+        },
+        {
+          "name": "SuperGenius",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/SuperGenius",
+          "commits": 1,
+          "human": 1,
+          "automated": 0,
+          "branches": [
+            "dev_blockstore"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: serialize node shutdown with async init state machine"
             }
           ]
         },
@@ -567,12 +771,12 @@
           "automated": 48,
           "repos": [
             {
-              "name": "SuperGenius",
+              "name": "GeniusNetwork",
               "commits": 1,
               "automated": 0
             },
             {
-              "name": "GeniusNetwork",
+              "name": "SuperGenius",
               "commits": 1,
               "automated": 0
             },
@@ -590,17 +794,39 @@
       "headline": "2 commits across 2 repos in 1 domain: Blockchain & network (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 48,
-      "summary": "They fixed a shutdown process for a node and resolved a crash in a network test."
+      "summary": "The team fixed a crash in the network configuration test and corrected a shutdown serialization issue in the blockchain project."
     }
   ],
   "builder": "v16",
   "prs": {
-    "prsOpened": 4,
+    "prsOpened": 6,
     "prsMerged": 1,
-    "prsClosed": 2,
+    "prsClosed": 3,
     "issuesOpened": 0,
     "issuesClosed": 0,
     "items": [
+      {
+        "type": "pr",
+        "event": "opened",
+        "repo": "GeniusSDK",
+        "number": 50,
+        "title": "Add GeniusSDKGetPayoutAddress (SDK-PAYOUT)",
+        "url": "https://github.com/GeniusVentures/GeniusSDK/pull/50",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-11T00:39:30Z"
+      },
+      {
+        "type": "pr",
+        "event": "closed",
+        "repo": "GeniusSDK",
+        "number": 49,
+        "title": "Expose task ids, task results and payout address over the C API",
+        "url": "https://github.com/GeniusVentures/GeniusSDK/pull/49",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-11T00:35:01Z"
+      },
       {
         "type": "pr",
         "event": "merged",
@@ -646,13 +872,13 @@
         "date": "2026-11-04T20:14:57Z"
       }
     ],
-    "openPrs": 23,
+    "openPrs": 24,
     "openIssues": 210,
     "closedIssuesTotal": 393,
     "mergedPrsTotal": 804
   },
   "readiness": {
-    "fetchedAt": "2026-11-10T23:49:38.818Z",
+    "fetchedAt": "2026-11-11T12:52:28.798Z",
     "pages": [
       {
         "key": "release-status",
@@ -920,6 +1146,13 @@
     },
     "metrics": [
       {
+        "key": "openPrs",
+        "label": "Open PRs",
+        "from": 23,
+        "to": 24,
+        "delta": 1
+      },
+      {
         "key": "mergedPrs",
         "label": "Merged PRs (total)",
         "from": 803,
@@ -939,9 +1172,9 @@
     },
     {
       "date": "2026-11-11",
-      "commits": 20,
+      "commits": 35,
       "openIssues": 210,
-      "openPrs": 23,
+      "openPrs": 24,
       "closedIssues": 393,
       "mergedPrs": 804
     }
