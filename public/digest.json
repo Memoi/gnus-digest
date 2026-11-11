@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-11T12:52:22.159Z",
+  "generatedAt": "2026-11-11T18:24:38.767Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
     "from": "2026-11-05",
     "to": "2026-11-11",
-    "commits": 35,
+    "commits": 37,
     "automated": 51,
-    "repos": 6,
+    "repos": 7,
     "contributors": 3,
     "releases": 0,
     "ciBuilds": 2,
@@ -25,11 +25,11 @@
         "commits": 4
       },
       {
-        "name": "CIDocker",
+        "name": "GeniusWallet",
         "commits": 2
       },
       {
-        "name": "GeniusSDK",
+        "name": "CIDocker",
         "commits": 2
       }
     ],
@@ -98,19 +98,33 @@
           "CIDocker: Updated: CI script to run on self hosted; alma linux docker with commonly used items",
           "gnus-dashboard: Fixed: design pass: gnus.ai design language, guided job submission, WCAG contrast fixes"
         ]
+      },
+      {
+        "name": "Wallet & apps",
+        "commits": 2,
+        "automated": 0,
+        "repos": [
+          {
+            "name": "GeniusWallet",
+            "commits": 2
+          }
+        ],
+        "highlights": [
+          "GeniusWallet: Updated: gnus_getEarnings carries a real jobsProcessed count; genus_api bindings for task ids/re…; wire gnus_getEarnings jobsProcessed to live task ids"
+        ]
       }
     ],
     "byType": {
+      "updated": 6,
       "tests": 6,
       "build": 3,
       "docs": 5,
       "upgraded": 1,
       "added": 5,
-      "updated": 4,
       "fixed": 11
     },
-    "headline": "35 commits by 3 contributors across 6 repos. Most active: GeniusNetwork (13), openapi-cpp-scaffolding (12), SuperGenius (4). Plus 51 automated commits. 2 CI builds published.",
-    "summary": "The team made 35 code updates across six projects, with three contributors doing most of the work. They completed a major milestone audit for the network project and added new features such as payout address handling and idempotency support. They also fixed several bugs, improved documentation, and updated development scripts."
+    "headline": "37 commits by 3 contributors across 7 repos. Most active: GeniusNetwork (13), openapi-cpp-scaffolding (12), SuperGenius (4). Plus 51 automated commits. 2 CI builds published.",
+    "summary": "The team wrapped up a major audit and user testing for their blockchain network, ensuring all requirements were met. They also strengthened security by fixing password handling and added new features to the wallet and development tools. In addition, they refined build scripts, design elements, and documentation to prepare for the upcoming release."
   },
   "days": [
     {
@@ -144,6 +158,26 @@
               "label": "docs",
               "count": 3,
               "text": "Docs: record session - phase 12 verification gate closed; UAT complete - 17/17 pass; CI run 42905264387 accepted as evidence (user ruling 2026-11… (+1 more)"
+            }
+          ]
+        },
+        {
+          "name": "GeniusWallet",
+          "domain": "Wallet & apps",
+          "url": "https://github.com/GeniusVentures/GeniusWallet",
+          "commits": 2,
+          "human": 2,
+          "automated": 0,
+          "branches": [
+            "claude/gsd-dashboard-bridge-milestone-b6a5e7",
+            "glm/ffi-task-ids"
+          ],
+          "items": [
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 2,
+              "text": "Updated: gnus_getEarnings carries a real jobsProcessed count; genus_api bindings for task ids/re…; wire gnus_getEarnings jobsProcessed to live task ids"
             }
           ]
         },
@@ -261,6 +295,21 @@
           ]
         },
         {
+          "name": "Wallet & apps",
+          "commits": 2,
+          "automated": 0,
+          "repos": [
+            {
+              "name": "GeniusWallet",
+              "commits": 2,
+              "automated": 0
+            }
+          ],
+          "labels": [
+            "updated"
+          ]
+        },
+        {
           "name": "Other",
           "commits": 2,
           "automated": 0,
@@ -276,10 +325,10 @@
           ]
         }
       ],
-      "headline": "13 commits across 4 repos in 3 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, fixed), Other (updated).",
-      "commits": 13,
+      "headline": "15 commits across 5 repos in 4 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, fixed), Wallet & apps (updated) +1 more.",
+      "commits": 15,
       "automated": 0,
-      "summary": "A milestone audit was successfully passed, unnecessary requirement files were removed, and a session was recorded for documentation; they also added idempotency‑key support, introduced a payout address function, and updated the SDK to expose task details."
+      "summary": "The team completed a milestone audit and user acceptance testing, updated the wallet to show real earnings, refreshed the software container images, and added support for a new request key in the development tools."
     },
     {
       "date": "2026-11-10",
@@ -449,7 +498,7 @@
       "headline": "13 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (upgraded, docs), Other (fixed).",
       "commits": 13,
       "automated": 0,
-      "summary": "The team introduced a service registration feature and rotating refresh tokens, fixed password storage bugs, and documented the token rotation process; they also updated the blockchain project’s build setup and refined the dashboard design for better accessibility."
+      "summary": "A new registration feature and better token security were added, documentation was updated, and the dashboard received design and accessibility improvements."
     },
     {
       "date": "2026-11-09",
@@ -505,7 +554,7 @@
       "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work). 2 CI builds published (SuperGenius ×2).",
       "commits": 2,
       "automated": 0,
-      "summary": "Password handling was improved by adding hashing and removing plain‑text exposure, and a related test was added to confirm the changes."
+      "summary": "Security was improved by ensuring passwords are stored safely and are no longer shown in plain text."
     },
     {
       "date": "2026-11-08",
@@ -594,7 +643,7 @@
       "headline": "3 commits across 2 repos in 1 domain: Blockchain & network (added, updated).",
       "commits": 3,
       "automated": 0,
-      "summary": "New scripts were added to set up testing environments on macOS and Ubuntu, and a configuration file was updated to keep certain settings persistent."
+      "summary": "New scripts were added to set up testing machines for macOS and Ubuntu, and important system settings were made persistent on macOS."
     },
     {
       "date": "2026-11-06",
@@ -699,7 +748,7 @@
       "headline": "2 commits across 2 repos in 2 domains: Blockchain & network (fixed), SDK & developer tools (build/release). 3 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 3,
-      "summary": "They addressed a post‑fix issue in the automated testing process and cleaned up a build‑related drift in the scaffolding tool."
+      "summary": "They resolved a build issue and updated the build system to reflect recent changes."
     },
     {
       "date": "2026-11-05",
@@ -794,17 +843,28 @@
       "headline": "2 commits across 2 repos in 1 domain: Blockchain & network (fixed). 48 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 48,
-      "summary": "The team fixed a crash in the network configuration test and corrected a shutdown serialization issue in the blockchain project."
+      "summary": "The team fixed a crash in a network test and corrected a shutdown process for a blockchain component."
     }
   ],
   "builder": "v16",
   "prs": {
-    "prsOpened": 6,
-    "prsMerged": 1,
+    "prsOpened": 7,
+    "prsMerged": 2,
     "prsClosed": 3,
     "issuesOpened": 0,
     "issuesClosed": 0,
     "items": [
+      {
+        "type": "pr",
+        "event": "merged",
+        "repo": "GeniusWallet",
+        "number": 297,
+        "title": "gnus_getEarnings carries a real jobsProcessed count; genus_api bindings for task ids/results/payout",
+        "url": "https://github.com/GeniusVentures/GeniusWallet/pull/297",
+        "author": "braianxde",
+        "draft": false,
+        "date": "2026-11-11T13:11:59Z"
+      },
       {
         "type": "pr",
         "event": "opened",
@@ -875,10 +935,10 @@
     "openPrs": 24,
     "openIssues": 210,
     "closedIssuesTotal": 393,
-    "mergedPrsTotal": 804
+    "mergedPrsTotal": 805
   },
   "readiness": {
-    "fetchedAt": "2026-11-11T12:52:28.798Z",
+    "fetchedAt": "2026-11-11T18:24:47.528Z",
     "pages": [
       {
         "key": "release-status",
@@ -1156,8 +1216,8 @@
         "key": "mergedPrs",
         "label": "Merged PRs (total)",
         "from": 803,
-        "to": 804,
-        "delta": 1
+        "to": 805,
+        "delta": 2
       }
     ]
   },
@@ -1172,11 +1232,11 @@
     },
     {
       "date": "2026-11-11",
-      "commits": 35,
+      "commits": 37,
       "openIssues": 210,
       "openPrs": 24,
       "closedIssues": 393,
-      "mergedPrs": 804
+      "mergedPrs": 805
     }
   ],
   "aiModel": "openai/gpt-oss-120b",
