@@ -135,7 +135,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   const rd = document.getElementById('readiness'), R = d.readiness;
   if (!R) rd.append(Object.assign(el('div', d.readinessError ? 'Could not load readiness (' + d.readinessError + ')' : 'No data yet.'), { className: 'card' }));
   else for (const pg of R.pages) {
-    const h3 = el('h3'); const a = el('a', pg.key.replace(/-/g, ' ')); if (safeUrl(pg.url)) { a.href = pg.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } h3.append(a); rd.append(h3);
+    const h3 = el('h3'); const a = el('a', pg.key.replace(/-/g, ' ')); if (safeUrl(pg.url)) a.href = pg.url; h3.append(a); rd.append(h3);
     if (pg.error) { rd.append(Object.assign(el('div', pg.error), { className: 'card' })); continue; }
     const fresh = [];
     if (pg.statusDate) fresh.push(`Status date: ${pg.statusDate}` + (pg.statusAgeDays != null ? ` (${pg.statusAgeDays} days ago)` : ''));
@@ -207,7 +207,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     const list = el('div'); list.style.marginTop = '10px';
     for (const it of P.items.slice(0, 15)) {
       const row = el('div', null, 'pr');
-      const a = el('a', `${it.title}`); if (safeUrl(it.url)) { a.href = it.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } 
+      const a = el('a', `${it.title}`); if (safeUrl(it.url)) a.href = it.url;
       row.append(el('span', `${it.event} ${it.type === 'pr' ? 'PR' : 'issue'}`, 'tag ' + it.event), a,
                  el('span', ` ${it.repo}#${it.number} · ${it.author}`, 'm'));
       list.append(row);
@@ -247,7 +247,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
         det.append(el('div', dom, 'dom'));
         const ul = el('ul');
         for (const r of repos) {
-          const li = el('li'), a = el('a', r.name); if (safeUrl(r.url)) { a.href = r.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } 
+          const li = el('li'), a = el('a', r.name); if (safeUrl(r.url)) a.href = r.url;
           li.append(a, el('span', ` (${r.commits}): ` + r.items.map(i => i.text).join(' · ')));
           if (r.branches && r.branches.length) li.append(el('span', ` [branches: ${r.branches.slice(0, 4).join(', ')}${r.branches.length > 4 ? ' +' + (r.branches.length - 4) : ''}]`));
           ul.append(li);
