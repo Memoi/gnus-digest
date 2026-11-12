@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12T00:10:36.212Z",
+  "generatedAt": "2026-11-12T00:20:32.576Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -121,16 +121,16 @@
       }
     ],
     "byType": {
-      "fixed": 10,
       "added": 7,
       "updated": 8,
+      "fixed": 10,
       "tests": 6,
       "build": 3,
       "docs": 5,
       "upgraded": 1
     },
     "headline": "40 commits by 4 contributors across 8 repos. Most active: GeniusNetwork (12), openapi-cpp-scaffolding (12), SuperGenius (5). Plus 3 automated commits. 2 CI builds published.",
-    "summary": "The team made 40 changes across eight projects, focusing on improving the blockchain network, developer tools, and user interfaces. They fixed several compilation issues, added new payout features, and updated documentation and testing processes. Automated checks were run a few times, and two builds were completed."
+    "summary": "The team finished a milestone audit for the network system and cleaned up old files, while adding new payout functionality to the SDK and improving earnings reporting in the wallet. They strengthened security by fixing password handling, adding token rotation, and adding tests and documentation. They also updated documentation, created setup scripts for testing environments, and fixed several compile and configuration issues."
   },
   "days": [
     {
@@ -219,7 +219,7 @@
       "headline": "4 commits across 2 repos in 2 domains: Other (added, updated), Blockchain & network (fixed).",
       "commits": 4,
       "automated": 0,
-      "summary": "The team added a README and an initial web page for the investor dashboard, and fixed a compile error related to payout addresses."
+      "summary": "The team added documentation and a basic webpage for the investor dashboard and fixed a compile issue in the SuperGenius component."
     },
     {
       "date": "2026-11-11",
@@ -447,7 +447,7 @@
       "headline": "16 commits across 6 repos in 4 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, updated), Wallet & apps (updated) +1 more.",
       "commits": 16,
       "automated": 0,
-      "summary": "They passed a milestone audit for the network, removed an outdated requirements file, and recorded verification results. They also added a new payout feature to the SDK, updated the wallet to show real job counts, and improved the Docker environment."
+      "summary": "They completed a major review of the network system, removed outdated files, and recorded verification results; added a new payout feature to the SDK and exposed task details; improved the wallet to show real earnings counts; and updated the Docker setup with useful tools."
     },
     {
       "date": "2026-11-10",
@@ -617,7 +617,7 @@
       "headline": "13 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (fixed, upgraded), Other (fixed).",
       "commits": 13,
       "automated": 0,
-      "summary": "New service registration and token rotation features were added to the developer tools, password handling was secured, and the changes were documented. Updates were also made to improve testing for the network project and to fix design issues in the dashboard."
+      "summary": "New service registration and rotating security tokens were added, password handling was secured, tests and documentation were added, and the dashboard design was improved for accessibility."
     },
     {
       "date": "2026-11-09",
@@ -673,7 +673,7 @@
       "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work). 2 CI builds published (SuperGenius ×2).",
       "commits": 2,
       "automated": 0,
-      "summary": "Password handling was secured and tests were added to ensure passwords are stored safely."
+      "summary": "Password handling was fixed to improve security and a test was added to confirm the changes work correctly."
     },
     {
       "date": "2026-11-08",
@@ -764,7 +764,7 @@
       "headline": "3 commits across 2 repos in 1 domain: Blockchain & network (added, updated).",
       "commits": 3,
       "automated": 0,
-      "summary": "Scripts were added to set up automated testing machines for macOS and Ubuntu, and environment settings were updated. A configuration issue with the testing machines was also fixed."
+      "summary": "Scripts were created to set up testing environments on macOS and Ubuntu, and some configuration settings were adjusted."
     },
     {
       "date": "2026-11-06",
@@ -869,10 +869,10 @@
       "headline": "2 commits across 2 repos in 2 domains: Blockchain & network (fixed), SDK & developer tools (build/release). 3 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 3,
-      "summary": "A post‑build issue for the network project was fixed and a small build drift in the developer tools was corrected."
+      "summary": "A post‑testing issue in the network system was fixed and a build inconsistency was corrected."
     }
   ],
-  "builder": "v16",
+  "builder": "v17",
   "prs": {
     "prsOpened": 8,
     "prsMerged": 2,
@@ -975,7 +975,7 @@
     "mergedPrsTotal": 805
   },
   "readiness": {
-    "fetchedAt": "2026-11-12T00:10:42.729Z",
+    "fetchedAt": "2026-11-12T00:20:40.177Z",
     "pages": [
       {
         "key": "release-status",
@@ -1059,6 +1059,7 @@
               "Q2 2026"
             ],
             "passed": true,
+            "fromStatus": false,
             "line": "The original Q2 2026 public-launch target passed. That date is not an outstanding deadline for finishing the mainnet implementation. GNUS.ai chose to coordinate public activation with GCS, Genius AI Boss, and other applications so the network can launch with useful workloads rather than as infrastructure alone."
           }
         ]
@@ -1221,6 +1222,7 @@
               "Q2 2026"
             ],
             "passed": true,
+            "fromStatus": false,
             "line": "SuperGenius mainnet implementation is complete; public mainnet has not launched. GNUS.ai is deliberately coordinating public activation with Genius Cognitive System (GCS), Genius AI Boss, and other initial applications. The original Q2 2026 public-launch target passed; it is not evidence that core mainnet implementation is unfinished. No replacement public-launch date has been announced."
           },
           {
@@ -1229,6 +1231,7 @@
               "Q2 2026"
             ],
             "passed": true,
+            "fromStatus": true,
             "line": "Q2 2026 (original target) — Public SuperGenius mainnet launch. The date passed; the coordinated public release has not occurred."
           }
         ]
