@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-11-12T07:10:57.274Z",
+  "generatedAt": "2026-11-12T13:55:08.386Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
     "from": "2026-11-06",
     "to": "2026-11-12",
     "commits": 54,
-    "automated": 16,
+    "automated": 29,
     "repos": 9,
     "contributors": 4,
     "releases": 0,
-    "ciBuilds": 2,
+    "ciBuilds": 10,
     "topRepos": [
       {
         "name": "gnus-investor-scenarios",
@@ -25,11 +25,11 @@
         "commits": 12
       },
       {
-        "name": "GeniusSDK",
+        "name": "SuperGenius",
         "commits": 5
       },
       {
-        "name": "SuperGenius",
+        "name": "GeniusSDK",
         "commits": 5
       }
     ],
@@ -62,7 +62,7 @@
       {
         "name": "Blockchain & network",
         "commits": 17,
-        "automated": 16,
+        "automated": 29,
         "repos": [
           {
             "name": "GeniusNetwork",
@@ -135,8 +135,8 @@
       }
     ],
     "byType": {
-      "added": 9,
       "fixed": 13,
+      "added": 9,
       "tests": 9,
       "refactored": 1,
       "docs": 6,
@@ -144,8 +144,8 @@
       "build": 3,
       "upgraded": 1
     },
-    "headline": "54 commits by 4 contributors across 9 repos. Most active: gnus-investor-scenarios (13), GeniusNetwork (12), openapi-cpp-scaffolding (12). Plus 16 automated commits. 2 CI builds published.",
-    "summary": "The team made a broad set of improvements across investor tools, developer kits, blockchain components, and infrastructure. New financial calculations and data fixes were added, while testing, documentation, and deployment processes were strengthened. Four contributors delivered 54 changes over the week."
+    "headline": "54 commits by 4 contributors across 9 repos. Most active: gnus-investor-scenarios (13), GeniusNetwork (12), openapi-cpp-scaffolding (12). Plus 29 automated commits. 10 CI builds published.",
+    "summary": "The team delivered a busy week with 54 changes across nine projects, focusing on investor tools, developer libraries, and the blockchain network. They added new features, fixed security and calculation bugs, and prepared the next version of the network after a successful audit. All work was done by four contributors and included updates to documentation and internal tools."
   },
   "days": [
     {
@@ -227,6 +227,26 @@
           ]
         },
         {
+          "name": "SuperGenius",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/SuperGenius",
+          "commits": 1,
+          "human": 1,
+          "automated": 0,
+          "branches": [
+            "develop",
+            "glm/payout-address-getter"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: GetPayoutAddress compile errors"
+            }
+          ]
+        },
+        {
           "name": "thirdparty",
           "domain": "SDK & developer tools",
           "url": "https://github.com/GeniusVentures/thirdparty",
@@ -246,31 +266,12 @@
           ]
         },
         {
-          "name": "SuperGenius",
-          "domain": "Blockchain & network",
-          "url": "https://github.com/GeniusVentures/SuperGenius",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "glm/payout-address-getter"
-          ],
-          "items": [
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: GetPayoutAddress compile errors"
-            }
-          ]
-        },
-        {
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 13,
+          "commits": 26,
           "human": 0,
-          "automated": 13,
+          "automated": 26,
           "branches": [
             "main"
           ],
@@ -278,14 +279,16 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 13,
-              "text": "Automated updates (13 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 26,
+              "text": "Automated updates (26 commits), e.g. update Base bootstrap nodes [skip ci]"
             }
           ]
         }
       ],
       "releases": [],
-      "ciBuilds": {},
+      "ciBuilds": {
+        "SuperGenius": 10
+      },
       "domains": [
         {
           "name": "Dashboards & investor tools",
@@ -331,7 +334,7 @@
         {
           "name": "Blockchain & network",
           "commits": 1,
-          "automated": 13,
+          "automated": 26,
           "repos": [
             {
               "name": "SuperGenius",
@@ -341,7 +344,7 @@
             {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 13
+              "automated": 26
             }
           ],
           "labels": [
@@ -349,10 +352,10 @@
           ]
         }
       ],
-      "headline": "18 commits across 4 repos in 3 domains: Dashboards & investor tools (added, fixed), SDK & developer tools (fixed, updated), Blockchain & network (fixed). 13 automated commits (rlp_enodes).",
+      "headline": "18 commits across 4 repos in 3 domains: Dashboards & investor tools (added, fixed), SDK & developer tools (fixed, updated), Blockchain & network (fixed). 26 automated commits (rlp_enodes). 10 CI builds published (SuperGenius ×10).",
       "commits": 18,
-      "automated": 13,
-      "summary": "The investor scenario tool received new lockout calculations, better data formatting, and additional tests, and the payout handling in the blockchain component was fixed; the developer kit was updated to run reliably on internal servers."
+      "automated": 26,
+      "summary": "The team added new lockout scenarios and improved calculations for the investor dashboard, fixed several bugs in the developer SDK and updated its documentation, and corrected a compile error in the blockchain component."
     },
     {
       "date": "2026-11-11",
@@ -486,6 +489,7 @@
           "human": 1,
           "automated": 0,
           "branches": [
+            "develop",
             "glm/payout-address-getter"
           ],
           "items": [
@@ -580,7 +584,7 @@
       "headline": "16 commits across 6 repos in 4 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, updated), Wallet & apps (updated) +1 more.",
       "commits": 16,
       "automated": 0,
-      "summary": "A major testing milestone was completed for the network platform, a new payout feature was added to the developer kit, earnings reporting in the wallet app was improved, and the Docker setup was refreshed for internal use."
+      "summary": "The team completed a major audit of the blockchain network and prepared the next release, added a new payout address feature to the developer SDK, and improved the wallet’s earnings reporting."
     },
     {
       "date": "2026-11-10",
@@ -750,7 +754,7 @@
       "headline": "13 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (fixed, upgraded), Dashboards & investor tools (fixed).",
       "commits": 13,
       "automated": 0,
-      "summary": "Security features and tests were added to the developer kit, build settings for the blockchain tools were corrected, and the dashboard’s visual design and accessibility were enhanced."
+      "summary": "Developers added new security features and documentation to the SDK, fixed password handling bugs, and made design improvements to the investor dashboard."
     },
     {
       "date": "2026-11-09",
@@ -782,9 +786,7 @@
         }
       ],
       "releases": [],
-      "ciBuilds": {
-        "SuperGenius": 2
-      },
+      "ciBuilds": {},
       "domains": [
         {
           "name": "SDK & developer tools",
@@ -803,10 +805,10 @@
           ]
         }
       ],
-      "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work). 2 CI builds published (SuperGenius ×2).",
+      "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work).",
       "commits": 2,
       "automated": 0,
-      "summary": "The developer kit fixed password storage and added a test to ensure user data is handled securely."
+      "summary": "The team fixed how passwords are stored and added tests to ensure the fix works."
     },
     {
       "date": "2026-11-08",
@@ -897,7 +899,7 @@
       "headline": "3 commits across 2 repos in 1 domain: Blockchain & network (added, updated).",
       "commits": 3,
       "automated": 0,
-      "summary": "Scripts were added to automate the setup of testing environments on macOS and Ubuntu, and related configuration fixes were made."
+      "summary": "New scripts were added to set up build machines for macOS and Ubuntu, and the configuration of those machines was improved."
     },
     {
       "date": "2026-11-06",
@@ -1002,27 +1004,27 @@
       "headline": "2 commits across 2 repos in 2 domains: Blockchain & network (fixed), SDK & developer tools (build/release). 3 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 3,
-      "summary": "Small fixes were applied to the network’s automated testing process and to the developer kit’s build setup."
+      "summary": "A small fix was applied to the build system and a cleanup was made to the SDK build files."
     }
   ],
   "builder": "v18",
   "prs": {
     "prsOpened": 8,
-    "prsMerged": 2,
+    "prsMerged": 3,
     "prsClosed": 3,
     "issuesOpened": 0,
     "issuesClosed": 0,
     "items": [
       {
         "type": "pr",
-        "event": "opened",
+        "event": "merged",
         "repo": "SuperGenius",
         "number": 404,
         "title": "Add payout address getters to GeniusAccount and GeniusNode",
         "url": "https://github.com/GeniusVentures/SuperGenius/pull/404",
         "author": "braianxde",
         "draft": false,
-        "date": "2026-11-11T22:51:01Z"
+        "date": "2026-11-12T13:35:55Z"
       },
       {
         "type": "pr",
@@ -1102,13 +1104,13 @@
         "date": "2026-11-10T18:52:30Z"
       }
     ],
-    "openPrs": 26,
+    "openPrs": 25,
     "openIssues": 210,
     "closedIssuesTotal": 393,
-    "mergedPrsTotal": 805
+    "mergedPrsTotal": 806
   },
   "readiness": {
-    "fetchedAt": "2026-11-12T07:11:03.890Z",
+    "fetchedAt": "2026-11-12T13:55:18.822Z",
     "staleDays": 60,
     "pages": [
       {
@@ -1383,15 +1385,15 @@
         "key": "openPrs",
         "label": "Open PRs",
         "from": 23,
-        "to": 26,
-        "delta": 3
+        "to": 25,
+        "delta": 2
       },
       {
         "key": "mergedPrs",
         "label": "Merged PRs (total)",
         "from": 803,
-        "to": 805,
-        "delta": 2
+        "to": 806,
+        "delta": 3
       }
     ]
   },
@@ -1416,9 +1418,9 @@
       "date": "2026-11-12",
       "commits": 54,
       "openIssues": 210,
-      "openPrs": 26,
+      "openPrs": 25,
       "closedIssues": 393,
-      "mergedPrs": 805
+      "mergedPrs": 806
     }
   ],
   "aiModel": "openai/gpt-oss-120b",
