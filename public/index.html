@@ -36,6 +36,13 @@
   .badge.done{color:#2e7d32;border-color:#2e7d32}.badge.progress{color:var(--accent);border-color:var(--accent)}
   .srow{padding:8px 0;border-bottom:1px solid var(--line);font:14px/1.45 system-ui,sans-serif}.srow:last-child{border-bottom:0}
   .srow .d{color:var(--mute);font-size:13px;margin-top:2px}
+  .notice{border-left:3px solid var(--accent)}
+  .notice .w{font:600 14px system-ui,sans-serif;color:var(--accent);margin-bottom:4px}
+  .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px 22px}
+  .kv .k{font:600 11px system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--mute);margin-bottom:3px}
+  .kv .v{font:15px/1.4 system-ui,sans-serif}
+  .kv .v .badge{margin-right:0}
+  .kv a{color:var(--accent);text-decoration:none;font-weight:600;border-bottom:1px solid var(--line)}
   .warn{border-left:3px solid #c0392b}
   .warn .w{font:600 14px system-ui,sans-serif;color:#c0392b;margin-bottom:4px}
   .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
@@ -67,6 +74,8 @@
   <h1>GitHub digest</h1>
   <p class="sub" id="meta">Loading…</p>
   <nav><a href="./" aria-current="page">Digest</a><a href="liquidity.html">GNUS liquidity</a></nav>
+  <h2>At a glance</h2>
+  <div class="card" id="overview"></div>
   <h2>Mainnet readiness</h2>
   <div id="changes"></div>
   <div id="readiness"></div>
@@ -127,7 +136,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
           else r.append(el('span', 'Removed', 'badge'), el('span', it.label));
           r.append(el('div', it.page.replace(/-/g, ' ') + ' · ' + it.section, 'd')); card.append(r);
         }
-        for (const t of C.readiness.trackDeltas) { any = true; const r = el('div', `${t.name}: ${t.from}% → ${t.to}%`, 'srow'); card.append(r); }
+        for (const t of C.readiness.trackDeltas) { any = true; const u = typeof t.from === 'number' ? '%' : ' done'; card.append(el('div', `${t.name}: ${t.from}${u === '%' ? '%' : ''} → ${t.to}${u}`, 'srow')); }
         if (!C.readiness.items.length && !C.readiness.trackDeltas.length) card.append(el('div', 'No change in the readiness status.', 'srow'));
       } else card.append(el('div', 'Readiness comparison is not available for this period.', 'srow'));
       for (const m of C.metrics) { any = true; card.append(el('div', `${m.label}: ${m.from} → ${m.to} (${m.delta > 0 ? '+' : ''}${m.delta})`, 'srow')); }
@@ -158,16 +167,20 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
         rd.append(tc); continue;
       }
       const c = el('div', null, 'card');
-      const row = el('div', null, 'trow'); row.append(el('b', t.name), el('span', `~${t.percent}% · ${t.done}/${t.total} done`, 'pct')); c.append(row);
+      const row = el('div', null, 'trow'); row.append(el('b', t.name), el('span', `${t.done}/${t.total} done`, 'pct')); c.append(row);
       if (t.summary) c.append(el('div', t.summary, 'legend'));
-      const segs = el('div', null, 'segs'); for (const it of t.items) segs.append(el('span', null, 'seg ' + it.status)); c.append(segs);
+      // pas de barre de progression quand la doc précise qu'il s'agit de zones à préparer, pas d'étapes datées
+      const noBar = /not (completed )?milestones|readiness areas|dated commitments/i.test((t.summary || '') + ' ' + (t.note || ''));
+      if (!noBar) { const segs = el('div', null, 'segs'); for (const it of t.items) segs.append(el('span', null, 'seg ' + it.status)); c.append(segs); }
       c.append(el('div', `${t.done} done · ${t.progress} in progress · ${t.todo} to do (of ${t.total})`, 'legend'));
       for (const it of t.items) {
         const row2 = el('div', null, 'it'); row2.append(el('span', ({ done: '✅', progress: '🔄', todo: '⬜' })[it.status] + ' ' + it.label));
         if (it.target) row2.append(el('span', ' → ' + it.target, 't')); c.append(row2);
       }
       if (t.note) c.append(el('div', t.note, 'note'));
-      rd.append(c);
+      if (t.total >= 8 && t.done / t.total >= 0.8) {          // longue liste presque terminée = historique : repliée
+        const hd = el('details'); hd.append(el('summary', `${t.name} — ${t.done}/${t.total} done`)); hd.append(c); rd.append(hd);
+      } else rd.append(c);
     }
     if (!pg.tracks.length || pg.notes.length) {
       const det = el('details'); det.append(el('summary', pg.tracks.length ? 'Notes' : 'Page content'));
@@ -180,9 +193,9 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   if (R) {
     const stale = R.pages.filter(p => p.stale);
     if (stale.length) {
-      const sw = el('div', null, 'card warn');
-      sw.append(el('div', stale.length > 1 ? 'Some documentation pages may be outdated' : 'A documentation page may be outdated', 'w'),
-        el('div', stale.map(p => `${p.key.replace(/-/g, ' ')} (${p.statusAgeDays ?? p.editedAgeDays} days old)`).join(', ') + ' — older than 30 days. Treat the status as possibly outdated and check the original pages.'));
+      const sw = el('div', null, 'card notice');
+      sw.append(el('div', stale.length > 1 ? 'Some documentation pages have not been updated for a while' : 'A documentation page has not been updated for a while', 'w'),
+        el('div', stale.map(p => `${p.key.replace(/-/g, ' ')} (${p.statusAgeDays ?? p.editedAgeDays} days old)`).join(', ') + ` — not updated for over ${R.staleDays || 60} days. The status shown may have changed since; check the original pages.`));
       alerts.append(sw);
     }
     const best = new Map(), score = x => (x.fromStatus ? 0 : 1000) + x.line.length;
@@ -193,7 +206,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     }
     if (best.size) {
       const qn = l => { const m = l.match(/Q([1-4]) (\d{4})/); return +m[2] * 10 + +m[1]; };
-      const w2 = el('div', null, 'card warn'); w2.append(el('div', 'Targets mentioned in the docs that are already in the past', 'w'));
+      const w2 = el('div', null, 'card notice'); w2.append(el('div', 'Targets mentioned in the docs that are already in the past', 'w'));
       for (const [label, { t, key }] of [...best].sort((x, y) => qn(x[0]) - qn(y[0]))) {
         const row = el('div', null, 'it');
         row.append(el('span', t.line.startsWith(label) ? t.line : `${label} — ${t.line}`), el('span', ' · ' + key.replace(/-/g, ' '), 't'));
@@ -204,6 +217,23 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   }
 
   const w = d.week, wk = document.getElementById('week');
+
+  // ---- vue d'ensemble : où en est GNUS ?
+  const ov = document.getElementById('overview'), kv = el('div', null, 'kv');
+  const kvItem = (k, ...nodes) => { const it = el('div'); it.append(el('div', k, 'k')); const v = el('div', null, 'v'); v.append(...nodes); it.append(v); kv.append(it); };
+  const mainnet = [];
+  if (R) for (const pg of R.pages) for (const t of pg.tracks) if (t.kind === 'table') for (const it of t.items) if (/mainnet/i.test(it.label)) mainnet.push(it);
+  for (const it of mainnet.slice(0, 2)) kvItem(it.label, el('span', it.statusText, 'badge ' + it.status));
+  kvItem('Activity (7 days)', document.createTextNode(`${w.commits} commits · ${w.repos} repos · ${w.contributors} contributors` + ((w.domains || [])[0] ? ` — mostly ${w.domains[0].name}` : '')));
+  const lastRel = (d.days || []).flatMap(x => x.releases || [])[0];
+  if (lastRel) {
+    const a = el('a', `${lastRel.repo} ${lastRel.tag}`);
+    if (safeUrl(lastRel.url)) { a.href = lastRel.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    kvItem('Latest release', a, document.createTextNode(` · ${fmtDate(lastRel.date)}`));
+  } else kvItem('Latest release', document.createTextNode('None this week' + (w.ciBuilds ? ` (${w.ciBuilds} CI builds)` : '')));
+  if (R) { const ages = R.pages.map(p => p.editedAgeDays).filter(x => x != null); if (ages.length) kvItem('Docs last edited', document.createTextNode(`${Math.min(...ages)} days ago`)); }
+  ov.append(kv);
+
   wk.append(el('div', `${w.from} → ${w.to}`, 'date'), el('div', w.summary || w.headline));
   const st = el('div', null, 'stats');
   for (const [k, v] of [['commits', w.commits], ['automated commits', w.automated], ['repos', w.repos], ['contributors', w.contributors], ['releases', w.releases], ['CI builds', w.ciBuilds]]) {
