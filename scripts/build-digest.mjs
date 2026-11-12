@@ -423,7 +423,7 @@ export function findTargets(md, now = new Date()) {
     if (!st && !/target|deadline|planned|expected|original|launch|date|announced/i.test(text)) continue;
     const key = text.toLowerCase();
     if (out.has(key)) continue;                                  // même phrase déjà vue
-    out.set(key, { label: labels[0], labels, passed: labels.some(l => quarterEnd(l) < now), line: cut(text, 900) });
+    out.set(key, { label: labels[0], labels, passed: labels.some(l => quarterEnd(l) < now), fromStatus: !!st, line: cut(text, 900) });
   }
   return [...out.values()];
 }
@@ -624,7 +624,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v16';
+  digest.builder = 'v17';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
