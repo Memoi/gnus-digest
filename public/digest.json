@@ -1,17 +1,21 @@
 {
-  "generatedAt": "2026-11-12T00:20:32.576Z",
+  "generatedAt": "2026-11-12T07:10:57.274Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
     "from": "2026-11-06",
     "to": "2026-11-12",
-    "commits": 40,
-    "automated": 3,
-    "repos": 8,
+    "commits": 54,
+    "automated": 16,
+    "repos": 9,
     "contributors": 4,
     "releases": 0,
     "ciBuilds": 2,
     "topRepos": [
+      {
+        "name": "gnus-investor-scenarios",
+        "commits": 13
+      },
       {
         "name": "GeniusNetwork",
         "commits": 12
@@ -21,23 +25,44 @@
         "commits": 12
       },
       {
-        "name": "SuperGenius",
+        "name": "GeniusSDK",
         "commits": 5
       },
       {
-        "name": "gnus-investor-scenarios",
-        "commits": 3
-      },
-      {
-        "name": "GeniusSDK",
-        "commits": 2
+        "name": "SuperGenius",
+        "commits": 5
       }
     ],
     "domains": [
       {
+        "name": "SDK & developer tools",
+        "commits": 18,
+        "automated": 0,
+        "repos": [
+          {
+            "name": "openapi-cpp-scaffolding",
+            "commits": 12
+          },
+          {
+            "name": "GeniusSDK",
+            "commits": 5
+          },
+          {
+            "name": "thirdparty",
+            "commits": 1
+          }
+        ],
+        "highlights": [
+          "GeniusSDK: Fixed: resolve on self-hosted runners and pin fallbacks to them",
+          "GeniusSDK: Updated: record the FFI consumer contract source; getPayoutAddress returns GeniusAddress; document the FFI consumer contract",
+          "thirdparty: Updated: always use self-hosted runners",
+          "GeniusSDK: Added: GeniusSDKGetPayoutAddress (SDK-PAYOUT)"
+        ]
+      },
+      {
         "name": "Blockchain & network",
         "commits": 17,
-        "automated": 3,
+        "automated": 16,
         "repos": [
           {
             "name": "GeniusNetwork",
@@ -60,38 +85,13 @@
         ]
       },
       {
-        "name": "SDK & developer tools",
-        "commits": 14,
-        "automated": 0,
-        "repos": [
-          {
-            "name": "openapi-cpp-scaffolding",
-            "commits": 12
-          },
-          {
-            "name": "GeniusSDK",
-            "commits": 2
-          }
-        ],
-        "highlights": [
-          "GeniusSDK: Added: GeniusSDKGetPayoutAddress (SDK-PAYOUT)",
-          "GeniusSDK: Updated: expose task ids, task results and payout address over the C API",
-          "openapi-cpp-scaffolding: Added: plumb Idempotency-Key into RequestContext",
-          "openapi-cpp-scaffolding: Fixed: look Idempotency-Key up by header name, not enum"
-        ]
-      },
-      {
-        "name": "Other",
-        "commits": 7,
+        "name": "Dashboards & investor tools",
+        "commits": 15,
         "automated": 0,
         "repos": [
           {
             "name": "gnus-investor-scenarios",
-            "commits": 3
-          },
-          {
-            "name": "CIDocker",
-            "commits": 2
+            "commits": 13
           },
           {
             "name": "gnus-dashboard",
@@ -99,10 +99,10 @@
           }
         ],
         "highlights": [
-          "gnus-investor-scenarios: Added: README for Genius Ventures investor dashboard",
-          "gnus-investor-scenarios: Updated: index.html; adding initial index.html file",
-          "CIDocker: Updated: CI script to run on self hosted; alma linux docker with commonly used items",
-          "gnus-dashboard: Fixed: design pass: gnus.ai design language, guided job submission, WCAG contrast fixes"
+          "gnus-investor-scenarios: Added: wire lockout scenarios to separate calculation module and CSV; warrant resale lockout control and investor cash chart (+1 more)",
+          "gnus-investor-scenarios: Fixed: restore working script and format dollar values to cents; link documentation homepage and format extreme modeled values",
+          "gnus-investor-scenarios: Test work: cover model formatting, lockouts, equity and burn safeguards",
+          "gnus-investor-scenarios: Refactored: extract pure formulas, token lockouts, and supply safeguards"
         ]
       },
       {
@@ -118,19 +118,34 @@
         "highlights": [
           "GeniusWallet: Updated: gnus_getEarnings carries a real jobsProcessed count; genus_api bindings for task ids/re…; wire gnus_getEarnings jobsProcessed to live task ids"
         ]
+      },
+      {
+        "name": "CI & infrastructure",
+        "commits": 2,
+        "automated": 0,
+        "repos": [
+          {
+            "name": "CIDocker",
+            "commits": 2
+          }
+        ],
+        "highlights": [
+          "CIDocker: Updated: CI script to run on self hosted; alma linux docker with commonly used items"
+        ]
       }
     ],
     "byType": {
-      "added": 7,
-      "updated": 8,
-      "fixed": 10,
-      "tests": 6,
+      "added": 9,
+      "fixed": 13,
+      "tests": 9,
+      "refactored": 1,
+      "docs": 6,
+      "updated": 12,
       "build": 3,
-      "docs": 5,
       "upgraded": 1
     },
-    "headline": "40 commits by 4 contributors across 8 repos. Most active: GeniusNetwork (12), openapi-cpp-scaffolding (12), SuperGenius (5). Plus 3 automated commits. 2 CI builds published.",
-    "summary": "The team finished a milestone audit for the network system and cleaned up old files, while adding new payout functionality to the SDK and improving earnings reporting in the wallet. They strengthened security by fixing password handling, adding token rotation, and adding tests and documentation. They also updated documentation, created setup scripts for testing environments, and fixed several compile and configuration issues."
+    "headline": "54 commits by 4 contributors across 9 repos. Most active: gnus-investor-scenarios (13), GeniusNetwork (12), openapi-cpp-scaffolding (12). Plus 16 automated commits. 2 CI builds published.",
+    "summary": "The team made a broad set of improvements across investor tools, developer kits, blockchain components, and infrastructure. New financial calculations and data fixes were added, while testing, documentation, and deployment processes were strengthened. Four contributors delivered 54 changes over the week."
   },
   "days": [
     {
@@ -138,10 +153,10 @@
       "repos": [
         {
           "name": "gnus-investor-scenarios",
-          "domain": "Other",
+          "domain": "Dashboards & investor tools",
           "url": "https://github.com/GeniusVentures/gnus-investor-scenarios",
-          "commits": 3,
-          "human": 3,
+          "commits": 13,
+          "human": 13,
           "automated": 0,
           "branches": [
             "main"
@@ -150,14 +165,83 @@
             {
               "type": "added",
               "label": "added",
+              "count": 3,
+              "text": "Added: wire lockout scenarios to separate calculation module and CSV; warrant resale lockout control and investor cash chart (+1 more)"
+            },
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 2,
+              "text": "Fixed: restore working script and format dollar values to cents; link documentation homepage and format extreme modeled values"
+            },
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 3,
+              "text": "Test work: cover model formatting, lockouts, equity and burn safeguards"
+            },
+            {
+              "type": "refactored",
+              "label": "refactored",
               "count": 1,
-              "text": "Added: README for Genius Ventures investor dashboard"
+              "text": "Refactored: extract pure formulas, token lockouts, and supply safeguards"
+            },
+            {
+              "type": "docs",
+              "label": "docs",
+              "count": 1,
+              "text": "Docs: explain module layout, lockouts and GitHub Pages instructions"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 3,
+              "text": "Updated: shade warrant resale lockout periods on investor charts; index.html (+1 more)"
+            }
+          ]
+        },
+        {
+          "name": "GeniusSDK",
+          "domain": "SDK & developer tools",
+          "url": "https://github.com/GeniusVentures/GeniusSDK",
+          "commits": 3,
+          "human": 3,
+          "automated": 0,
+          "branches": [
+            "glm/ci-selfhosted-runners",
+            "glm/payout-address"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: resolve on self-hosted runners and pin fallbacks to them"
             },
             {
               "type": "updated",
               "label": "updated",
               "count": 2,
-              "text": "Updated: index.html; adding initial index.html file"
+              "text": "Updated: record the FFI consumer contract source; getPayoutAddress returns GeniusAddress; document the FFI consumer contract"
+            }
+          ]
+        },
+        {
+          "name": "thirdparty",
+          "domain": "SDK & developer tools",
+          "url": "https://github.com/GeniusVentures/thirdparty",
+          "commits": 1,
+          "human": 1,
+          "automated": 0,
+          "branches": [
+            "develop"
+          ],
+          "items": [
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 1,
+              "text": "Updated: always use self-hosted runners"
             }
           ]
         },
@@ -179,36 +263,85 @@
               "text": "Fixed: GetPayoutAddress compile errors"
             }
           ]
+        },
+        {
+          "name": "rlp_enodes",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/rlp_enodes",
+          "commits": 13,
+          "human": 0,
+          "automated": 13,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "automated",
+              "label": "automated updates",
+              "count": 13,
+              "text": "Automated updates (13 commits), e.g. update Base bootstrap nodes [skip ci]"
+            }
+          ]
         }
       ],
       "releases": [],
       "ciBuilds": {},
       "domains": [
         {
-          "name": "Other",
-          "commits": 3,
+          "name": "Dashboards & investor tools",
+          "commits": 13,
           "automated": 0,
           "repos": [
             {
               "name": "gnus-investor-scenarios",
-              "commits": 3,
+              "commits": 13,
               "automated": 0
             }
           ],
           "labels": [
             "added",
+            "fixed",
+            "test work",
+            "refactored",
+            "docs",
+            "updated"
+          ]
+        },
+        {
+          "name": "SDK & developer tools",
+          "commits": 4,
+          "automated": 0,
+          "repos": [
+            {
+              "name": "GeniusSDK",
+              "commits": 3,
+              "automated": 0
+            },
+            {
+              "name": "thirdparty",
+              "commits": 1,
+              "automated": 0
+            }
+          ],
+          "labels": [
+            "fixed",
             "updated"
           ]
         },
         {
           "name": "Blockchain & network",
           "commits": 1,
-          "automated": 0,
+          "automated": 13,
           "repos": [
             {
               "name": "SuperGenius",
               "commits": 1,
               "automated": 0
+            },
+            {
+              "name": "rlp_enodes",
+              "commits": 0,
+              "automated": 13
             }
           ],
           "labels": [
@@ -216,10 +349,10 @@
           ]
         }
       ],
-      "headline": "4 commits across 2 repos in 2 domains: Other (added, updated), Blockchain & network (fixed).",
-      "commits": 4,
-      "automated": 0,
-      "summary": "The team added documentation and a basic webpage for the investor dashboard and fixed a compile issue in the SuperGenius component."
+      "headline": "18 commits across 4 repos in 3 domains: Dashboards & investor tools (added, fixed), SDK & developer tools (fixed, updated), Blockchain & network (fixed). 13 automated commits (rlp_enodes).",
+      "commits": 18,
+      "automated": 13,
+      "summary": "The investor scenario tool received new lockout calculations, better data formatting, and additional tests, and the payout handling in the blockchain component was fixed; the developer kit was updated to run reliably on internal servers."
     },
     {
       "date": "2026-11-11",
@@ -303,7 +436,7 @@
         },
         {
           "name": "CIDocker",
-          "domain": "Other",
+          "domain": "CI & infrastructure",
           "url": "https://github.com/GeniusVentures/CIDocker",
           "commits": 2,
           "human": 2,
@@ -429,7 +562,7 @@
           ]
         },
         {
-          "name": "Other",
+          "name": "CI & infrastructure",
           "commits": 2,
           "automated": 0,
           "repos": [
@@ -447,7 +580,7 @@
       "headline": "16 commits across 6 repos in 4 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, updated), Wallet & apps (updated) +1 more.",
       "commits": 16,
       "automated": 0,
-      "summary": "They completed a major review of the network system, removed outdated files, and recorded verification results; added a new payout feature to the SDK and exposed task details; improved the wallet to show real earnings counts; and updated the Docker setup with useful tools."
+      "summary": "A major testing milestone was completed for the network platform, a new payout feature was added to the developer kit, earnings reporting in the wallet app was improved, and the Docker setup was refreshed for internal use."
     },
     {
       "date": "2026-11-10",
@@ -536,7 +669,7 @@
         },
         {
           "name": "gnus-dashboard",
-          "domain": "Other",
+          "domain": "Dashboards & investor tools",
           "url": "https://github.com/GeniusVentures/gnus-dashboard",
           "commits": 2,
           "human": 2,
@@ -599,7 +732,7 @@
           ]
         },
         {
-          "name": "Other",
+          "name": "Dashboards & investor tools",
           "commits": 2,
           "automated": 0,
           "repos": [
@@ -614,10 +747,10 @@
           ]
         }
       ],
-      "headline": "13 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (fixed, upgraded), Other (fixed).",
+      "headline": "13 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (fixed, upgraded), Dashboards & investor tools (fixed).",
       "commits": 13,
       "automated": 0,
-      "summary": "New service registration and rotating security tokens were added, password handling was secured, tests and documentation were added, and the dashboard design was improved for accessibility."
+      "summary": "Security features and tests were added to the developer kit, build settings for the blockchain tools were corrected, and the dashboard’s visual design and accessibility were enhanced."
     },
     {
       "date": "2026-11-09",
@@ -673,7 +806,7 @@
       "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work). 2 CI builds published (SuperGenius ×2).",
       "commits": 2,
       "automated": 0,
-      "summary": "Password handling was fixed to improve security and a test was added to confirm the changes work correctly."
+      "summary": "The developer kit fixed password storage and added a test to ensure user data is handled securely."
     },
     {
       "date": "2026-11-08",
@@ -764,7 +897,7 @@
       "headline": "3 commits across 2 repos in 1 domain: Blockchain & network (added, updated).",
       "commits": 3,
       "automated": 0,
-      "summary": "Scripts were created to set up testing environments on macOS and Ubuntu, and some configuration settings were adjusted."
+      "summary": "Scripts were added to automate the setup of testing environments on macOS and Ubuntu, and related configuration fixes were made."
     },
     {
       "date": "2026-11-06",
@@ -869,10 +1002,10 @@
       "headline": "2 commits across 2 repos in 2 domains: Blockchain & network (fixed), SDK & developer tools (build/release). 3 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 3,
-      "summary": "A post‑testing issue in the network system was fixed and a build inconsistency was corrected."
+      "summary": "Small fixes were applied to the network’s automated testing process and to the developer kit’s build setup."
     }
   ],
-  "builder": "v17",
+  "builder": "v18",
   "prs": {
     "prsOpened": 8,
     "prsMerged": 2,
@@ -975,7 +1108,8 @@
     "mergedPrsTotal": 805
   },
   "readiness": {
-    "fetchedAt": "2026-11-12T00:20:40.177Z",
+    "fetchedAt": "2026-11-12T07:11:03.890Z",
+    "staleDays": 60,
     "pages": [
       {
         "key": "release-status",
@@ -1051,7 +1185,7 @@
         "lastEdited": "2026-10-08T20:38:00Z",
         "statusAgeDays": 35,
         "editedAgeDays": 35,
-        "stale": true,
+        "stale": false,
         "targets": [
           {
             "label": "Q2 2026",
@@ -1214,7 +1348,7 @@
         "lastEdited": "2026-10-08T20:38:00Z",
         "statusAgeDays": null,
         "editedAgeDays": 35,
-        "stale": true,
+        "stale": false,
         "targets": [
           {
             "label": "Q2 2026",
@@ -1280,7 +1414,7 @@
     },
     {
       "date": "2026-11-12",
-      "commits": 40,
+      "commits": 54,
       "openIssues": 210,
       "openPrs": 26,
       "closedIssues": 393,
