@@ -42,6 +42,9 @@
   .grid2 .card{margin-bottom:0}
   svg.chart{width:100%;height:auto;color:var(--accent);display:block;margin:6px 0 2px}
   .arrow{color:var(--mute);margin:0 6px}
+  details .np{margin:0 0 1.4em;font:14px/1.65 system-ui,sans-serif}
+  details .nh{margin:1.8em 0 .6em}
+  details > summary + .nh{margin-top:1em}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
   .chip{font:12px system-ui,sans-serif;border:1px solid var(--line);border-radius:12px;padding:1px 9px;color:var(--mute)}
   .chip b{color:var(--ink)}
@@ -133,25 +136,15 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   }
 
   const rd = document.getElementById('readiness'), R = d.readiness;
+  const alerts = el('div'); if (R) rd.append(alerts);      // boîtes d'alerte uniques, affichées avant les pages
   if (!R) rd.append(Object.assign(el('div', d.readinessError ? 'Could not load readiness (' + d.readinessError + ')' : 'No data yet.'), { className: 'card' }));
   else for (const pg of R.pages) {
-    const h3 = el('h3'); const a = el('a', pg.key.replace(/-/g, ' ')); if (safeUrl(pg.url)) a.href = pg.url; h3.append(a); rd.append(h3);
+    const h3 = el('h3'); const a = el('a', pg.key.replace(/-/g, ' ')); if (safeUrl(pg.url)) { a.href = pg.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } h3.append(a); rd.append(h3);
     if (pg.error) { rd.append(Object.assign(el('div', pg.error), { className: 'card' })); continue; }
     const fresh = [];
     if (pg.statusDate) fresh.push(`Status date: ${pg.statusDate}` + (pg.statusAgeDays != null ? ` (${pg.statusAgeDays} days ago)` : ''));
     if (pg.lastEdited) fresh.push(`source last edited ${fmtDate(pg.lastEdited)} (${pg.editedAgeDays} days ago)`);
     if (fresh.length) rd.append(el('div', fresh.join(' · '), 'legend'));
-    if (pg.stale) {
-      const w = el('div', null, 'card warn'); w.append(el('div', 'This page may be outdated', 'w'),
-        el('div', `The status information is more than 30 days old. Treat it as possibly outdated and check the original page.`));
-      rd.append(w);
-    }
-    const past = (pg.targets || []).filter(t => t.passed);
-    if (past.length) {
-      const w = el('div', null, 'card warn'); w.append(el('div', 'Targets mentioned in the docs that are already in the past', 'w'));
-      for (const t of past) w.append(el('div', t.line.startsWith(t.label) ? t.line : `${t.label} — ${t.line}`, 'it'));
-      rd.append(w);
-    }
     for (const t of pg.tracks) {
       if (t.kind === 'table') {
         const tc = el('div', null, 'card');
@@ -178,8 +171,35 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     }
     if (!pg.tracks.length || pg.notes.length) {
       const det = el('details'); det.append(el('summary', pg.tracks.length ? 'Notes' : 'Page content'));
-      for (const n of pg.notes) { det.append(el('div', n.heading, 'date')); for (const l of n.lines) det.append(el('div', l)); }
+      for (const n of pg.notes) { if (n.heading) det.append(el('div', n.heading, 'date nh')); for (const l of n.lines) if (!/^Status date/i.test(l)) det.append(el('p', l, 'np')); }
       rd.append(det);
+    }
+  }
+
+  // objectifs dépassés : UNE seule boîte, UNE ligne par trimestre (la plus précise), toutes pages confondues
+  if (R) {
+    const stale = R.pages.filter(p => p.stale);
+    if (stale.length) {
+      const sw = el('div', null, 'card warn');
+      sw.append(el('div', stale.length > 1 ? 'Some documentation pages may be outdated' : 'A documentation page may be outdated', 'w'),
+        el('div', stale.map(p => `${p.key.replace(/-/g, ' ')} (${p.statusAgeDays ?? p.editedAgeDays} days old)`).join(', ') + ' — older than 30 days. Treat the status as possibly outdated and check the original pages.'));
+      alerts.append(sw);
+    }
+    const best = new Map(), score = x => (x.fromStatus ? 0 : 1000) + x.line.length;
+    // seules les étapes de roadmap non terminées comptent : les phrases libres sont déjà lisibles dans les notes de la page
+    for (const pg of R.pages) for (const t of (pg.targets || [])) if (t.passed && t.fromStatus !== false) {
+      const cur = best.get(t.label);
+      if (!cur || score(t) < score(cur.t)) best.set(t.label, { t, key: pg.key });
+    }
+    if (best.size) {
+      const qn = l => { const m = l.match(/Q([1-4]) (\d{4})/); return +m[2] * 10 + +m[1]; };
+      const w2 = el('div', null, 'card warn'); w2.append(el('div', 'Targets mentioned in the docs that are already in the past', 'w'));
+      for (const [label, { t, key }] of [...best].sort((x, y) => qn(x[0]) - qn(y[0]))) {
+        const row = el('div', null, 'it');
+        row.append(el('span', t.line.startsWith(label) ? t.line : `${label} — ${t.line}`), el('span', ' · ' + key.replace(/-/g, ' '), 't'));
+        w2.append(row);
+      }
+      alerts.append(w2);
     }
   }
 
@@ -207,7 +227,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     const list = el('div'); list.style.marginTop = '10px';
     for (const it of P.items.slice(0, 15)) {
       const row = el('div', null, 'pr');
-      const a = el('a', `${it.title}`); if (safeUrl(it.url)) a.href = it.url;
+      const a = el('a', `${it.title}`); if (safeUrl(it.url)) { a.href = it.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
       row.append(el('span', `${it.event} ${it.type === 'pr' ? 'PR' : 'issue'}`, 'tag ' + it.event), a,
                  el('span', ` ${it.repo}#${it.number} · ${it.author}`, 'm'));
       list.append(row);
@@ -247,7 +267,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
         det.append(el('div', dom, 'dom'));
         const ul = el('ul');
         for (const r of repos) {
-          const li = el('li'), a = el('a', r.name); if (safeUrl(r.url)) a.href = r.url;
+          const li = el('li'), a = el('a', r.name); if (safeUrl(r.url)) { a.href = r.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
           li.append(a, el('span', ` (${r.commits}): ` + r.items.map(i => i.text).join(' · ')));
           if (r.branches && r.branches.length) li.append(el('span', ` [branches: ${r.branches.slice(0, 4).join(', ')}${r.branches.length > 4 ? ' +' + (r.branches.length - 4) : ''}]`));
           ul.append(li);
