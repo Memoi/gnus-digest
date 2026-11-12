@@ -150,6 +150,8 @@ const isBuildRelease = r => r.prerelease || /-(Release|Debug)$/i.test(r.tag || '
 export const DEFAULT_DOMAINS = [
   { name: 'Cognitive system (AI)',  repos: ['GeniusCognitiveSystem', '*Cognitive*', '*swarm*'] },
   { name: 'Wallet & apps',          repos: ['GeniusWallet', '*Wallet*'] },
+  { name: 'Dashboards & investor tools', repos: ['gnus-dashboard', 'gnus-investor-*'] },
+  { name: 'CI & infrastructure',    repos: ['CIDocker', '*docker*'] },
   { name: 'SDK & developer tools',  repos: ['GeniusSDK', '*SDK*', 'openapi-cpp-scaffolding', 'AsyncIOManager', 'thirdparty'] },
   { name: 'Docs & website',         repos: ['gitbook', 'documentation', '*docs*', '*website*'] },
   { name: 'Blockchain & network',   repos: ['SuperGenius', 'GeniusNetwork', 'rlp_enodes', 'zkLLVM', '*contracts*'] },
@@ -402,7 +404,7 @@ async function fetchIssuesPrs(since) {
 const DOCS_REPO  = process.env.DOCS_REPO || 'GeniusVentures/gitbook';
 const DOC_PAGES  = (process.env.DOC_PAGES || 'release-status,public-roadmap').split(',').map(x => x.trim()).filter(Boolean);
 const DOCS_BASE  = process.env.DOCS_BASE || 'https://docs.gnus.ai/about-gnus.ai/';
-const STALE_DAYS = Number(process.env.STALE_DAYS || 30);   // au-delà, la page signale une information possiblement périmée
+const STALE_DAYS = Number(process.env.STALE_DAYS || 60);   // au-delà, la page signale une information possiblement périmée
 
 // Objectifs trimestriels cités dans la doc (« Q2 2026 »), analysés LIGNE PAR LIGNE.
 // - une étape déjà terminée ([x], ✅) est de l'historique : ignorée ;
@@ -561,7 +563,7 @@ async function fetchDocs() {
     pages.push({ key, url: `${DOCS_BASE}${key}/`, source: f.path, ...parsed, lastEdited, statusAgeDays, editedAgeDays,
       stale: (statusAgeDays ?? editedAgeDays ?? 0) > STALE_DAYS, targets: findTargets(text) });
   }
-  return { fetchedAt: new Date().toISOString(), pages };
+  return { fetchedAt: new Date().toISOString(), staleDays: STALE_DAYS, pages };
 }
 
 /* ---------------- Historique et changements ---------------- */
@@ -579,7 +581,7 @@ export function makeSnapshot(digest, date) {
     date, commits: w.commits, automated: w.automated, contributors: w.contributors, repos: w.repos,
     openPrs: P.openPrs ?? null, openIssues: P.openIssues ?? null, closedIssues: P.closedIssuesTotal ?? null, mergedPrs: P.mergedPrsTotal ?? null,
     readiness: digest.readiness ? digest.readiness.pages.filter(p => !p.error).map(p => ({ key: p.key,
-      tracks: p.tracks.map(t => ({ name: t.name, kind: t.kind, percent: t.percent ?? null,
+      tracks: p.tracks.map(t => ({ name: t.name, kind: t.kind, done: t.done ?? null, total: t.total ?? null,
         items: t.items.map(i => ({ label: i.label.slice(0, 100), status: i.status, statusText: i.statusText || '' })) })) })) : null,
   };
 }
@@ -607,9 +609,11 @@ export function compareSnapshots(prev, cur) {
         items.push({ type: 'status', page: v.page, section: v.section, label: v.label, from: txt(o), fromStatus: o.status, to: txt(v), toStatus: v.status });
     }
     for (const [k, v] of a) if (!b.has(k)) items.push({ type: 'removed', page: v.page, section: v.section, label: v.label, from: txt(v), fromStatus: v.status });
-    const pc = snap => { const m = new Map(); for (const p of snap.readiness) for (const t of p.tracks) if (t.percent != null) m.set(`${p.key}|${t.name}`, { name: t.name, percent: t.percent }); return m; };
+    const pc = snap => { const m = new Map();
+      for (const p of snap.readiness) for (const t of p.tracks) if (t.kind === 'track' && t.total != null) m.set(`${p.key}|${t.name}`, { name: t.name, done: t.done, total: t.total });
+      return m; };
     const pa = pc(prev), pb = pc(cur), trackDeltas = [];
-    for (const [k, v] of pb) { const o = pa.get(k); if (o && o.percent !== v.percent) trackDeltas.push({ name: v.name, from: o.percent, to: v.percent }); }
+    for (const [k, v] of pb) { const o = pa.get(k); if (o && (o.done !== v.done || o.total !== v.total)) trackDeltas.push({ name: v.name, from: `${o.done}/${o.total}`, to: `${v.done}/${v.total}` }); }
     out.readiness = { items, trackDeltas };
   }
   for (const [key, label] of [['openIssues', 'Open issues'], ['openPrs', 'Open PRs'], ['closedIssues', 'Closed issues (total)'], ['mergedPrs', 'Merged PRs (total)']])
@@ -624,7 +628,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v17';
+  digest.builder = 'v18';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
