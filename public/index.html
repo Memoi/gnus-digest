@@ -3,7 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GitHub digest</title>
+<title>GNUS digest — GitHub activity, mainnet readiness, liquidity</title>
+<meta name="description" content="Daily digest of the GeniusVentures GitHub activity, GNUS mainnet readiness from the public docs, and on-chain liquidity depth.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GNUS digest">
+<meta property="og:description" content="GitHub activity, mainnet readiness and liquidity depth for GNUS, updated daily from public sources.">
+<meta property="og:image" content="https://gnus-digest.vercel.app/og.png"><!-- pour les aperçus Telegram/X : remplace par l'adresse complète, ex. https://ton-site.vercel.app/og.png -->
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
 <style>
   :root{--bg:#f4f1ec;--panel:#fff;--ink:#22201c;--mute:#716b62;--line:#ddd7cc;--accent:#8a4b12}
   @media (prefers-color-scheme:dark){:root{--bg:#1d1b18;--panel:#272420;--ink:#ece7de;--mute:#a39b8f;--line:#3a352e;--accent:#e0a367}}
@@ -49,6 +56,14 @@
   .grid2 .card{margin-bottom:0}
   svg.chart{width:100%;height:auto;color:var(--accent);display:block;margin:6px 0 2px}
   .arrow{color:var(--mute);margin:0 6px}
+  .pr .b{flex:1;min-width:0}
+  .pr .b a{display:block}
+  .pr .b span.m{display:block;font-size:12.5px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dsum{margin:8px 0 4px;font-size:15px;line-height:1.5}
+  .chip.auto{border-style:dashed}
+  footer{margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--line);font:13px/1.55 system-ui,sans-serif;color:var(--mute)}
+  footer p{margin:0 0 8px}
+  footer a{color:var(--accent)}
   details .np{margin:0 0 1.4em;font:14px/1.65 system-ui,sans-serif}
   details .nh{margin:1.8em 0 .6em}
   details > summary + .nh{margin-top:1em}
@@ -89,6 +104,7 @@
   <div class="grid2" id="trends"></div>
   <h2>Daily</h2>
   <div id="days"></div>
+  <footer id="foot"></footer>
 </main>
 <script>
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
@@ -99,7 +115,7 @@ function spark(title, pts) {
   const card = el('div', null, 'card'); card.append(el('div', title, 'date'));
   const v = pts.filter(p => p.v != null);
   if (v.length < 2) { card.append(el('div', `Not enough history yet (${v.length} day${v.length === 1 ? '' : 's'}). The chart builds up daily.`, 'legend')); return card; }
-  const W = 300, H = 70, pad = 6, vals = v.map(p => p.v), min = Math.min(...vals), max = Math.max(...vals);
+  const W = 300, H = 70, pad = 6, vals = v.map(p => p.v), min = 0, max = Math.max(...vals, 1);   // l'échelle part de zéro : une petite variation reste petite
   const X = i => pad + i * (W - 2 * pad) / (v.length - 1), Y = x => H - pad - (x - min) / ((max - min) || 1) * (H - 2 * pad);
   const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('class', 'chart'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', title);
@@ -108,8 +124,11 @@ function spark(title, pts) {
   line.setAttribute('fill', 'none'); line.setAttribute('stroke', 'currentColor'); line.setAttribute('stroke-width', '2');
   const dot = document.createElementNS(NS, 'circle');
   dot.setAttribute('cx', X(v.length - 1)); dot.setAttribute('cy', Y(v[v.length - 1].v)); dot.setAttribute('r', '3.5'); dot.setAttribute('fill', 'currentColor');
-  svg.append(line, dot); card.append(svg);
-  card.append(el('div', `${v[0].date} → ${v[v.length - 1].date} · now ${v[v.length - 1].v} (min ${min}, max ${max})`, 'legend'));
+  const last = v[v.length - 1].v, delta = last - v[0].v;
+  const big = el('div', String(last), 'big'); big.append(el('small', delta ? ` ${delta > 0 ? '+' : ''}${delta} over the period` : ' no change over the period'));
+  svg.append(line, dot);
+  card.append(big, svg);
+  card.append(el('div', `${v[0].date} → ${v[v.length - 1].date}`, 'legend'));
   return card;
 }
 const fmtDate = s => s ? new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
@@ -117,7 +136,7 @@ const fmtDate = s => s ? new Date(s).toLocaleDateString('en-GB', { day: 'numeric
 fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   document.getElementById('meta').textContent =
     `${d.org} · updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}` +
-    (d.ai ? ' · AI-written summaries (' + d.ai + ')' : d.aiError ? ' · AI unavailable: ' + d.aiError : '') + (d.builder ? ' · script ' + d.builder : ' · script v1');
+    (d.aiError ? ' · AI unavailable: ' + d.aiError : '');
 
   // ---- changements depuis la semaine dernière
   const chBox = document.getElementById('changes'), C = d.changes;
@@ -145,6 +164,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   }
 
   const rd = document.getElementById('readiness'), R = d.readiness;
+  const seenNotes = new Set();                              // paragraphes déjà affichés sur une page précédente
   const alerts = el('div'); if (R) rd.append(alerts);      // boîtes d'alerte uniques, affichées avant les pages
   if (!R) rd.append(Object.assign(el('div', d.readinessError ? 'Could not load readiness (' + d.readinessError + ')' : 'No data yet.'), { className: 'card' }));
   else for (const pg of R.pages) {
@@ -184,8 +204,15 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     }
     if (!pg.tracks.length || pg.notes.length) {
       const det = el('details'); det.append(el('summary', pg.tracks.length ? 'Notes' : 'Page content'));
-      for (const n of pg.notes) { if (n.heading) det.append(el('div', n.heading, 'date nh')); for (const l of n.lines) if (!/^Status date/i.test(l)) det.append(el('p', l, 'np')); }
-      rd.append(det);
+      for (const n of pg.notes) {
+        const lines = n.lines.filter(l => !/^Status date/i.test(l)).filter(l => {
+          const k = l.toLowerCase().replace(/\s+/g, ' ').trim(); if (seenNotes.has(k)) return false; seenNotes.add(k); return true;
+        });
+        if (!lines.length) continue;
+        if (n.heading) det.append(el('div', n.heading, 'date nh'));
+        for (const l of lines) det.append(el('p', l, 'np'));
+      }
+      if (det.children.length > 1) rd.append(det);
     }
   }
 
@@ -258,8 +285,8 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     for (const it of P.items.slice(0, 15)) {
       const row = el('div', null, 'pr');
       const a = el('a', `${it.title}`); if (safeUrl(it.url)) { a.href = it.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
-      row.append(el('span', `${it.event} ${it.type === 'pr' ? 'PR' : 'issue'}`, 'tag ' + it.event), a,
-                 el('span', ` ${it.repo}#${it.number} · ${it.author}`, 'm'));
+      const body = el('div', null, 'b'); body.append(a, el('span', `${it.repo}#${it.number} · ${it.author}`, 'm'));
+      row.append(el('span', `${it.event} ${it.type === 'pr' ? 'PR' : 'issue'}`, 'tag ' + it.event), body);
       list.append(row);
     }
     if (!P.items.length) list.append(el('div', 'No issue or pull request activity this week.'));
@@ -270,16 +297,38 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   for (const [title, key] of [['Commits (rolling 7 days)', 'commits'], ['Open issues', 'openIssues'], ['Open PRs', 'openPrs'], ['Merged PRs (total)', 'mergedPrs']])
     tr.append(spark(title, T.map(p => ({ date: p.date, v: p[key] }))));
 
+  // ---- pied de page : sources et méthode
+  const ft = document.getElementById('foot');
+  ft.append(el('div', 'Sources & method', 'date'));
+  const fp = (...nodes) => { const p = el('p'); p.append(...nodes); ft.append(p); };
+  const ext = (text, url) => { const a = el('a', text); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; return a; };
+  fp(document.createTextNode('Data comes from the GitHub API (public repositories of '), ext(d.org, 'https://github.com/' + d.org),
+     document.createTextNode('), the documentation repository '), ext('GeniusVentures/gitbook', 'https://github.com/GeniusVentures/gitbook'),
+     document.createTextNode(', and on-chain data read live on the liquidity page.'));
+  fp(document.createTextNode(d.ai
+    ? `Daily and weekly summaries are written by an AI model (${d.ai}) from public commit messages and may contain errors.`
+    : 'Summaries are generated automatically from commit messages (no AI model on this run).'));
+  fp(document.createTextNode('Liquidity figures are estimates from on-chain pool data; gas, other pools and market moves are not included. Public information, not financial advice.'));
+  fp(document.createTextNode(`Updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })} · script ${d.builder || 'v1'}`));
+
   const domBox = document.getElementById('domains');
   for (const g of (w.domains || [])) {
     const c = el('div', null, 'card');
     c.append(el('div', g.name, 'date'));
     const big = el('div', String(g.commits), 'big'); big.append(el('small', ` commit${g.commits === 1 ? '' : 's'}` + (g.automated ? ` · +${g.automated} automated` : '')));
     c.append(big);
+    if (g.summary) c.append(el('div', g.summary, 'dsum'));
     const chips = el('div', null, 'chips');
-    for (const r of g.repos) { const ch = el('span', null, 'chip'); ch.append(el('b', r.name), document.createTextNode(` ${r.commits}`)); chips.append(ch); }
+    for (const r of g.repos) {
+      if (r.commits === 0 && r.automated) { chips.append(el('span', `${r.name} · automated ×${r.automated}`, 'chip auto')); continue; }
+      const ch = el('span', null, 'chip'); ch.append(el('b', r.name), document.createTextNode(` ${r.commits}`)); chips.append(ch);
+    }
     c.append(chips);
-    if (g.highlights.length) { const ul = el('ul', null, 'hl'); for (const t of g.highlights.slice(0, 3)) ul.append(el('li', t)); c.append(ul); }
+    if (g.highlights.length) {
+      const list = el('ul', null, 'hl'); for (const t of g.highlights.slice(0, 3)) list.append(el('li', t));
+      if (g.summary) { const det = el('details'); det.append(el('summary', 'Show commits')); det.append(list); c.append(det); }   // phrase IA = commits repliés
+      else c.append(list);
+    }
     domBox.append(c);
   }
   if (!(w.domains || []).length) domBox.append(Object.assign(el('div', 'No activity to group this week.'), { className: 'card' }));
@@ -299,7 +348,8 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
         for (const r of repos) {
           const li = el('li'), a = el('a', r.name); if (safeUrl(r.url)) { a.href = r.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
           li.append(a, el('span', ` (${r.commits}): ` + r.items.map(i => i.text).join(' · ')));
-          if (r.branches && r.branches.length) li.append(el('span', ` [branches: ${r.branches.slice(0, 4).join(', ')}${r.branches.length > 4 ? ' +' + (r.branches.length - 4) : ''}]`));
+          const nb = (r.branches || []).filter(b => !/^(main|master|develop|dev)$/i.test(b));
+          if (nb.length) li.append(el('span', ` [branches: ${nb.slice(0, 4).join(', ')}${nb.length > 4 ? ' +' + (nb.length - 4) : ''}]`));
           ul.append(li);
         }
         det.append(ul);
