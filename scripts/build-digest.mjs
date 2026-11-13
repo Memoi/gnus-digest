@@ -261,9 +261,9 @@ export function buildDigest(activity, now = new Date(), days = DAYS, domains = D
       for (const d of daysOut) for (const r of d.repos) {                  // jours du plus récent au plus ancien
         const g = wk.get(r.domain) || { name: r.domain, commits: 0, automated: 0, repos: new Map(), highlights: [] };
         g.commits += r.human; g.automated += r.automated;
-        const rr = g.repos.get(r.name) || { name: r.name, commits: 0 }; rr.commits += r.human; g.repos.set(r.name, rr);
+        const rr = g.repos.get(r.name) || { name: r.name, commits: 0, automated: 0 }; rr.commits += r.human; rr.automated += r.automated; g.repos.set(r.name, rr);
         for (const it of r.items) if (it.type !== 'automated' && g.highlights.length < 4) {
-          const t = `${r.name}: ${it.text}`.slice(0, 170); if (!g.highlights.includes(t)) g.highlights.push(t);
+          const t = cut(`${r.name}: ${it.text}`, 170); if (!g.highlights.includes(t)) g.highlights.push(t);
         }
         wk.set(r.domain, g);
       }
@@ -291,10 +291,12 @@ function pickModel(ids) {
   return null;
 }
 
-async function polishWithLLM(digest) {
+export async function polishWithLLM(digest) {
   // charge utile compacte (les niveaux gratuits limitent la taille d'entrée)
   const payload = {
-    week: { ...digest.week, byType: undefined },
+    week: { from: digest.week.from, to: digest.week.to, commits: digest.week.commits, automated: digest.week.automated, repos: digest.week.repos,
+      contributors: digest.week.contributors, releases: digest.week.releases, ciBuilds: digest.week.ciBuilds,
+      domains: digest.week.domains.map(g => ({ name: g.name, commits: g.commits, repos: g.repos.map(r => r.name), changes: g.highlights.slice(0, 3) })) },
     days: digest.days.filter(d => d.repos.length || d.releases.length || Object.keys(d.ciBuilds).length).map(d => ({
       date: d.date,
       repos: d.repos.slice(0, 4).map(r => ({ repo: r.name, domain: r.domain, manual: r.human, automated: r.automated,
@@ -314,7 +316,8 @@ async function polishWithLLM(digest) {
       'Ignore automated commits and CI builds unless nothing else happened (then mention them in a few words). ' +
       'Also write a 3-sentence summary of the week. Never invent facts that are not in the data. ' +
       'Answer in plain text only, no markdown, no JSON, exactly one line per item: first a line "WEEK: <summary>", ' +
-      'then one line "YYYY-MM-DD: <summary>" for each day present in the data.' },
+      'then one line "YYYY-MM-DD: <summary>" for each day present in the data. ' +
+      'Finally, for each entry of week.domains write one line "DOMAIN <domain name>: <one or two plain sentences on what that area worked on this week>".' },
     { role: 'user', content: JSON.stringify(payload) }];
   const call = model => fetch(url, { method: 'POST', headers, body: JSON.stringify({ model, temperature: 0.2, messages }) });
 
@@ -341,6 +344,8 @@ async function polishWithLLM(digest) {
   const txt = body.choices?.[0]?.message?.content || '';
   let gotWeek = false, gotDays = 0;
   for (const line of txt.split('\n')) {
+    const dm = line.replace(/^[\s\-*•]+/, '').replace(/\*\*/g, '').match(/^DOMAIN\s+(.+?)\s*:\s*(.+)$/i);
+    if (dm) { const g = digest.week.domains.find(x => x.name.toLowerCase() === dm[1].trim().toLowerCase()); if (g) g.summary = dm[2].trim(); continue; }
     const m = line.replace(/^[\s\-*•]+/, '').replace(/\*\*/g, '').match(/^(WEEK|\d{4}-\d{2}-\d{2})\s*:\s*(.+)$/i);
     if (!m) continue;
     if (m[1].toUpperCase() === 'WEEK') { digest.week.summary = m[2].trim(); gotWeek = true; }
@@ -628,7 +633,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v18';
+  digest.builder = 'v19';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
