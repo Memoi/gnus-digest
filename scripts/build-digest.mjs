@@ -312,12 +312,15 @@ export async function polishWithLLM(digest) {
     ...(isGitHub ? { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } : {}) };
   const messages = [
     { role: 'system', content: 'You write a short GitHub digest, always in English, for non-developers. ' +
-      'For each day write 1-2 plain sentences describing what the team did (no jargon, no commit hashes, no run IDs). ' +
+      'For each day write 1-2 plain sentences describing what changed (no jargon, no commit hashes, no run IDs). ' +
+      'Never attribute work to teams, groups or people: do not write \"the SDK team\", \"the dashboards team\" or \"the other area\"; ' +
+      'name the topic instead (for example \"The SDK gained a payout address feature\" or use the passive voice). ' +
+      'The domain called \"Other\" is a miscellaneous bucket: just describe its changes without calling it an area or a team. ' +
       'Ignore automated commits and CI builds unless nothing else happened (then mention them in a few words). ' +
       'Also write a 3-sentence summary of the week. Never invent facts that are not in the data. ' +
       'Answer in plain text only, no markdown, no JSON, exactly one line per item: first a line "WEEK: <summary>", ' +
       'then one line "YYYY-MM-DD: <summary>" for each day present in the data. ' +
-      'Finally, for each entry of week.domains write one line "DOMAIN <domain name>: <one or two plain sentences on what that area worked on this week>".' },
+      'Finally, for each entry of week.domains write one line "DOMAIN <domain name>: <one or two plain sentences on what changed in that domain this week, without mentioning teams>".' },
     { role: 'user', content: JSON.stringify(payload) }];
   const call = model => fetch(url, { method: 'POST', headers, body: JSON.stringify({ model, temperature: 0.2, messages }) });
 
@@ -633,7 +636,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v19';
+  digest.builder = 'v20';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
