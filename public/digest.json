@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T13:19:34.929Z",
+  "generatedAt": "2026-11-13T13:27:35.478Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -61,7 +61,7 @@
           "GeniusSDK: Updated: only use self hosted runners; change build pointer (+2 more)",
           "thirdparty: Updated: merge origin/develop into dev_db_storage; remove warning causing undef (+1 more)"
         ],
-        "summary": "The SDK team added a payout address function, cleaned up build runner configurations, introduced idempotency handling, added service registration, improved password security, and removed unnecessary warnings."
+        "summary": "The SDK added a payout address feature, support for idempotency keys, and exposed service registration. Security was enhanced with password hashing, email indexing, and rotating refresh tokens, while the build system switched to self‑hosted runners."
       },
       {
         "name": "Blockchain & network",
@@ -90,7 +90,7 @@
           "GeniusNetwork: Test work: milestone audit PASSED - 3/3 requirements, 7/7 phases, 5/5 integration seams, 1/1 E2E f…; VERIFICATION PASSED - TEST-02 4/4 criteria verified…",
           "GeniusNetwork: Build/release: remove REQUIREMENTS.md for v1.1 milestone; archive v1.1 milestone files (rocksdb-backup ws)"
         ],
-        "summary": "The blockchain team refined storage cleanup, added payout address features, completed a milestone audit, and set up CI runner scripts for macOS and Ubuntu."
+        "summary": "Network components received improvements to cold‑storage handling and added payout address getters. Audit tests confirmed compliance, and CI scripts were added to provision runners and enforce self‑hosted execution."
       },
       {
         "name": "Dashboards & investor tools",
@@ -114,7 +114,7 @@
           "gnus-investor-scenarios: Test work: cover model formatting, lockouts, equity and burn safeguards",
           "gnus-investor-scenarios: Refactored: extract pure formulas, token lockouts, and supply safeguards"
         ],
-        "summary": "The dashboard team added new lockout scenarios, fixed calculation scripts, expanded tests, and improved visual design and accessibility."
+        "summary": "Investor tools gained new lockout scenarios, CSV reporting, and better value formatting, with extensive tests added. The dashboard was refined for design consistency and accessibility."
       },
       {
         "name": "Other",
@@ -137,7 +137,7 @@
           "openapi-client-scaffold: Test work: failing tests for opt-in numeric keypad direct entry",
           "libp2p: Updated: remove undef, probably no longer needed, creates warnings if there"
         ],
-        "summary": "The other tools team created a numeric keypad component with tests and cleaned up warnings in the libp2p library."
+        "summary": "A numeric keypad component with tap handling was added to the client scaffold, accompanied by tests. Unused warnings were cleaned up in the networking library."
       },
       {
         "name": "Wallet & apps",
@@ -154,7 +154,7 @@
           "GeniusWallet: Updated: select self hosted runners",
           "GeniusWallet: Updated: gnus_getEarnings carries a real jobsProcessed count; genus_api bindings for task ids/re…; wire gnus_getEarnings jobsProcessed to live task ids"
         ],
-        "summary": "The wallet team updated earnings reporting to include real job counts and added task ID bindings."
+        "summary": "The wallet now reports accurate job counts and links earnings to task identifiers, and its build process was updated to use self‑hosted runners."
       },
       {
         "name": "CI & infrastructure",
@@ -170,7 +170,7 @@
         "highlights": [
           "CIDocker: Updated: CI script to run on self hosted; alma linux docker with commonly used items"
         ],
-        "summary": "The infrastructure team updated CI scripts to run on self‑hosted runners and refreshed the Docker image with common tools."
+        "summary": "CI scripts were modified to run on self‑hosted runners, and a new Alma Linux Docker image with common tools was added."
       }
     ],
     "byType": {
@@ -184,7 +184,7 @@
       "upgraded": 1
     },
     "headline": "67 commits by 5 contributors across 11 repos. Most active: gnus-investor-scenarios (13), openapi-cpp-scaffolding (12), GeniusNetwork (11). Plus 73 automated commits. 37 CI builds published.",
-    "summary": "This week the team delivered several enhancements across the SDK, blockchain, and investor tools, while also improving security and documentation. They added new payout address features, refined storage cleanup, and introduced lockout scenarios for financial models. Overall, the work focused on stability, usability, and preparing the infrastructure for upcoming releases."
+    "summary": "The week saw major enhancements across the platform, including new payout address capabilities, improved security for user data, and extensive testing of network audits. Developer tools were updated to support self‑hosted runners, idempotency keys, and rotating refresh tokens. Investor tools and dashboards received new lockout scenarios, CSV reporting, and accessibility improvements."
   },
   "days": [
     {
@@ -256,7 +256,7 @@
       "headline": "2 commits across 1 repo in 1 domain: Blockchain & network (updated). 29 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 29,
-      "summary": "The team improved the storage cleanup process to retain important markers."
+      "summary": "Cold‑storage cleanup was improved to retain important markers during data removal, and recent code updates were merged."
     },
     {
       "date": "2026-11-12",
@@ -601,7 +601,7 @@
       "headline": "28 commits across 8 repos in 5 domains: Dashboards & investor tools (added, fixed), SDK & developer tools (added, fixed), Other (added, test work) +2 more. 44 automated commits (rlp_enodes). 37 CI builds published (SuperGenius ×16, GeniusWallet ×6, GeniusSDK ×15).",
       "commits": 28,
       "automated": 44,
-      "summary": "The team added new financial lockout scenarios and refined calculation scripts for investor tools, introduced a new payout address feature and fixed build issues in the SDK, cleaned up warnings in third‑party code, and created a numeric keypad component with accompanying tests."
+      "summary": "New financial lockout scenarios and CSV reporting were added to the investor tools, and several fixes improved script formatting and testing. The SDK gained a payout address feature, switched to self‑hosted runners, and a numeric keypad component was introduced for the client scaffold."
     },
     {
       "date": "2026-11-11",
@@ -839,7 +839,7 @@
       "headline": "17 commits across 6 repos in 4 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, fixed), Wallet & apps (updated) +1 more.",
       "commits": 17,
       "automated": 0,
-      "summary": "The team completed a milestone audit for the network and recorded the results, added payout address capabilities and fixed recovery checks in the blockchain code, improved request handling in the SDK, and enhanced earnings reporting in the wallet app."
+      "summary": "Audit tests for the network passed all checks and documentation was updated. Payout address retrieval was added to core components, and request handling was improved with idempotency support. Earnings reporting in the wallet now includes accurate job counts and task identifiers."
     },
     {
       "date": "2026-11-10",
@@ -1011,7 +1011,7 @@
       "headline": "15 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (fixed, upgraded), Dashboards & investor tools (fixed).",
       "commits": 15,
       "automated": 0,
-      "summary": "Developers added new service registration and improved security by hashing passwords and rotating refresh tokens, documented these changes, fixed build runner settings, updated CI configurations, and refined the dashboard design for better accessibility."
+      "summary": "The SDK introduced service registration, rotating refresh tokens, and secured password handling with new tests and documentation. Build processes were forced to use self‑hosted runners across several components. The dashboard received design and accessibility fixes."
     },
     {
       "date": "2026-11-09",
@@ -1065,7 +1065,7 @@
       "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work).",
       "commits": 2,
       "automated": 0,
-      "summary": "The team fixed password handling to ensure hashes are stored and added tests to verify the change."
+      "summary": "Password storage was secured by hashing and email indexing was added, with tests confirming the changes."
     },
     {
       "date": "2026-11-08",
@@ -1157,10 +1157,10 @@
       "headline": "3 commits across 2 repos in 1 domain: Blockchain & network (added, updated).",
       "commits": 3,
       "automated": 0,
-      "summary": "The team set up new CI runner scripts for macOS and Ubuntu and adjusted environment configurations, and also fixed runner settings in the blockchain code."
+      "summary": "Scripts were added to set up CI runners for macOS and Ubuntu, and environment settings were persisted. Runner configuration was tightened to ensure self‑hosted execution."
     }
   ],
-  "builder": "v19",
+  "builder": "v20",
   "prs": {
     "prsOpened": 9,
     "prsMerged": 4,
@@ -1274,7 +1274,7 @@
     "mergedPrsTotal": 807
   },
   "readiness": {
-    "fetchedAt": "2026-11-13T13:19:44.957Z",
+    "fetchedAt": "2026-11-13T13:27:42.886Z",
     "staleDays": 60,
     "pages": [
       {
