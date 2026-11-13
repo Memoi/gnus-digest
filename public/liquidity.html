@@ -62,6 +62,10 @@
   .buy .fill{background:var(--buy)} .sell .fill{background:var(--sell)}
   .note{color:var(--mute);font-size:13px;margin-top:22px}
   select{font:inherit;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
+  td a.tok{color:var(--accent);font-size:12px;text-decoration:none}
+  td .gap{color:var(--accent);font-size:12px;font-weight:600}
+  .notice{margin-top:8px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;font:14px/1.5 system-ui,sans-serif}
+  .notice .nt{font-weight:600;color:var(--accent);margin-bottom:4px}
   @media (max-width:640px){
     .bar.cmpbar{flex-direction:row;flex-wrap:nowrap;gap:8px}
     .cmpbar button{width:auto;flex:1}
@@ -104,7 +108,8 @@
     <button id="cmpGo">Compare</button>
   </div>
   <div class="wrap"><table id="cmp"><thead><tr><th>Network</th><th>Pool</th><th>Price</th><th>Pool balance</th><th>Buy +X%</th><th>Sell −X%</th><th>Block</th></tr></thead><tbody id="cmpBody"></tbody></table></div>
-  <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value of tokens to sell to push it down by X%. Each network's default pool; fees included.</p>
+  <div id="cmpAlert"></div>
+  <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value of tokens to sell to push it down by X%. Each network's default pool; fees included. A price more than 50% away from the other networks is labelled.</p>
 
   <h2>Pool explorer</h2>
   <div class="bar">
@@ -408,18 +413,20 @@ function render(S){
     const [b, q] = mapPair(v0, v1);
     return `${fmt(b)} ${baseSym} + ${fmt(q)} ${quoteSym}` + (quoteUsd!=null ? ` (≈ ${usd((b*basePrice+q)*quoteUsd)})` : '');
   };
-  let inR0 = 0, inR1 = 0;
-  if (S.v3){
-    const lo = Math.floor(S.tickCur/S.spacing)*S.spacing;
-    inR0 = S.L*(1/S.sqrtCur - 1/tickSqrt(lo+S.spacing))/10**S.dec0;
-    inR1 = S.L*(S.sqrtCur - tickSqrt(lo))/10**S.dec1;
-  }
+  // Profondeur : ce qu'il faut dépenser (achat) ou vendre pour déplacer le prix de ±2 % et ±5 %
+  const depth = pct => {
+    const up = calcRow(S, D, pct), dn = calcRow(S, D, -pct);
+    const buy = up.noLiq ? 'not enough liquidity' : (quoteUsd != null ? usd(up.quote*quoteUsd) : `${fmt(up.quote)} ${quoteSym}`);
+    const sell = dn.noLiq ? 'not enough liquidity' : (quoteUsd != null ? usd(dn.base*baseUsd) : `${fmt(dn.base)} ${baseSym}`);
+    return `Buy ${buy} · Sell ${sell}`;
+  };
 
   $('info').innerHTML = [
     ['Pool', `${S.sym0}/${S.sym1} · ${S.v3 ? 'v3' : 'v2'} pool, fee ${+(S.fee*100).toFixed(3)}%${S.stable ? ' · stable curve (estimates inaccurate)' : ''}`],
     [`${baseSym} price`, `${fmt(basePrice)} ${quoteSym}` + (baseUsd!=null ? ` (${usd(baseUsd)})` : '')],
     ['Pool balance', pairStr(S.bal0/10**S.dec0, S.bal1/10**S.dec1)],
-    ...(S.v3 ? [['In-range liquidity', pairStr(inR0, inR1)]] : []),
+    ['Depth ±2%', depth(2)],
+    ['Depth ±5%', depth(5)],
     ['Block', S.block.toLocaleString('en-US')]
   ].map(([k,v])=>`<div><b>${k}</b><span>${v}</span></div>`).join('');
 
@@ -466,16 +473,25 @@ function mkCell(label, main, sub, cls){
   if (sub) { const d = document.createElement('div'); d.className = 'sub'; d.style.margin = '0'; d.textContent = sub; td.append(d); }
   return td;
 }
-function compareCells(c, S, pct){
+// Contexte affiché avec les écarts de prix. Mets '' pour le retirer le jour où le bridge existera.
+const BRIDGE_NOTE = 'GNUS cannot currently be bridged between networks, so arbitrage cannot close these gaps: each network trades as a separate market.';
+const EXPLORERS = { ethereum: 'https://etherscan.io/token/', polygon: 'https://polygonscan.com/token/', base: 'https://basescan.org/token/', bsc: 'https://bscscan.com/token/' };
+function compareCells(k, c, S, pct){
   const D = derive(S), up = calcRow(S, D, pct), dn = calcRow(S, D, -pct);
   const { baseSym, quoteSym, quoteUsd, basePrice, baseUsd } = D;
   const hasUsd = quoteUsd != null;
   const bBal = (D.baseIsT0 ? S.bal0 : S.bal1) / 10**D.dBase, qBal = (D.baseIsT0 ? S.bal1 : S.bal0) / 10**D.dQuote;
   const tvl = (bBal*basePrice + qBal);
   const money = (qty, valueQuote) => hasUsd ? usd(valueQuote*quoteUsd) : `${fmt(valueQuote)} ${quoteSym}`;
+  const poolCell = mkCell('Pool', `${baseSym}/${quoteSym}`, `${S.v3 ? 'v3' : 'v2'} · fee ${+(S.fee*100).toFixed(3)}%${S.stable ? ' · stable curve' : ''}`);
+  const tokAddr = D.baseIsT0 ? S.tok0 : S.tok1;                                  // adresse du token de base, cliquable vers l'explorateur
+  const tokLink = document.createElement('a'); tokLink.className = 'tok';
+  tokLink.textContent = `${baseSym} ${tokAddr.slice(0, 6)}…${tokAddr.slice(-4)} ↗`;
+  tokLink.href = EXPLORERS[k] + tokAddr; tokLink.target = '_blank'; tokLink.rel = 'noopener noreferrer';
+  const tokWrap = document.createElement('div'); tokWrap.append(tokLink); poolCell.append(tokWrap);
   return [
     mkCell('Network', c.label, null, 'pct'),
-    mkCell('Pool', `${baseSym}/${quoteSym}`, `${S.v3 ? 'v3' : 'v2'} · fee ${+(S.fee*100).toFixed(3)}%${S.stable ? ' · stable curve' : ''}`),
+    poolCell,
     mkCell('Price', hasUsd ? usd(baseUsd) : `${fmt(basePrice)} ${quoteSym}`, hasUsd ? `${fmt(basePrice)} ${quoteSym}` : null),
     mkCell('Pool balance', money(0, tvl), `${fmt(bBal)} ${baseSym}`),
     up.noLiq ? mkCell(`Buy +${pct}%`, 'Not enough liquidity') : mkCell(`Buy +${pct}%`, money(0, up.quote), `${fmt(up.base)} ${baseSym} received`),
@@ -487,6 +503,7 @@ async function compareAll(){
   const pct = Math.abs(parseFloat($('cmpPct').value)) || 10;
   const body = $('cmpBody'); body.textContent = '';
   $('cmpGo').disabled = true;
+  const results = [];
   const jobs = Object.entries(CHAINS).map(([k, c]) => {
     const tr = document.createElement('tr');
     tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Loading…'), { colSpan: 6 }));
@@ -495,13 +512,41 @@ async function compareAll(){
       try{
         const key = k + ':' + c.addr.toLowerCase();
         const S = POOLS[key] || (POOLS[key] = await loadPool({ chain: k, addr: c.addr, urls: c.rpcs, block: 'latest', status: () => {} }));
-        tr.textContent = ''; tr.append(...compareCells(c, S, pct));
+        const cells = compareCells(k, c, S, pct);
+        tr.textContent = ''; tr.append(...cells);
+        const D = derive(S);
+        results.push({ label: c.label, usd: D.baseUsd, sym: D.baseSym, priceCell: cells[2] });
       }catch(e){
         tr.textContent = ''; tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Error: ' + (e.message || e)), { colSpan: 6 }));
       }
     })();
   });
   await Promise.all(jobs);
+  // écart de prix : signalé quand un réseau s'écarte de plus de 50 % de la médiane des autres
+  const box = $('cmpAlert'); box.textContent = '';
+  const priced = results.filter(r => r.usd != null && isFinite(r.usd) && r.usd > 0), flagged = [];
+  if (priced.length >= 3) for (const r of priced) {
+    const others = priced.filter(x => x !== r).map(x => x.usd).sort((a, b) => a - b);
+    const med = others.length % 2 ? others[(others.length - 1) / 2] : (others[others.length / 2 - 1] + others[others.length / 2]) / 2;
+    const dev = r.usd / med - 1;
+    if (Math.abs(dev) > 0.5) {
+      flagged.push({ ...r, med, dev });
+      const g = document.createElement('div'); g.className = 'gap';
+      g.textContent = `${dev > 0 ? '+' : '−'}${Math.round(Math.abs(dev)*100)}% vs other networks`;
+      r.priceCell.append(g);
+    }
+  }
+  if (flagged.length) {
+    const n = document.createElement('div'); n.className = 'notice';
+    const t = document.createElement('div'); t.className = 'nt'; t.textContent = 'Price gaps between networks'; n.append(t);
+    for (const f of flagged) {
+      const line = document.createElement('div');
+      line.textContent = `${f.label}: ${f.sym} at ${usd(f.usd)} is ${Math.round(Math.abs(f.dev)*100)}% ${f.dev > 0 ? 'above' : 'below'} the median of the other networks (${usd(f.med)}).`;
+      n.append(line);
+    }
+    if (BRIDGE_NOTE) { const note = document.createElement('div'); note.style.marginTop = '6px'; note.style.color = 'var(--mute)'; note.textContent = BRIDGE_NOTE; n.append(note); }
+    box.append(n);
+  }
   $('cmpGo').disabled = false;
 }
 $('cmpGo').onclick = () => { for (const k of Object.keys(POOLS)) delete POOLS[k]; compareAll(); };
