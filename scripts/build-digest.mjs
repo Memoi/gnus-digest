@@ -4,6 +4,8 @@ import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 
 const ORG    = process.env.ORG || 'GeniusVentures';
+const SITE_URL = (process.env.SITE_URL || 'https://gnus-digest.vercel.app').replace(/\/$/, '');
+const DOCS_ORIGIN = process.env.DOCS_ORIGIN || 'https://docs.gnus.ai/';
 const DAYS   = Number(process.env.DAYS || 7);
 const TZ     = process.env.TZ_NAME || 'Europe/Zurich';   // fuseau utilisé pour découper les jours
 const TOKEN  = process.env.GITHUB_TOKEN || '';
@@ -629,18 +631,115 @@ export function compareSnapshots(prev, cur) {
   return out;
 }
 
+/* ---------------- Changements de la documentation ---------------- */
+export function docsUrlFor(path) {
+  if (!/\.md$/i.test(path)) return null;
+  const base = path.replace(/\.md$/i, '');
+  if (/^(readme|summary)$/i.test(base.split('/').pop())) return null;      // fichiers techniques, pas des pages
+  return DOCS_ORIGIN + base.replace(/\/index$/i, '').split('/').map(encodeURIComponent).join('/') + '/';
+}
+// details = réponses de l'API « un commit » (avec la liste des fichiers modifiés)
+export function aggregateDocsChanges(details) {
+  const byPath = new Map();
+  for (const d of details) {
+    if (!d) continue;
+    const date = d.commit?.committer?.date || d.commit?.author?.date;
+    for (const f of d.files || []) {
+      const url = docsUrlFor(f.filename);
+      if (!url) continue;
+      const e = byPath.get(f.filename) || { path: f.filename, url, edits: 0, last: null, subject: '' };
+      e.edits++;
+      if (!e.last || date > e.last) { e.last = date; e.subject = cleanSubject(d.commit.message); }
+      byPath.set(f.filename, e);
+    }
+  }
+  return [...byPath.values()].sort((a, b) => b.last.localeCompare(a.last)).slice(0, 20);
+}
+async function fetchDocsChanges(since) {
+  const commits = await gh(`/repos/${DOCS_REPO}/commits`, { since: since.toISOString(), per_page: 100 });
+  const pick = commits.slice(0, 40), details = [];
+  for (let i = 0; i < pick.length; i += 5)
+    details.push(...await Promise.all(pick.slice(i, i + 5).map(c => gh(`/repos/${DOCS_REPO}/commits/${c.sha}`).catch(() => null))));
+  return { windowDays: DAYS, commits: commits.length, pages: aggregateDocsChanges(details) };
+}
+
+/* ---------------- Flux RSS ---------------- */
+const xmlEsc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const niceDay = date => new Date(date + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+
+// Un article par journée COMPLÈTE (pas aujourd'hui) : leur contenu ne bouge plus, les lecteurs RSS n'affichent pas de doublons.
+export function buildFeed(digest, site = SITE_URL) {
+  const items = digest.days.slice(1)
+    .filter(d => d.commits || d.automated || (d.releases || []).length)
+    .map(d => {
+      const repos = (d.repos || []).map(r => r.name);
+      const text = (d.summary || d.headline) + (repos.length ? ` Repositories: ${repos.join(', ')}.` : '');
+      return `    <item>
+      <title>${xmlEsc('GNUS digest — ' + niceDay(d.date))}</title>
+      <link>${xmlEsc(site + '/')}</link>
+      <guid isPermaLink="false">gnus-digest-${xmlEsc(d.date)}</guid>
+      <pubDate>${new Date(d.date + 'T23:59:00Z').toUTCString()}</pubDate>
+      <description>${xmlEsc(text)}</description>
+    </item>`;
+    }).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GNUS digest</title>
+    <link>${xmlEsc(site + '/')}</link>
+    <description>Daily digest of the ${xmlEsc(digest.org)} GitHub activity, written from public commit messages.</description>
+    <language>en</language>
+    <lastBuildDate>${new Date(digest.generatedAt).toUTCString()}</lastBuildDate>
+    <atom:link href="${xmlEsc(site + '/feed.xml')}" rel="self" type="application/rss+xml"/>
+${items}
+  </channel>
+</rss>
+`;
+}
+
+/* ---------------- Telegram ---------------- */
+// Message du matin : résumé de HIER (dernière journée complète). Renvoie null les jours sans rien à dire.
+export function buildTelegramText(digest, now = new Date(), site = SITE_URL, postQuiet = process.env.TELEGRAM_POST_QUIET === '1') {
+  const y = digest.days[1];
+  if (!y) return null;
+  const quiet = !y.commits && !y.automated && !(y.releases || []).length;
+  const docsRecent = (digest.docsChanges?.pages || []).filter(p => Date.parse(p.last) >= now.getTime() - 2 * 86400000);
+  if (quiet && !docsRecent.length && !postQuiet) return null;
+  const w = digest.week, lines = [`📊 GNUS digest — ${niceDay(y.date)}`, '', y.summary || y.headline, ''];
+  lines.push(`This week: ${w.commits} commits · ${w.repos} repos · ${w.contributors} contributors` + (w.domains?.[0] ? ` (mostly ${w.domains[0].name})` : ''));
+  const mainnet = [];
+  for (const pg of digest.readiness?.pages || []) for (const t of pg.tracks || []) if (t.kind === 'table')
+    for (const it of t.items) if (/mainnet/i.test(it.label)) mainnet.push(`${it.label}: ${it.statusText}`);
+  if (mainnet.length) lines.push('Mainnet — ' + mainnet.slice(0, 2).join(' · '));
+  if (docsRecent.length) lines.push('Docs updated: ' + docsRecent.slice(0, 4).map(p => p.path.split('/').pop().replace(/\.md$/i, '').replace(/[-_]/g, ' ')).join(', '));
+  lines.push('', site + '/');
+  return lines.join('\n').slice(0, 3900);
+}
+async function postTelegram(token, chat, text) {
+  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: chat, text, disable_web_page_preview: false }) });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok || !j.ok) throw new Error(`Telegram ${res.status}: ${j.description || 'unknown error'}`);   // le jeton n'apparaît jamais dans l'erreur
+}
+
 /* ---------------- main ---------------- */
 async function main() {
   const now = new Date();
+  let prev = null;
+  try { prev = JSON.parse(await readFile('public/digest.json', 'utf8')); } catch {}      // pour ne pas poster deux fois le même jour sur Telegram
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v21';
+  digest.builder = 'v22';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
   catch (e) { digest.readinessError = String(e.message).slice(0, 200); console.warn('Docs step skipped:', e.message); }
+
+  try { digest.docsChanges = await fetchDocsChanges(new Date(now.getTime() - DAYS * 86400000)); }
+  catch (e) { digest.docsChangesError = String(e.message).slice(0, 200); console.warn('Docs changes step skipped:', e.message); }
 
   // historique : comparaison avec il y a ~7 jours + tendances
   const history = await loadHistory();
@@ -655,8 +754,26 @@ async function main() {
     try { digest = await polishWithLLM(digest); digest.ai = digest.aiModel; console.log('AI summaries added'); }
     catch (e) { digest.aiError = String(e.message).slice(0, 400); console.warn('LLM step skipped:', e.message); }
   }
+  digest.telegramPosted = prev?.telegramPosted || null;
   await mkdir('public', { recursive: true });
   await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
-  console.log(`digest.json written: ${digest.week.commits} commits, ${digest.week.repos} repos`);
+  await writeFile('public/feed.xml', buildFeed(digest));
+  console.log(`digest.json written: ${digest.week.commits} commits, ${digest.week.repos} repos; feed.xml written`);
+
+  // Telegram (facultatif : seulement si le jeton et le canal sont configurés)
+  const tgToken = process.env.TELEGRAM_BOT_TOKEN, tgChat = process.env.TELEGRAM_CHAT_ID;
+  if (tgToken && tgChat) {
+    const todayKey = dayKey(now);
+    if (digest.telegramPosted === todayKey && process.env.TELEGRAM_FORCE !== '1') console.log('Telegram: already posted today');
+    else {
+      const msg = buildTelegramText(digest, now);
+      if (!msg) console.log('Telegram: nothing worth posting today');
+      else {
+        try { await postTelegram(tgToken, tgChat, msg); digest.telegramPosted = todayKey; delete digest.telegramError; console.log('Telegram: posted'); }
+        catch (e) { digest.telegramError = String(e.message).slice(0, 200); console.warn('Telegram step failed:', e.message); }
+        await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
+      }
+    }
+  }
 }
 if (import.meta.url === pathToFileURL(process.argv[1] || '').href) main().catch(e => { console.error(e); process.exit(1); });
