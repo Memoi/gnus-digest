@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="GNUS liquidity">
 <meta property="og:description" content="Cost to move the price on each network, read live from the blockchain. Estimates only, not financial advice.">
-<meta property="og:image" content="https://gnus-digest.vercel.app/og.png">
+<meta property="og:image" content="og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
 <style>
@@ -31,7 +31,7 @@
   nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
   nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
   .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-  input,textarea,button{font:inherit;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
+  input,textarea,button{font:inherit;font-family:system-ui,sans-serif;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
   input#addr{flex:1;min-width:300px;font-family:Consolas,monospace;font-size:13px}
   input#lv{width:100%}
   button{background:var(--ink);color:var(--bg);border-color:var(--ink);cursor:pointer;font-weight:600}
@@ -61,7 +61,7 @@
   .fill{height:100%;border-radius:5px}
   .buy .fill{background:var(--buy)} .sell .fill{background:var(--sell)}
   .note{color:var(--mute);font-size:13px;margin-top:22px}
-  select{font:inherit;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
+  select{font:inherit;font-family:system-ui,sans-serif;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
   td a.tok{color:var(--accent);font-size:12px;text-decoration:none}
   td .gap{color:var(--accent);font-size:12px;font-weight:600}
   .notice{margin-top:8px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;font:14px/1.5 system-ui,sans-serif}
@@ -97,8 +97,8 @@
 <body>
 <main>
   <nav><a href="./">Digest</a><a href="liquidity.html" aria-current="page">GNUS liquidity</a></nav>
-  <h1>DEX pool depth (Uniswap / PancakeSwap)</h1>
-  <p class="sub">How much buying (or selling) it would actually take to reach each price level. Data is read live from the blockchain, nothing to update.</p>
+  <h1>DEX pool depth</h1>
+  <p class="sub">How much buying (or selling) it would actually take to reach each price level. Works with Uniswap, PancakeSwap, Aerodrome and compatible pools. Data is read live from the blockchain, nothing to update.</p>
 
   <h2>All networks at a glance</h2>
   <div class="bar cmpbar" style="align-items:center">
@@ -107,9 +107,9 @@
     <span class="sub" style="margin:0">%</span>
     <button id="cmpGo">Compare</button>
   </div>
-  <div class="wrap"><table id="cmp"><thead><tr><th>Network</th><th>Pool</th><th>Price</th><th>Pool balance</th><th>Buy +X%</th><th>Sell −X%</th><th>Block</th></tr></thead><tbody id="cmpBody"></tbody></table></div>
+  <div class="wrap"><table id="cmp"><thead><tr><th>Network</th><th>Pool</th><th>Price</th><th>Pool balance</th><th>Buy +X%</th><th>Sell −X%</th><th>Read at</th></tr></thead><tbody id="cmpBody"></tbody></table></div>
   <div id="cmpAlert"></div>
-  <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value of tokens to sell to push it down by X%. Each network's default pool; fees included. A price more than 50% away from the other networks is labelled.</p>
+  <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value, at the current price, of the tokens to sell to push it down by X% (the sale brings in a bit less because of price impact and fees). Each network's default pool; fees included. A price more than 50% away from the other networks is labelled.</p>
 
   <h2>Pool explorer</h2>
   <div class="bar">
@@ -132,6 +132,7 @@ https://cloudflare-eth.com</textarea>
 
   <div id="status"></div>
   <div class="info" id="info"></div>
+  <p class="sub" id="depthNote" style="margin-top:8px"></p>
   <div id="out"></div>
 
   <p class="note">Public on-chain information, not financial advice. Estimate for this pool only: pool fees included, but no gas, no other pools' slippage and no arbitrage during the move. Price can jump freely through zones with no liquidity.</p>
@@ -294,7 +295,7 @@ async function loadPool(ctx){
     addr, v3, tok0, tok1, dec0: d0?num(d0[0]):18, dec1: d1?num(d1[0]):18,
     sym0: cleanSym(s0?s0[0]:'T0'), sym1: cleanSym(s1?s1[0]:'T1'),
     isQ0: !!q0, isQ1: !!q1, usd0: usdOf(q0,0), usd1: usdOf(q1,1),
-    bal0: b0?num(b0[0]):0, bal1: b1?num(b1[0]):0, block: parseInt(ctx.block,16),
+    bal0: b0?num(b0[0]):0, bal1: b1?num(b1[0]):0, block: parseInt(ctx.block,16), readAt: Date.now(),
     fee: v3 ? num(fee[0])/1e6 : ((feeIdx != null && R[feeIdx]) ? num(R[feeIdx][0])/10000 : (CHAINS[ctx.chain].v2fee || 0.003)),
     stable: !!(stab && stab[0])
   };
@@ -421,6 +422,9 @@ function render(S){
     return `Buy ${buy} · Sell ${sell}`;
   };
 
+  $('depthNote').textContent = quoteUsd != null
+    ? `Depth: “Buy” = the dollars to spend; “Sell” = the value, at the current price, of the ${baseSym} to sell. Selling actually brings in a bit less (price impact and fees): see “USD received” in the sell table.`
+    : `Depth: “Buy” = the ${quoteSym} to spend; “Sell” = the ${baseSym} to sell.`;
   $('info').innerHTML = [
     ['Pool', `${S.sym0}/${S.sym1} · ${S.v3 ? 'v3' : 'v2'} pool, fee ${+(S.fee*100).toFixed(3)}%${S.stable ? ' · stable curve (estimates inaccurate)' : ''}`],
     [`${baseSym} price`, `${fmt(basePrice)} ${quoteSym}` + (baseUsd!=null ? ` (${usd(baseUsd)})` : '')],
@@ -436,7 +440,7 @@ function render(S){
   const buys = rows.filter(r=>r.pct>0), sells = rows.filter(r=>r.pct<0).reverse();
   const bar = (val,max,cls)=>`<td class="viz"><div class="bg"><div class="fill" style="width:${max>0?Math.max(2,val/max*100):0}%"></div></div></td>`;
   const uq = v => quoteUsd!=null ? `<td>${usd(v*quoteUsd)}</td>` : '';
-  const hq = quoteUsd!=null ? '<th>USD value</th>' : '';
+  const hqBuy = quoteUsd!=null ? '<th>USD spent</th>' : '', hqSell = quoteUsd!=null ? '<th>USD received</th>' : '';
   const hp = quoteUsd!=null ? '<th>Target price (USD)</th>' : '';
   const tp = r => quoteUsd!=null ? `<td>${usd(r.tBase*quoteUsd)}</td>` : '';
 
@@ -445,13 +449,13 @@ function render(S){
 
   let html = '';
   html += `<h2>Buy ${baseSym} to push the price up</h2><div class="wrap"><table class="buy"><thead><tr>
-    <th>Change</th><th>Target price (${quoteSym})</th>${hp}<th>To spend (${quoteSym})</th><th>${baseSym} received</th>${hq}<th>Ticks crossed</th><th></th></tr></thead><tbody>` +
+    <th>Change</th><th>Target price (${quoteSym})</th>${hp}<th>To spend (${quoteSym})</th><th>${baseSym} received</th>${hqBuy}<th>Ticks crossed</th><th></th></tr></thead><tbody>` +
     buys.map(r=> r.noLiq
       ? `<tr><td class="pct">+${r.pct}%</td><td>${fmt(r.tBase)}</td>${tp(r)}<td colspan="${quoteUsd!=null?5:4}">Not enough liquidity to reach this level</td></tr>`
       : `<tr><td class="pct">+${r.pct}%</td><td>${fmt(r.tBase)}</td>${tp(r)}<td>${fmt(r.quote)}</td><td>${fmt(r.base)}</td>${uq(r.quote)}<td>${r.crossed}</td>${bar(r.quote,maxB)}</tr>`).join('') +
     `</tbody></table></div>`;
   html += `<h2>Sell ${baseSym} to push the price down</h2><div class="wrap"><table class="sell"><thead><tr>
-    <th>Change</th><th>Target price (${quoteSym})</th>${hp}<th>${baseSym} to sell</th><th>${quoteSym} received</th>${hq}<th>Ticks crossed</th><th></th></tr></thead><tbody>` +
+    <th>Change</th><th>Target price (${quoteSym})</th>${hp}<th>${baseSym} to sell</th><th>${quoteSym} received</th>${hqSell}<th>Ticks crossed</th><th></th></tr></thead><tbody>` +
     sells.map(r=> r.noLiq
       ? `<tr><td class="pct">${r.pct}%</td><td>${fmt(r.tBase)}</td>${tp(r)}<td colspan="${quoteUsd!=null?5:4}">Not enough liquidity to reach this level</td></tr>`
       : `<tr><td class="pct">${r.pct}%</td><td>${fmt(r.tBase)}</td>${tp(r)}<td>${fmt(r.base)}</td><td>${fmt(r.quote)}</td>${uq(r.quote)}<td>${r.crossed}</td>${bar(r.base,maxS)}</tr>`).join('') +
@@ -496,7 +500,7 @@ function compareCells(k, c, S, pct){
     mkCell('Pool balance', money(0, tvl), `${fmt(bBal)} ${baseSym}`),
     up.noLiq ? mkCell(`Buy +${pct}%`, 'Not enough liquidity') : mkCell(`Buy +${pct}%`, money(0, up.quote), `${fmt(up.base)} ${baseSym} received`),
     dn.noLiq ? mkCell(`Sell −${pct}%`, 'Not enough liquidity') : mkCell(`Sell −${pct}%`, hasUsd ? usd(dn.base*baseUsd) : `${fmt(dn.base)} ${baseSym}`, `${fmt(dn.base)} ${baseSym} sold`),
-    mkCell('Block', S.block.toLocaleString('en-US'), null),
+    mkCell('Read at', new Date(S.readAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), null),
   ];
 }
 async function compareAll(){
