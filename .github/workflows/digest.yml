@@ -28,9 +28,13 @@ jobs:
           LLM_URL: ${{ vars.LLM_URL }}
           LLM_MODEL: ${{ vars.LLM_MODEL }}
           LLM_KEY: ${{ secrets.LLM_API_KEY }}
+          SITE_URL: https://gnus-digest.vercel.app
+          # Telegram (facultatif) : secrets TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID ; vides = aucun envoi
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       - name: Commit result
         run: |
           git config user.name  "digest-bot"
           git config user.email "digest-bot@users.noreply.github.com"
-          git add public/digest.json public/history.json
+          git add public/digest.json public/history.json public/feed.xml
           git diff --cached --quiet || (git commit -m "chore: update digest" && git push)
