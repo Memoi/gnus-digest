@@ -35,7 +35,7 @@
       "repos": [
         "GeniusSDK",
         "*SDK*",
-        "openapi-cpp-scaffolding",
+        "openapi-*",
         "AsyncIOManager",
         "thirdparty"
       ]
@@ -56,6 +56,7 @@
         "GeniusNetwork",
         "rlp_enodes",
         "zkLLVM",
+        "libp2p*",
         "*contracts*"
       ]
     }
