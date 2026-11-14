@@ -152,9 +152,9 @@ export const DEFAULT_DOMAINS = [
   { name: 'Wallet & apps',          repos: ['GeniusWallet', '*Wallet*'] },
   { name: 'Dashboards & investor tools', repos: ['gnus-dashboard', 'gnus-investor-*'] },
   { name: 'CI & infrastructure',    repos: ['CIDocker', '*docker*'] },
-  { name: 'SDK & developer tools',  repos: ['GeniusSDK', '*SDK*', 'openapi-cpp-scaffolding', 'AsyncIOManager', 'thirdparty'] },
+  { name: 'SDK & developer tools',  repos: ['GeniusSDK', '*SDK*', 'openapi-*', 'AsyncIOManager', 'thirdparty'] },
   { name: 'Docs & website',         repos: ['gitbook', 'documentation', '*docs*', '*website*'] },
-  { name: 'Blockchain & network',   repos: ['SuperGenius', 'GeniusNetwork', 'rlp_enodes', 'zkLLVM', '*contracts*'] },
+  { name: 'Blockchain & network',   repos: ['SuperGenius', 'GeniusNetwork', 'rlp_enodes', 'zkLLVM', 'libp2p*', '*contracts*'] },
 ];
 const globToRe = pat => new RegExp('^' + pat.split('*').map(x => x.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('.*') + '$', 'i');
 export function domainOf(repoName, cfg = DEFAULT_DOMAINS) {
@@ -636,7 +636,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v20';
+  digest.builder = 'v21';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
