@@ -13,6 +13,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="GNUS digest: GitHub activity, mainnet readiness and liquidity">
+<link rel="alternate" type="application/rss+xml" title="GNUS digest" href="feed.xml">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://gnus-digest.vercel.app/og.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
@@ -48,6 +49,8 @@
   .badge.done{color:#2e7d32;border-color:#2e7d32}.badge.progress{color:var(--accent);border-color:var(--accent)}
   .srow{padding:8px 0;border-bottom:1px solid var(--line);font:14px/1.45 system-ui,sans-serif}.srow:last-child{border-bottom:0}
   .srow .d{color:var(--mute);font-size:13px;margin-top:2px}
+  .srow .m{color:var(--mute);font-size:13px}
+  .srow a{color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--line)}
   .notice{border-left:3px solid var(--accent)}
   .notice .w{font:600 14px system-ui,sans-serif;color:var(--accent);margin-bottom:4px}
   .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px 22px}
@@ -94,11 +97,14 @@
   <h1>GitHub digest</h1>
   <p class="sub" id="meta">Loading…</p>
   <nav><a href="./" aria-current="page">Digest</a><a href="liquidity.html">GNUS liquidity</a></nav>
+  <div id="banner"></div>
   <h2>At a glance</h2>
   <div class="card" id="overview"></div>
   <h2>Mainnet readiness</h2>
   <div id="changes"></div>
   <div id="readiness"></div>
+  <h2>Documentation changes</h2>
+  <div class="card" id="docchanges"></div>
   <h2>This week</h2>
   <div class="card" id="week"></div>
   <h2>Activity by domain</h2>
@@ -304,6 +310,31 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   for (const [title, key] of [['Commits (rolling 7 days)', 'commits'], ['Open issues', 'openIssues'], ['Open PRs', 'openPrs'], ['Merged PRs (total)', 'mergedPrs']])
     tr.append(spark(title, T.map(p => ({ date: p.date, v: p[key] }))));
 
+  // ---- bandeau si les données ne sont plus renouvelées (workflow en panne, clé expirée…)
+  const ageH = (Date.now() - new Date(d.generatedAt).getTime()) / 3.6e6;
+  if (ageH > 36) {
+    const bn = el('div', null, 'card notice');
+    bn.append(el('div', 'These figures may be out of date', 'w'),
+      el('div', `Last update: ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })} (${Math.round(ageH)} hours ago). The daily update may have failed.`));
+    document.getElementById('banner').append(bn);
+  }
+
+  // ---- changements de la documentation (7 jours)
+  const dc = document.getElementById('docchanges'), DCH = d.docsChanges;
+  if (!DCH) dc.append(el('div', d.docsChangesError ? `Could not load documentation changes (${d.docsChangesError})` : 'No data yet.'));
+  else if (!DCH.pages.length) dc.append(el('div', `No documentation page changed in the last ${DCH.windowDays || 7} days.`));
+  else {
+    dc.append(el('div', `${DCH.pages.length} page${DCH.pages.length === 1 ? '' : 's'} edited in the last ${DCH.windowDays || 7} days`, 'legend'));
+    for (const pgc of DCH.pages.slice(0, 12)) {
+      const row = el('div', null, 'srow');
+      const a = el('a', pgc.path.split('/').pop().replace(/\.md$/i, '').replace(/[-_]/g, ' '));
+      if (safeUrl(pgc.url)) { a.href = pgc.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+      row.append(a, el('span', ` · ${pgc.edits} edit${pgc.edits === 1 ? '' : 's'} · last ${fmtDate(pgc.last)}`, 'm'));
+      if (pgc.subject) row.append(el('div', pgc.subject, 'd'));
+      dc.append(row);
+    }
+  }
+
   // ---- pied de page : sources et méthode
   const ft = document.getElementById('foot');
   ft.append(el('div', 'Sources & method', 'date'));
@@ -316,7 +347,8 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     ? `Daily and weekly summaries are written by an AI model (${d.ai}) from public commit messages and may contain errors.`
     : 'Summaries are generated automatically from commit messages (no AI model on this run).'));
   fp(document.createTextNode('Liquidity figures are estimates from on-chain pool data; gas, other pools and market moves are not included. Public information, not financial advice.'));
-  fp(document.createTextNode(`Updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })} · script ${d.builder || 'v1'}`));
+  { const rss = el('a', 'RSS feed'); rss.href = 'feed.xml';
+    fp(document.createTextNode(`Updated ${new Date(d.generatedAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })} · script ${d.builder || 'v1'} · `), rss); }
 
   const domBox = document.getElementById('domains');
   for (const g of (w.domains || [])) {
