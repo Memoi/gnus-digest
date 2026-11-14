@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="GNUS digest">
 <meta property="og:description" content="GitHub activity, mainnet readiness and liquidity depth for GNUS, updated daily from public sources.">
-<meta property="og:image" content="https://gnus-digest.vercel.app/og.png"><!-- pour les aperçus Telegram/X : remplace par l'adresse complète, ex. https://ton-site.vercel.app/og.png -->
+<meta property="og:image" content="og.png"><!-- pour les aperçus Telegram/X : remplace par l'adresse complète, ex. https://ton-site.vercel.app/og.png -->
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
 <style>
@@ -187,7 +187,9 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
         rd.append(tc); continue;
       }
       const c = el('div', null, 'card');
-      const row = el('div', null, 'trow'); row.append(el('b', t.name), el('span', `${t.done}/${t.total} done`, 'pct')); c.append(row);
+      const row = el('div', null, 'trow'); row.append(el('b', t.name), el('span', `${t.done}/${t.total} done`, 'pct'));
+      const collapsed = t.total >= 8 && t.done / t.total >= 0.8;      // liste presque terminée : repliée, son titre est déjà dans le résumé cliquable
+      if (!collapsed) c.append(row);
       if (t.summary) c.append(el('div', t.summary, 'legend'));
       // pas de barre de progression quand la doc précise qu'il s'agit de zones à préparer, pas d'étapes datées
       const noBar = /not (completed )?milestones|readiness areas|dated commitments/i.test((t.summary || '') + ' ' + (t.note || ''));
@@ -198,7 +200,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
         if (it.target) row2.append(el('span', ' → ' + it.target, 't')); c.append(row2);
       }
       if (t.note) c.append(el('div', t.note, 'note'));
-      if (t.total >= 8 && t.done / t.total >= 0.8) {          // longue liste presque terminée = historique : repliée
+      if (collapsed) {
         const hd = el('details'); hd.append(el('summary', `${t.name} — ${t.done}/${t.total} done`)); hd.append(c); rd.append(hd);
       } else rd.append(c);
     }
