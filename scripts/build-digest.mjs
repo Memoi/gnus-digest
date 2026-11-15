@@ -12,7 +12,6 @@ const DAYS   = Number(process.env.DAYS || 7);
 const TZ     = process.env.TZ_NAME || 'Europe/Zurich';   // fuseau utilisé pour découper les jours
 const TOKEN  = process.env.GITHUB_TOKEN || '';
 const API    = 'https://api.github.com';
-const TELEGRAM_ALLOW_MULTIPLE_PER_DAY  =  1;
 
 /* ---------------- GitHub API ---------------- */
 async function gh(path, params = {}) {
