@@ -15,14 +15,11 @@ jobs:
     timeout-minutes: 15        # une lecture de blockchain qui se bloque ne doit pas bloquer le job
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 24
-      - name: Install ethers (reads the liquidity pools)
-        run: npm install --no-save --no-audit --no-fund ethers@5.7.2
+      - name: Download ethers (reads the liquidity pools)
+        run: curl -fsSL --retry 2 --max-time 30 -o scripts/ethers.umd.min.js https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js
         continue-on-error: true   # sans lui, seule la liquidité est ignorée
       - name: Build digest
-        run: node scripts/build-digest.mjs
+        run: node --version && node scripts/build-digest.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ORG: GeniusVentures
