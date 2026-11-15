@@ -2,6 +2,8 @@
 // Node 20+, aucune dépendance. Résumé 100 % règles (gratuit) ; IA gratuite optionnelle (USE_LLM=1).
 import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
+import { createRequire } from 'node:module';
+import { withTimeout, fetchLiquiditySnapshot, updateLiquidityHistory, updateArchive, summarizeMilestones } from './extras.mjs';
 
 const ORG    = process.env.ORG || 'GeniusVentures';
 const SITE_URL = (process.env.SITE_URL || 'https://gnus-digest.vercel.app').replace(/\/$/, '');
@@ -723,6 +725,35 @@ async function postTelegram(token, chat, text) {
   if (!res.ok || !j.ok) throw new Error(`Telegram ${res.status}: ${j.description || 'unknown error'}`);   // le jeton n'apparaît jamais dans l'erreur
 }
 
+/* ---------------- Jalons GitHub, liquidité, archive ---------------- */
+const LIQ_FILE = 'public/liquidity-history.json', ARCHIVE_FILE = 'public/archive.json';
+async function loadJson(path, fallback) { try { const j = JSON.parse(await readFile(path, 'utf8')); return Array.isArray(fallback) && !Array.isArray(j) ? fallback : j; } catch { return fallback; } }
+
+const MS_QUERY = `query($org:String!,$after:String){ organization(login:$org){ repositories(first:50,after:$after,privacy:PUBLIC,orderBy:{field:PUSHED_AT,direction:DESC}){
+  pageInfo{hasNextPage endCursor}
+  nodes{ name isArchived milestones(first:10,states:OPEN,orderBy:{field:DUE_DATE,direction:ASC}){ nodes{ title url dueOn progressPercentage open:issues(states:OPEN){totalCount} closed:issues(states:CLOSED){totalCount} } } } } } }`;
+async function fetchMilestones() {
+  let nodes = [], after = null;
+  for (let page = 0; page < 4; page++) {                                   // jusqu'à 200 repos
+    const d = await ghql(MS_QUERY, { org: ORG, after });
+    const r = d.organization.repositories;
+    nodes = nodes.concat(r.nodes);
+    if (!r.pageInfo.hasNextPage) break;
+    after = r.pageInfo.endCursor;
+  }
+  return summarizeMilestones(nodes);
+}
+
+// Liquidité : même code que la page liquidity.html (public/pool-core.js), lu avec le paquet ethers installé par le workflow
+async function liquiditySnapshot(now) {
+  const m = await import('ethers');
+  const ethers = m.ethers ?? m.default?.ethers ?? m.default;
+  if (!ethers?.utils) throw new Error('ethers package not available (npm install ethers@5.7.2)');
+  const core = createRequire(import.meta.url)('../public/pool-core.js');
+  core.init(ethers);
+  return fetchLiquiditySnapshot(core, dayKey(now));
+}
+
 /* ---------------- main ---------------- */
 async function main() {
   const now = new Date();
@@ -732,7 +763,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v22';
+  digest.builder = 'v23';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
@@ -740,6 +771,20 @@ async function main() {
 
   try { digest.docsChanges = await fetchDocsChanges(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.docsChangesError = String(e.message).slice(0, 200); console.warn('Docs changes step skipped:', e.message); }
+
+  try { digest.milestones = await fetchMilestones(); }
+  catch (e) { digest.milestonesError = String(e.message).slice(0, 200); console.warn('Milestones step skipped:', e.message); }
+
+  // historique de liquidité (facultatif : demande le paquet ethers)
+  try {
+    const snap = await withTimeout(liquiditySnapshot(now), 240000, 'liquidity');
+    const kept = updateLiquidityHistory(await loadJson(LIQ_FILE, []), snap);
+    await mkdir('public', { recursive: true });
+    await writeFile(LIQ_FILE, JSON.stringify(kept));
+    const okChains = Object.values(snap.chains).filter(c => !c.error).length;
+    digest.liquidity = { date: snap.date, networks: okChains, total: Object.keys(snap.chains).length };
+    console.log(`Liquidity snapshot: ${okChains}/${digest.liquidity.total} networks`);
+  } catch (e) { digest.liquidityError = String(e.message).slice(0, 200); console.warn('Liquidity step skipped:', e.message); }
 
   // historique : comparaison avec il y a ~7 jours + tendances
   const history = await loadHistory();
@@ -754,6 +799,9 @@ async function main() {
     try { digest = await polishWithLLM(digest); digest.ai = digest.aiModel; console.log('AI summaries added'); }
     catch (e) { digest.aiError = String(e.message).slice(0, 400); console.warn('LLM step skipped:', e.message); }
   }
+  // archive des journées complètes (après l'IA : on y garde les résumés rédigés)
+  await mkdir('public', { recursive: true });
+  await writeFile(ARCHIVE_FILE, JSON.stringify(updateArchive(await loadJson(ARCHIVE_FILE, []), digest)));
   digest.telegramPosted = prev?.telegramPosted || null;
   await mkdir('public', { recursive: true });
   await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
