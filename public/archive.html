@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GNUS digest — archive</title>
+<meta name="description" content="Past daily summaries of the GeniusVentures GitHub activity, grouped by week.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GNUS digest — archive">
+<meta property="og:description" content="Past daily summaries of the GeniusVentures GitHub activity, grouped by week.">
+<meta property="og:url" content="https://gnus-digest.vercel.app/archive.html">
+<meta property="og:image" content="https://gnus-digest.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gnus-digest.vercel.app/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
+<style>
+  :root{--bg:#f4f1ec;--panel:#fff;--ink:#22201c;--mute:#716b62;--line:#ddd7cc;--accent:#8a4b12}
+  @media (prefers-color-scheme:dark){:root{--bg:#1d1b18;--panel:#272420;--ink:#ece7de;--mute:#a39b8f;--line:#3a352e;--accent:#e0a367}}
+  *{box-sizing:border-box}
+  body{margin:0;padding:20px;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif}
+  main{max-width:760px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 2px}
+  .sub{color:var(--mute);font:13px system-ui,sans-serif;margin:0 0 18px}
+  nav{font:14px system-ui,sans-serif;margin:0 0 18px}
+  nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
+  nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
+  input{width:100%;font:16px system-ui,sans-serif;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);margin:0 0 14px}
+  input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  details.week{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-bottom:10px;padding:2px 16px}
+  details.week > summary{cursor:pointer;list-style:none;padding:12px 0;font:600 14px system-ui,sans-serif}
+  details.week > summary::-webkit-details-marker{display:none}
+  details.week > summary::before{content:"▸ ";color:var(--accent)}
+  details.week[open] > summary::before{content:"▾ "}
+  summary .tot{color:var(--mute);font-weight:400}
+  .day{padding:10px 0;border-top:1px solid var(--line)}
+  .day .d{font:600 12px system-ui,sans-serif;color:var(--mute);letter-spacing:.03em;margin-bottom:3px}
+  .day .t{margin:0 0 6px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font:12px system-ui,sans-serif;border:1px solid var(--line);border-radius:12px;padding:1px 9px;color:var(--mute)}
+  .chip.rel a{color:var(--accent);text-decoration:none;font-weight:600}
+  .auto{font:11px system-ui,sans-serif;color:var(--mute);margin-left:6px;border:1px dashed var(--line);border-radius:8px;padding:0 6px}
+  footer{margin:30px 0 10px;padding-top:14px;border-top:1px solid var(--line);font:13px/1.55 system-ui,sans-serif;color:var(--mute)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Archive</h1>
+  <p class="sub" id="meta">Loading…</p>
+  <nav><a href="./">Digest</a><a href="liquidity.html">GNUS liquidity</a><a href="archive.html" aria-current="page">Archive</a></nav>
+  <input id="q" type="search" placeholder="Filter by repository, domain or keyword…" aria-label="Filter the archive">
+  <div id="weeks"></div>
+  <footer>Daily summaries are kept as they were written the day after. Days with no activity are not listed. Written by an AI model when available, otherwise generated from commit messages (marked “auto”); they may contain errors.</footer>
+</main>
+<script>
+const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+const safeUrl = u => /^https:\/\/github\.com\//.test(u) ? u : null;
+const fmtDay = s => new Date(s + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const monday = s => { const d = new Date(s + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7)); return d.toISOString().slice(0, 10); };
+
+let ALL = [];
+function render(filter) {
+  const box = document.getElementById('weeks'); box.textContent = '';
+  const f = (filter || '').trim().toLowerCase();
+  const match = e => !f || [e.text, ...(e.repos || []), ...(e.domains || []).map(x => x.name), ...(e.releases || []).map(r => `${r.repo} ${r.tag}`)].join(' ').toLowerCase().includes(f);
+  const weeks = new Map();
+  for (const e of ALL.filter(match)) { const k = monday(e.date); if (!weeks.has(k)) weeks.set(k, []); weeks.get(k).push(e); }
+  if (!weeks.size) { box.append(el('p', f ? 'Nothing matches this filter.' : 'The archive is empty for now: it fills up one day at a time.', 'sub')); return; }
+  let n = 0;
+  for (const [wk, entries] of [...weeks].sort((a, b) => b[0].localeCompare(a[0]))) {
+    entries.sort((a, b) => b.date.localeCompare(a.date));
+    const det = el('details', null, 'week'); if (n++ < 2 || f) det.open = true;
+    const repos = new Set(entries.flatMap(e => e.repos || []));
+    const sum = el('summary'); sum.append(document.createTextNode('Week of ' + new Date(wk + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })),
+      el('span', ` · ${entries.reduce((s, e) => s + (e.commits || 0), 0)} commits · ${repos.size} repos · ${entries.length} active day${entries.length === 1 ? '' : 's'}`, 'tot'));
+    det.append(sum);
+    for (const e of entries) {
+      const day = el('div', null, 'day'), d = el('div', fmtDay(e.date), 'd'); if (!e.ai) d.append(el('span', 'auto', 'auto'));
+      day.append(d, el('p', e.text, 't'));
+      const chips = el('div', null, 'chips');
+      for (const g of (e.domains || [])) chips.append(el('span', `${g.name} · ${g.commits}`, 'chip'));
+      for (const r of (e.releases || [])) { const c = el('span', null, 'chip rel'), a = el('a', `${r.repo} ${r.tag}`); const u = safeUrl(r.url); if (u) { a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer'; } c.append(a); chips.append(c); }
+      if (chips.children.length) day.append(chips);
+      det.append(day);
+    }
+    box.append(det);
+  }
+}
+fetch('archive.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []).then(a => {
+  ALL = Array.isArray(a) ? a : [];
+  document.getElementById('meta').textContent = ALL.length ? `${ALL.length} days of activity since ${new Date(ALL[0].date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}` : 'No archived days yet';
+  render('');
+  document.getElementById('q').addEventListener('input', e => render(e.target.value));
+});
+</script>
+</body>
+</html>
