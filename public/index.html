@@ -67,6 +67,8 @@
   .ms{padding:8px 0;border-bottom:1px solid var(--line);font:14px/1.45 system-ui,sans-serif}.ms:last-child{border-bottom:0}
   .ms a{color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--line)}
   .ms .m{color:var(--mute);font-size:13px}
+  .ms .mh{font:600 14px system-ui,sans-serif}
+  .ms .msub{margin:8px 0 0 12px;padding-left:10px;border-left:2px solid var(--line)}
   .mbar{height:6px;background:var(--line);border-radius:3px;margin:6px 0 3px}.mbar i{display:block;height:100%;background:var(--accent);border-radius:3px}
   .pr .b{flex:1;min-width:0}
   .pr .b a{display:block}
@@ -344,16 +346,36 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   }
 
   // ---- jalons GitHub : section visible seulement si l'organisation en utilise
+  // Jalons de même nom regroupés (« TestNet » dans trois repos = un seul bloc) ; blocs avec échéance d'abord, puis ordre alphabétique.
   if ((d.milestones || []).length) {
     document.getElementById('msWrap').hidden = false;
     const mb = document.getElementById('milestones');
-    for (const m of d.milestones.slice(0, 10)) {
-      const row = el('div', null, 'ms'), a = el('a', m.title);
-      if (safeUrl(m.url)) { a.href = m.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
-      row.append(a, el('span', ` · ${m.repo}`, 'm'));
-      const bar = el('div', null, 'mbar'), fill = el('i'); fill.style.width = Math.max(0, Math.min(100, m.percent)) + '%'; bar.append(fill); row.append(bar);
-      row.append(el('div', `${m.percent}% · ${m.closed}/${m.open + m.closed} issues closed` + (m.dueOn ? ` · due ${fmtDate(m.dueOn)}` : ''), 'm'));
-      mb.append(row);
+    const norm = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '');
+    const groups = new Map();
+    for (const m of d.milestones) { const k = norm(m.title); if (!groups.has(k)) groups.set(k, { title: m.title, items: [] }); groups.get(k).items.push(m); }
+    const ordered = [...groups.values()].map(g => {
+      g.items.sort((x, y) => y.percent - x.percent || x.repo.localeCompare(y.repo, 'en', { sensitivity: 'base' }));   // plus avancé d'abord
+      g.due = g.items.map(i => i.dueOn).filter(Boolean).sort()[0] || null;
+      return g;
+    }).sort((x, y) => (x.due && y.due) ? x.due.localeCompare(y.due) : x.due ? -1 : y.due ? 1 : x.title.localeCompare(y.title, 'en', { sensitivity: 'base' }));
+    const bar = m => { const b = el('div', null, 'mbar'), f = el('i'); f.style.width = Math.max(0, Math.min(100, m.percent)) + '%'; b.append(f); return b; };
+    const link = (text, m) => { const a = el('a', text); if (safeUrl(m.url)) { a.href = m.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } return a; };
+    const stats = m => `${m.percent}% · ${m.closed}/${m.open + m.closed} issues closed` + (m.dueOn ? ` · due ${fmtDate(m.dueOn)}` : '');
+    for (const g of ordered.slice(0, 30)) {
+      const block = el('div', null, 'ms');
+      if (g.items.length === 1) {                                    // jalon unique : titre + repo sur une ligne
+        const m = g.items[0];
+        block.append(link(m.title, m), el('span', ` · ${m.repo}`, 'm'), bar(m), el('div', stats(m), 'm'));
+      } else {                                                       // jalon présent dans plusieurs repos : titre une fois, une ligne par repo
+        const done = g.items.filter(i => i.percent >= 100).length;
+        const hd = el('div', g.title, 'mh'); hd.append(el('span', ` · ${g.items.length} repositories · ${done} complete`, 'm')); block.append(hd);
+        for (const m of g.items) {
+          const sub = el('div', null, 'msub');
+          sub.append(link(m.repo, m), bar(m), el('div', stats(m), 'm'));
+          block.append(sub);
+        }
+      }
+      mb.append(block);
     }
   }
 
