@@ -12,11 +12,15 @@ permissions:
 jobs:
   digest:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15        # une lecture de blockchain qui se bloque ne doit pas bloquer le job
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: 24
+      - name: Install ethers (reads the liquidity pools)
+        run: npm install --no-save --no-audit --no-fund ethers@5.7.2
+        continue-on-error: true   # sans lui, seule la liquidité est ignorée
       - name: Build digest
         run: node scripts/build-digest.mjs
         env:
@@ -36,5 +40,5 @@ jobs:
         run: |
           git config user.name  "digest-bot"
           git config user.email "digest-bot@users.noreply.github.com"
-          git add public/digest.json public/history.json public/feed.xml
+          git add public/
           git diff --cached --quiet || (git commit -m "chore: update digest" && git push)
