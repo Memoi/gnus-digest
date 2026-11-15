@@ -12,6 +12,7 @@ const DAYS   = Number(process.env.DAYS || 7);
 const TZ     = process.env.TZ_NAME || 'Europe/Zurich';   // fuseau utilisé pour découper les jours
 const TOKEN  = process.env.GITHUB_TOKEN || '';
 const API    = 'https://api.github.com';
+const TELEGRAM_ALLOW_MULTIPLE_PER_DAY  =  1;
 
 /* ---------------- GitHub API ---------------- */
 async function gh(path, params = {}) {
@@ -826,9 +827,19 @@ async function main() {
   // Telegram (facultatif : seulement si le jeton et le canal sont configurés)
   const tgToken = process.env.TELEGRAM_BOT_TOKEN, tgChat = process.env.TELEGRAM_CHAT_ID;
   if (tgToken && tgChat) {
+    // const todayKey = dayKey(now);
+    // if (digest.telegramPosted === todayKey && process.env.TELEGRAM_FORCE !== '1') console.log('Telegram: already posted today');
+    // else {
     const todayKey = dayKey(now);
-    if (digest.telegramPosted === todayKey && process.env.TELEGRAM_FORCE !== '1') console.log('Telegram: already posted today');
-    else {
+    const allowMultiplePerDay = process.env.TELEGRAM_ALLOW_MULTIPLE_PER_DAY === '1';
+    
+    if (
+      !allowMultiplePerDay &&
+      digest.telegramPosted === todayKey &&
+      process.env.TELEGRAM_FORCE !== '1'
+    ) {
+      console.log('Telegram: already posted today');
+    } else {
       const msg = buildTelegramText(digest, now);
       if (!msg) console.log('Telegram: nothing worth posting today');
       else {
