@@ -64,6 +64,10 @@
   .grid2 .card{margin-bottom:0}
   svg.chart{width:100%;height:auto;color:var(--accent);display:block;margin:6px 0 2px}
   .arrow{color:var(--mute);margin:0 6px}
+  .ms{padding:8px 0;border-bottom:1px solid var(--line);font:14px/1.45 system-ui,sans-serif}.ms:last-child{border-bottom:0}
+  .ms a{color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--line)}
+  .ms .m{color:var(--mute);font-size:13px}
+  .mbar{height:6px;background:var(--line);border-radius:3px;margin:6px 0 3px}.mbar i{display:block;height:100%;background:var(--accent);border-radius:3px}
   .pr .b{flex:1;min-width:0}
   .pr .b a{display:block}
   .pr .b span.m{display:block;font-size:12.5px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -96,7 +100,7 @@
 <main>
   <h1>GitHub digest</h1>
   <p class="sub" id="meta">Loading…</p>
-  <nav><a href="./" aria-current="page">Digest</a><a href="liquidity.html">GNUS liquidity</a></nav>
+  <nav><a href="./" aria-current="page">Digest</a><a href="liquidity.html">GNUS liquidity</a><a href="archive.html">Archive</a></nav>
   <div id="banner"></div>
   <h2>At a glance</h2>
   <div class="card" id="overview"></div>
@@ -111,6 +115,10 @@
   <div class="grid2" id="domains"></div>
   <h2>Issues &amp; pull requests</h2>
   <div class="card" id="prs"></div>
+  <div id="msWrap" hidden>
+    <h2>GitHub milestones</h2>
+    <div class="card" id="milestones"></div>
+  </div>
   <h2>Trends</h2>
   <div class="grid2" id="trends"></div>
   <h2>Daily</h2>
@@ -332,6 +340,20 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
       row.append(a, el('span', ` · ${pgc.edits} edit${pgc.edits === 1 ? '' : 's'} · last ${fmtDate(pgc.last)}`, 'm'));
       if (pgc.subject) row.append(el('div', pgc.subject, 'd'));
       dc.append(row);
+    }
+  }
+
+  // ---- jalons GitHub : section visible seulement si l'organisation en utilise
+  if ((d.milestones || []).length) {
+    document.getElementById('msWrap').hidden = false;
+    const mb = document.getElementById('milestones');
+    for (const m of d.milestones.slice(0, 10)) {
+      const row = el('div', null, 'ms'), a = el('a', m.title);
+      if (safeUrl(m.url)) { a.href = m.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+      row.append(a, el('span', ` · ${m.repo}`, 'm'));
+      const bar = el('div', null, 'mbar'), fill = el('i'); fill.style.width = Math.max(0, Math.min(100, m.percent)) + '%'; bar.append(fill); row.append(bar);
+      row.append(el('div', `${m.percent}% · ${m.closed}/${m.open + m.closed} issues closed` + (m.dueOn ? ` · due ${fmtDate(m.dueOn)}` : ''), 'm'));
+      mb.append(row);
     }
   }
 
