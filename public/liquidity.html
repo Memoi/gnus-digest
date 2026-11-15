@@ -67,6 +67,7 @@
   .buy .fill{background:var(--buy)} .sell .fill{background:var(--sell)}
   .note{color:var(--mute);font-size:13px;margin-top:22px}
   select{font:inherit;font-family:system-ui,sans-serif;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
+  td svg.mini{color:var(--accent);vertical-align:middle;margin:0 0 0 8px}
   td a.tok{color:var(--accent);font-size:12px;text-decoration:none}
   td .gap{color:var(--accent);font-size:12px;font-weight:600}
   .notice{margin-top:8px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;font:14px/1.5 system-ui,sans-serif}
@@ -101,7 +102,7 @@
 </head>
 <body>
 <main>
-  <nav><a href="./">Digest</a><a href="liquidity.html" aria-current="page">GNUS liquidity</a></nav>
+  <nav><a href="./">Digest</a><a href="liquidity.html" aria-current="page">GNUS liquidity</a><a href="archive.html">Archive</a></nav>
   <h1>DEX pool depth</h1>
   <p class="sub">How much buying (or selling) it would actually take to reach each price level. Works with Uniswap, PancakeSwap, Aerodrome and compatible pools. Data is read live from the blockchain, nothing to update.</p>
 
@@ -115,6 +116,10 @@
   <div class="wrap"><table id="cmp"><thead><tr><th>Network</th><th>Pool</th><th>Price</th><th>Pool balance</th><th>Buy +X%</th><th>Sell −X%</th><th>Read at</th></tr></thead><tbody id="cmpBody"></tbody></table></div>
   <div id="cmpAlert"></div>
   <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value, at the current price, of the tokens to sell to push it down by X% (the sale brings in a bit less because of price impact and fees). Each network's default pool; fees included. A price more than 50% away from the other networks is labelled.</p>
+
+  <h2>Daily history</h2>
+  <div class="wrap"><table id="hist"><thead><tr><th>Network</th><th>Price</th><th>Pool balance</th><th>Buy +5%</th><th>Sell −5%</th></tr></thead><tbody id="histBody"></tbody></table></div>
+  <p class="sub" id="histNote" style="margin-top:6px"></p>
 
   <h2>Pool explorer</h2>
   <div class="bar">
@@ -144,227 +149,20 @@ https://cloudflare-eth.com</textarea>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+<script src="pool-core.js"></script>
 <script>
-const { Interface, getAddress } = ethers.utils;
-const CHAINS = {
-  ethereum: {
-    label:'Ethereum', llama:'ethereum', addr:'0xf10e8ccdb3f065bf24afa14d08cc6336d4a9a281',
-    rpcs:['https://ethereum-rpc.publicnode.com','https://eth.llamarpc.com','https://1rpc.io/eth','https://eth.drpc.org','https://cloudflare-eth.com'],
-    quotes:{
-      '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2':{feed:'0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419'}, // WETH / ETH-USD
-      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48':{usd:1}, // USDC
-      '0xdac17f958d2ee523a2206206994597c13d831ec7':{usd:1}, // USDT
-      '0x6b175474e89094c44da98b954eedeac495271d0f':{usd:1}  // DAI
-    }
-  },
-  polygon: {
-    label:'Polygon', llama:'polygon', addr:'0x45126b956401daaec92afba2a9953e14b16fb83f',
-    rpcs:['https://polygon-rpc.com','https://polygon-bor-rpc.publicnode.com','https://1rpc.io/matic','https://polygon.drpc.org'],
-    quotes:{
-      '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270':{feed:'0xAB594600376Ec9fD91F8e885dADF0CE036862dE0'}, // WMATIC / MATIC-USD
-      '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619':{feed:'0xF9680D99D6C9589e2a93a78A04A279e509205945'}, // WETH / ETH-USD
-      '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359':{usd:1}, // USDC
-      '0x2791bca1f2de4661ed88a30c99a7a9449aa84174':{usd:1}, // USDC.e
-      '0xc2132d05d31c914a87c6611c10748aeb04b58e8f':{usd:1}, // USDT
-      '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063':{usd:1}  // DAI
-    }
-  },
-  base: {
-    label:'Base', llama:'base', addr:'0x73dddbe505f9197138785e1ccfa2988705ce4bfd',
-    rpcs:['https://mainnet.base.org','https://base-rpc.publicnode.com','https://1rpc.io/base','https://base.drpc.org'],
-    quotes:{
-      '0x4200000000000000000000000000000000000006':{feed:'0x71041dddad3595f9ced3dccfbe3d1f4b0a16bb70'}, // WETH / ETH-USD
-      '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913':{usd:1}, // USDC
-      '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca':{usd:1}, // USDbC
-      '0x50c5725949a6f0c72e6c4a641f24049a917db0cb':{usd:1}, // DAI
-      '0x940181a94a35a4569e4529a3cdfb74e38fd98631':{}       // AERO (prix via DefiLlama)
-    }
-  },
-  bsc: {
-    label:'BNB Chain', llama:'bsc', v2fee:0.0025, addr:'0x15804c36a495efb511351e9ef0b211ad8bd8da88',
-    rpcs:['https://bsc-dataseed.binance.org','https://bsc-rpc.publicnode.com','https://1rpc.io/bnb','https://bsc.drpc.org'],
-    quotes:{
-      '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c':{feed:'0x0567f2323251f0aab15c8dfb1967e4e8a7d42aee'}, // WBNB / BNB-USD
-      '0x2170ed0880ac9a755fd29b2688956bd959f933f8':{feed:'0x9ef1b8c0e4f7dc8bf5719ea496883dc6401d5b2e'}, // ETH / ETH-USD
-      '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c':{feed:'0x264990fbd0a4796a3e3d8e37c4d5f87a3aca5ebf'}, // BTCB / BTC-USD
-      '0x55d398326f99059ff775485246999027b3197955':{usd:1}, // USDT
-      '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d':{usd:1}, // USDC
-      '0xe9e7cea3dedca5984780bafc599bd69add087d56':{usd:1}, // BUSD
-      '0xc5f0f7b66764f6ec8c8dff7ba683102295e16409':{usd:1}  // FDUSD
-    }
-  }
-};
 const CH = () => CHAINS[$('chain').value];
-const MC3 = '0xcA11bde05977b3631167028862bE2a173976CA11';
-
-const ifMC = new Interface(['function aggregate3((address target,bool allowFailure,bytes callData)[] calls) payable returns ((bool success,bytes returnData)[] returnData)']);
-const ifV3 = new Interface([
-  'function token0() view returns (address)','function token1() view returns (address)',
-  'function fee() view returns (uint24)','function tickSpacing() view returns (int24)',
-  'function liquidity() view returns (uint128)',
-  'function slot0() view returns (uint160 sqrtPriceX96,int24 tick,uint16,uint16,uint16,uint8,bool)',
-  'function tickBitmap(int16) view returns (uint256)',
-  'function ticks(int24) view returns (uint128 liquidityGross,int128 liquidityNet,uint256,uint256,int56,uint160,uint32,bool)']);
-const ifV2 = new Interface(['function getReserves() view returns (uint112,uint112,uint32)']);
-const ifV3b = new Interface(['function slot0() view returns (uint160 sqrtPriceX96,int24 tick,uint16,uint16,uint16,bool)']); // Aerodrome Slipstream layout
-const ifV2x = new Interface(['function factory() view returns (address)','function stable() view returns (bool)']);
-const ifFac = new Interface(['function getFee(address pool,bool stable) view returns (uint256)']); // Aerodrome / Velodrome
-const ifErc = new Interface(['function decimals() view returns (uint8)','function symbol() view returns (string)','function balanceOf(address) view returns (uint256)']);
-const ifCL = new Interface(['function latestRoundData() view returns (uint80,int256,uint256,uint256,uint80)']);
-
+// Le calcul vient de pool-core.js (partagé avec le script quotidien)
+PoolCore.init(ethers);
+const { CHAINS, derive, calcRow, walkV3, walkV2, tickSqrt, num, cleanSym } = PoolCore;
+async function loadPool(ctx){ return PoolCore.loadPool(ctx); }
 const $ = id => document.getElementById(id);
 const setStatus = (t, err) => { $('status').textContent = t; $('status').className = err ? 'err' : ''; };
 // Chaque chargement de pool reçoit un contexte {chain, addr, urls, block, status} : plusieurs réseaux peuvent charger en parallèle.
-const cleanSym = x => String(x).replace(/[^\w.$\- ]/g, '').slice(0, 24) || '?';   // les symboles viennent de la chaîne : jamais de HTML
 const POOLS = {};                                                                   // cache : « réseau:adresse » -> pool lu
 const mainCtx = () => ({ chain: $('chain').value, addr: $('addr').value,
   urls: $('rpcs').value.split('\n').map(x => x.trim()).filter(Boolean), block: 'latest', status: setStatus });
 
-async function rpc(method, params, ctx){
-  const urls = ctx.urls;
-  const errs = [];
-  for (const url of urls){
-    try{
-      const r = await fetch(url,{method:'POST',headers:{'content-type':'application/json'},
-        body:JSON.stringify({jsonrpc:'2.0',id:1,method,params})});
-      const j = await r.json();
-      if (j.error) throw new Error(j.error.message);
-      return j.result;
-    }catch(e){ errs.push(url.replace(/^https?:\/\//,'') + ' → ' + (e.message||e)); }
-  }
-  throw new Error('No RPC reachable. Details: ' + errs.join(' | ') +
-    (location.protocol==='file:' ? '' : ' (page not opened locally: open the file from your PC)'));
-}
-
-async function multicall(calls, ctx){
-  const out = [];
-  for (let i=0;i<calls.length;i+=200){
-    const chunk = calls.slice(i,i+200);
-    const data = ifMC.encodeFunctionData('aggregate3',[chunk.map(c=>[c.target,true,c.iface.encodeFunctionData(c.fn,c.args||[])])]);
-    const res = await rpc('eth_call',[{to:MC3,data},ctx.block],ctx);
-    const dec = ifMC.decodeFunctionResult('aggregate3',res)[0];
-    dec.forEach((r,j)=>{
-      const c = chunk[j];
-      let v = null;
-      if (r.success && r.returnData !== '0x'){ try{ v = c.iface.decodeFunctionResult(c.fn,r.returnData); }catch(e){} }
-      out.push(v);
-    });
-  }
-  return out;
-}
-
-const num = x => Number(x.toString());
-const tickSqrt = t => Math.pow(1.0001, t/2);
-
-async function llamaPrices(slug, addrs){
-  const out = {};
-  try{
-    const r = await fetch('https://coins.llama.fi/prices/current/' + addrs.map(a=>slug+':'+a).join(','));
-    const j = await r.json();
-    for (const [k,v] of Object.entries(j.coins||{})) out[k.split(':')[1].toLowerCase()] = v.price;
-  }catch(e){ console.warn('DefiLlama price lookup failed', e); }
-  return out;
-}
-
-async function loadPool(ctx){
-  const addr = getAddress(ctx.addr.trim().toLowerCase());
-  ctx.block = await rpc('eth_blockNumber',[],ctx);
-
-  ctx.status('Reading pool…');
-  const [t0,t1,fee,spacing,liq,slot0a,res,slot0b,fac,stab] = await multicall([
-    {target:addr,iface:ifV3,fn:'token0'},{target:addr,iface:ifV3,fn:'token1'},
-    {target:addr,iface:ifV3,fn:'fee'},{target:addr,iface:ifV3,fn:'tickSpacing'},
-    {target:addr,iface:ifV3,fn:'liquidity'},{target:addr,iface:ifV3,fn:'slot0'},
-    {target:addr,iface:ifV2,fn:'getReserves'},
-    {target:addr,iface:ifV3b,fn:'slot0'},
-    {target:addr,iface:ifV2x,fn:'factory'},{target:addr,iface:ifV2x,fn:'stable'}], ctx);
-  const slot0 = slot0a || slot0b;
-  if (!t0 || !t1) throw new Error("Not a Uniswap v2/v3 pool (token0/token1 not found). A v4 pool needs a different contract.");
-  const v3 = !!slot0;
-  if (!v3 && !res) throw new Error('Pool not recognised (neither slot0 nor getReserves).');
-
-  const tok0 = t0[0], tok1 = t1[0];
-  const q0 = CHAINS[ctx.chain].quotes[tok0.toLowerCase()], q1 = CHAINS[ctx.chain].quotes[tok1.toLowerCase()];
-  const calls = [
-    {target:tok0,iface:ifErc,fn:'decimals'},{target:tok0,iface:ifErc,fn:'symbol'},
-    {target:tok1,iface:ifErc,fn:'decimals'},{target:tok1,iface:ifErc,fn:'symbol'},
-    {target:tok0,iface:ifErc,fn:'balanceOf',args:[addr]},{target:tok1,iface:ifErc,fn:'balanceOf',args:[addr]}];
-  const fIdx = [null,null];
-  [q0,q1].forEach((q,k)=>{ if (q && q.feed){ fIdx[k] = calls.length; calls.push({target:q.feed.toLowerCase(),iface:ifCL,fn:'latestRoundData'}); } });
-  let feeIdx = null;
-  if (!v3 && fac){ feeIdx = calls.length; calls.push({target:fac[0],iface:ifFac,fn:'getFee',args:[addr, stab ? stab[0] : false]}); }
-  const R = await multicall(calls, ctx);
-  const [d0,s0,d1,s1,b0,b1] = R;
-  const usdOf = (q,k) => !q ? null : (q.feed ? (R[fIdx[k]] ? num(R[fIdx[k]][1])/1e8 : null) : (q.usd ?? null));
-  const S = {
-    addr, v3, tok0, tok1, dec0: d0?num(d0[0]):18, dec1: d1?num(d1[0]):18,
-    sym0: cleanSym(s0?s0[0]:'T0'), sym1: cleanSym(s1?s1[0]:'T1'),
-    isQ0: !!q0, isQ1: !!q1, usd0: usdOf(q0,0), usd1: usdOf(q1,1),
-    bal0: b0?num(b0[0]):0, bal1: b1?num(b1[0]):0, block: parseInt(ctx.block,16), readAt: Date.now(),
-    fee: v3 ? num(fee[0])/1e6 : ((feeIdx != null && R[feeIdx]) ? num(R[feeIdx][0])/10000 : (CHAINS[ctx.chain].v2fee || 0.003)),
-    stable: !!(stab && stab[0])
-  };
-  if (S.usd0 == null || S.usd1 == null){
-    const ps = await llamaPrices(CHAINS[ctx.chain].llama, [tok0, tok1]);
-    if (S.usd0 == null) S.usd0 = ps[tok0.toLowerCase()] ?? null;
-    if (S.usd1 == null) S.usd1 = ps[tok1.toLowerCase()] ?? null;
-  }
-
-  if (v3){
-    S.sqrtCur = num(slot0.sqrtPriceX96)/2**96;
-    S.tickCur = slot0.tick;
-    S.L = num(liq[0]);
-    S.spacing = spacing[0];
-    S.ticks = await loadTicks(addr, S.spacing, ctx);
-  } else {
-    S.r0 = num(res[0]); S.r1 = num(res[1]);
-  }
-  return S;
-}
-
-async function loadTicks(addr, spacing, ctx){
-  ctx.status('Reading tick bitmap…');
-  const wmin = Math.floor(-887272/spacing) >> 8, wmax = Math.floor(887272/spacing) >> 8;
-  const words = [];
-  for (let w=wmin; w<=wmax; w++) words.push(w);
-  const bm = await multicall(words.map(w=>({target:addr,iface:ifV3,fn:'tickBitmap',args:[w]})), ctx);
-  const init = [];
-  bm.forEach((r,idx)=>{
-    if (!r) return;
-    const word = BigInt(r[0].toString());
-    if (word === 0n) return;
-    for (let b=0;b<256;b++) if ((word >> BigInt(b)) & 1n) init.push((words[idx]*256 + b)*spacing);
-  });
-  ctx.status(`Reading ${init.length} initialized ticks…`);
-  const data = await multicall(init.map(t=>({target:addr,iface:ifV3,fn:'ticks',args:[t]})), ctx);
-  const ticks = init.map((t,i)=>({tick:t, net: data[i] ? num(data[i].liquidityNet) : 0}));
-  ticks.sort((a,b)=>a.tick-b.tick);
-  return ticks;
-}
-
-/* ---------- calcul ---------- */
-function walkV3(S, sqrtT){
-  let s = S.sqrtCur, L = S.L, in0=0,in1=0,out0=0,out1=0, crossed=0, noLiq=false;
-  if (sqrtT > s){
-    const arr = S.ticks.filter(t=>t.tick > S.tickCur);
-    const seg = to => { if (L<=0){ if(to>s) noLiq=true; } else { in1 += L*(to-s); out0 += L*(1/s-1/to); } s = to; };
-    for (const t of arr){ const sT = tickSqrt(t.tick); if (sT >= sqrtT) break; seg(sT); L += t.net; crossed++; }
-    seg(sqrtT);
-  } else {
-    const arr = S.ticks.filter(t=>t.tick <= S.tickCur).reverse();
-    const seg = to => { if (L<=0){ if(to<s) noLiq=true; } else { in0 += L*(1/to-1/s); out1 += L*(s-to); } s = to; };
-    for (const t of arr){ const sT = tickSqrt(t.tick); if (sT <= sqrtT) break; seg(sT); L -= t.net; crossed++; }
-    seg(sqrtT);
-  }
-  return {in0,in1,out0,out1,crossed,noLiq};
-}
-function walkV2(S, Praw){
-  const k = S.r0*S.r1, r0n = Math.sqrt(k/Praw), r1n = Math.sqrt(k*Praw);
-  if (Praw > S.r1/S.r0) return {in0:0,in1:r1n-S.r1,out0:S.r0-r0n,out1:0,crossed:0,noLiq:false};
-  return {in0:r0n-S.r0,in1:0,out0:0,out1:S.r1-r1n,crossed:0,noLiq:false};
-}
-
-/* ---------- affichage ---------- */
 function fmt(n){
   if (!isFinite(n)) return '∞';
   const a = Math.abs(n);
@@ -374,41 +172,6 @@ function fmt(n){
   return n.toFixed(Math.min(18, 3 - Math.floor(Math.log10(a))));
 }
 const usd = n => n==null ? '' : '$'+fmt(n);
-
-// Valeurs dérivées d'un pool (token de base / de référence, prix, décimales…)
-function derive(S){
-  let baseIsT0;
-  if (S.isQ0 !== S.isQ1) baseIsT0 = S.isQ1;                         // the configured quote token is the quote
-  else if ((S.usd0 != null) !== (S.usd1 != null)) baseIsT0 = S.usd0 == null; // the priced token is the quote
-  else baseIsT0 = true;
-  const baseSym = baseIsT0 ? S.sym0 : S.sym1, quoteSym = baseIsT0 ? S.sym1 : S.sym0;
-  const quoteUsd = baseIsT0 ? S.usd1 : S.usd0;
-  const rawFactor = Math.pow(10, S.dec0 - S.dec1);
-  const Praw = S.v3 ? S.sqrtCur*S.sqrtCur : S.r1/S.r0;
-  const Pcur = Praw * rawFactor;
-  const basePrice = baseIsT0 ? Pcur : 1/Pcur;
-  const baseUsd = quoteUsd!=null ? basePrice*quoteUsd : null;
-  const dBase = baseIsT0 ? S.dec0 : S.dec1, dQuote = baseIsT0 ? S.dec1 : S.dec0;
-  const feeMul = 1/(1-S.fee);
-  return { baseIsT0, baseSym, quoteSym, quoteUsd, rawFactor, basePrice, baseUsd, dBase, dQuote, feeMul };
-}
-
-// Coût pour déplacer le prix de `pct` % (pct > 0 : acheter la base ; pct < 0 : la vendre)
-function calcRow(S, D, pct){
-  const { baseIsT0, rawFactor, basePrice, dBase, dQuote, feeMul } = D;
-  const tBase = basePrice*(1+pct/100);
-  const tP = baseIsT0 ? tBase : 1/tBase;
-  const tRaw = tP/rawFactor;
-  const w = S.v3 ? walkV3(S, Math.sqrt(tRaw)) : walkV2(S, tRaw);
-  const g0 = w.in0*feeMul, g1 = w.in1*feeMul;
-  let r;
-  if (pct > 0){
-    r = {pct, tBase, quote:(baseIsT0?g1:g0)/10**dQuote, base:(baseIsT0?w.out0:w.out1)/10**dBase};
-  } else {
-    r = {pct, tBase, base:(baseIsT0?g0:g1)/10**dBase, quote:(baseIsT0?w.out1:w.out0)/10**dQuote};
-  }
-  return Object.assign(r,{crossed:w.crossed,noLiq:w.noLiq});
-}
 
 function render(S){
   const D = derive(S);
@@ -560,6 +323,45 @@ async function compareAll(){
 }
 $('cmpGo').onclick = () => { for (const k of Object.keys(POOLS)) delete POOLS[k]; compareAll(); };
 
+/* ---------------- historique quotidien (écrit chaque jour par le script du digest) ---------------- */
+function miniSpark(vals){
+  const NS = 'http://www.w3.org/2000/svg', W = 84, H = 22, pad = 2, svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('class', 'mini'); svg.setAttribute('aria-hidden', 'true');
+  const min = Math.min(...vals), max = Math.max(...vals), X = i => pad + i * (W - 2*pad) / (vals.length - 1), Y = v => H - pad - (v - min) / ((max - min) || 1) * (H - 2*pad);
+  const pl = document.createElementNS(NS, 'polyline');
+  pl.setAttribute('points', vals.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ')); pl.setAttribute('fill', 'none'); pl.setAttribute('stroke', 'currentColor'); pl.setAttribute('stroke-width', '1.6');
+  svg.append(pl); return svg;
+}
+function histCell(label, series, formatter){
+  const vals = series.filter(v => v != null);
+  if (!vals.length) return mkCell(label, '–');
+  const last = vals[vals.length - 1], first = vals[0];
+  const change = vals.length > 1 && first ? `${last >= first ? '+' : '−'}${Math.abs(Math.round((last / first - 1) * 100))}% over ${vals.length} days` : null;
+  const td = mkCell(label, formatter(last), change);
+  if (vals.length > 1) td.insertBefore(miniSpark(vals), td.querySelector('div'));
+  return td;
+}
+async function loadHistory(){
+  const body = $('histBody');
+  let hist = [];
+  try { const r = await fetch('liquidity-history.json', { cache: 'no-store' }); hist = r.ok ? await r.json() : []; } catch(e) {}
+  if (!Array.isArray(hist) || !hist.length){
+    $('histNote').textContent = 'No history yet: a snapshot is recorded every day by the daily update, so this table fills up over time.';
+    return;
+  }
+  for (const [k, c] of Object.entries(CHAINS)){
+    const rows = hist.map(h => h.chains && h.chains[k] && !h.chains[k].error ? h.chains[k] : null);
+    const tr = document.createElement('tr');
+    tr.append(mkCell('Network', c.label, null, 'pct'),
+      histCell('Price', rows.map(r => r && r.priceUsd), v => usd(v)),
+      histCell('Pool balance', rows.map(r => r && r.tvlUsd), v => usd(v)),
+      histCell('Buy +5%', rows.map(r => r && r.d5 && r.d5.buy), v => usd(v)),
+      histCell('Sell −5%', rows.map(r => r && r.d5 && r.d5.sell), v => usd(v)));
+    body.append(tr);
+  }
+  $('histNote').textContent = `${hist.length} daily snapshot${hist.length === 1 ? '' : 's'}, since ${hist[0].date}. “Buy” = dollars to spend to push the price up 5%; “Sell” = value of the tokens to sell to push it down 5%.`;
+}
+
 async function go(){
   $('go').disabled = true;
   try{
@@ -586,6 +388,7 @@ function setChain(k){
 $('chain').onchange = () => { setChain($('chain').value); go(); };
 { const q = new URLSearchParams(location.search).get('chain'); setChain(CHAINS[q] ? q : 'ethereum'); }
 go();
+loadHistory();
 </script>
 </body>
 </html>
