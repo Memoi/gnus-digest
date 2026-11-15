@@ -5,49 +5,49 @@
     <link>https://gnus-digest.vercel.app/</link>
     <description>Daily digest of the GeniusVentures GitHub activity, written from public commit messages.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 15 Nov 2026 15:14:20 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 15 Nov 2026 15:23:44 GMT</lastBuildDate>
     <atom:link href="https://gnus-digest.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GNUS digest — Saturday 14 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-14</guid>
       <pubDate>Sat, 14 Nov 2026 23:59:00 GMT</pubDate>
-      <description>A new roadmap for version 1.2 was created and its requirements were defined, and the backup system was updated to support a tiered archive and light‑node model. Repositories: GeniusNetwork, rlp_enodes.</description>
+      <description>A new roadmap and requirements were documented for the upcoming version, and the backup system was updated to support a tiered storage model. Repositories: GeniusNetwork, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Friday 13 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-13</guid>
       <pubDate>Fri, 13 Nov 2026 23:59:00 GMT</pubDate>
-      <description>An old AI submodule was removed and references to it were cleared from documentation, while the network’s backup and storage handling were improved and new logging was added. Repositories: GeniusCognitiveSystem, GeniusNetwork, SuperGenius, GNUS-NEO-SWARM, rlp_enodes.</description>
+      <description>An outdated AI component was removed and its documentation cleaned up, and storage management was enhanced to retain important markers during cleanup. Repositories: GeniusCognitiveSystem, GeniusNetwork, SuperGenius, GNUS-NEO-SWARM, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Thursday 12 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-12</guid>
       <pubDate>Thu, 12 Nov 2026 23:59:00 GMT</pubDate>
-      <description>New investor lockout scenarios and related calculations were added, along with fixes, tests, and formula refactoring; the SDK gained a payout address feature and was adjusted to run on internal servers; a numeric keypad component was added to a client scaffold. Repositories: gnus-investor-scenarios, GeniusSDK, thirdparty, openapi-client-scaffold, GeniusWallet, SuperGenius, libp2p, openapi-cpp-scaffolding.</description>
+      <description>Investor tools were expanded with lockout scenarios, CSV output and better formatting, and the SDK added a payout address feature and a numeric keypad component, alongside various fixes. Repositories: gnus-investor-scenarios, GeniusSDK, thirdparty, openapi-client-scaffold, GeniusWallet, SuperGenius, libp2p, openapi-cpp-scaffolding.</description>
     </item>
     <item>
       <title>GNUS digest — Wednesday 11 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-11</guid>
       <pubDate>Wed, 11 Nov 2026 23:59:00 GMT</pubDate>
-      <description>A milestone audit was completed and documentation was updated; the wallet now tracks job counts and includes new API bindings; a payout address feature was added to accounts and nodes; request handling was improved with idempotency support. Repositories: GeniusNetwork, GeniusWallet, SuperGenius, openapi-cpp-scaffolding, GeniusSDK, CIDocker.</description>
+      <description>The network milestone audit was completed and documentation updated, while new features added payout address retrieval and idempotency handling, and the wallet now shows real job counts. Repositories: GeniusNetwork, GeniusWallet, SuperGenius, openapi-cpp-scaffolding, GeniusSDK, CIDocker.</description>
     </item>
     <item>
       <title>GNUS digest — Tuesday 10 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-10</guid>
       <pubDate>Tue, 10 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The SDK introduced service registration, rotating refresh tokens, and secured password handling with email indexing; build processes were forced to use internal servers; the dashboard received design and accessibility fixes. Repositories: openapi-cpp-scaffolding, SuperGenius, GeniusNetwork, gnus-dashboard.</description>
+      <description>User authentication was strengthened by hashing passwords and adding rotating refresh tokens, and the system now supports registering services dynamically. The dashboard received design updates for accessibility, and build processes were adjusted to use internal build machines. Repositories: openapi-cpp-scaffolding, SuperGenius, GeniusNetwork, gnus-dashboard.</description>
     </item>
     <item>
       <title>GNUS digest — Monday 9 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-09</guid>
       <pubDate>Mon, 09 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Password handling was secured by adding hashing and email indexing, with tests confirming the changes. Repositories: openapi-cpp-scaffolding.</description>
+      <description>Password handling was improved to store hashed passwords and related tests were added. Repositories: openapi-cpp-scaffolding.</description>
     </item>
   </channel>
 </rss>
