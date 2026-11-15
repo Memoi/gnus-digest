@@ -744,14 +744,24 @@ async function fetchMilestones() {
   return summarizeMilestones(nodes);
 }
 
-// Liquidité : même code que la page liquidity.html (public/pool-core.js), lu avec le paquet ethers installé par le workflow
+// Liquidité : même code que la page liquidity.html (public/pool-core.js).
+// ethers vient du fichier scripts/ethers.umd.min.js téléchargé par le workflow (1 seconde), sinon du paquet npm s'il est installé.
+async function loadEthers() {
+  const req = createRequire(import.meta.url);
+  const attempts = [() => req('./ethers.umd.min.js'), () => import('ethers')];
+  for (const attempt of attempts) {
+    try { const m = await attempt(); const e = m.ethers ?? m.default?.ethers ?? m.default ?? m; if (e?.utils) return e; } catch {}
+  }
+  throw new Error('ethers not available (the workflow downloads scripts/ethers.umd.min.js)');
+}
 async function liquiditySnapshot(now) {
-  const m = await import('ethers');
-  const ethers = m.ethers ?? m.default?.ethers ?? m.default;
-  if (!ethers?.utils) throw new Error('ethers package not available (npm install ethers@5.7.2)');
+  const t0 = Date.now();
+  const ethers = await loadEthers();
   const core = createRequire(import.meta.url)('../public/pool-core.js');
   core.init(ethers);
-  return fetchLiquiditySnapshot(core, dayKey(now));
+  const snap = await fetchLiquiditySnapshot(core, dayKey(now));
+  console.log(`Liquidity read in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+  return snap;
 }
 
 /* ---------------- main ---------------- */
@@ -759,11 +769,14 @@ async function main() {
   const now = new Date();
   let prev = null;
   try { prev = JSON.parse(await readFile('public/digest.json', 'utf8')); } catch {}      // pour ne pas poster deux fois le même jour sur Telegram
+  const T0 = Date.now();
+  // la lecture des pools démarre tout de suite et tourne PENDANT les appels GitHub (limite : 90 s)
+  const liquidityJob = withTimeout(liquiditySnapshot(now), 90000, 'liquidity').then(v => ({ v }), e => ({ e }));
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v23';
+  digest.builder = 'v24';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
@@ -777,7 +790,9 @@ async function main() {
 
   // historique de liquidité (facultatif : demande le paquet ethers)
   try {
-    const snap = await withTimeout(liquiditySnapshot(now), 240000, 'liquidity');
+    const lr = await liquidityJob;
+    if (lr.e) throw lr.e;
+    const snap = lr.v;
     const kept = updateLiquidityHistory(await loadJson(LIQ_FILE, []), snap);
     await mkdir('public', { recursive: true });
     await writeFile(LIQ_FILE, JSON.stringify(kept));
@@ -806,7 +821,7 @@ async function main() {
   await mkdir('public', { recursive: true });
   await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
   await writeFile('public/feed.xml', buildFeed(digest));
-  console.log(`digest.json written: ${digest.week.commits} commits, ${digest.week.repos} repos; feed.xml written`);
+  console.log(`digest.json written: ${digest.week.commits} commits, ${digest.week.repos} repos; feed.xml written (${((Date.now() - T0) / 1000).toFixed(1)}s)`);
 
   // Telegram (facultatif : seulement si le jeton et le canal sont configurés)
   const tgToken = process.env.TELEGRAM_BOT_TOKEN, tgChat = process.env.TELEGRAM_CHAT_ID;
