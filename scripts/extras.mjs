@@ -1,8 +1,12 @@
 // Fonctions annexes du digest : historique de liquidité, archive des journées, jalons GitHub.
 // Chaque fonction « pure » est testable sans réseau.
 
-export const withTimeout = (promise, ms, label = 'step') =>
-  Promise.race([promise, new Promise((_, rej) => setTimeout(() => rej(new Error(`${label} timed out after ${ms / 1000}s`)), ms))]);
+// Le minuteur est ANNULÉ dès que la tâche se termine : sinon Node reste en attente jusqu'à l'échéance (jusqu'à plusieurs minutes de perdues).
+export function withTimeout(promise, ms, label = 'step') {
+  let timer;
+  const limit = new Promise((_, rej) => { timer = setTimeout(() => rej(new Error(`${label} timed out after ${ms / 1000}s`)), ms); });
+  return Promise.race([promise, limit]).finally(() => clearTimeout(timer));
+}
 
 const fin = x => (Number.isFinite(x) ? Number(x.toPrecision(6)) : null);   // pas de NaN/Infinity dans le JSON, valeurs arrondies
 
@@ -12,7 +16,8 @@ export async function fetchLiquiditySnapshot(core, date) {
   const out = {};
   await Promise.all(Object.entries(core.CHAINS).map(async ([k, c]) => {
     try {
-      const S = await core.loadPool({ chain: k, addr: c.addr, urls: c.rpcs, block: 'latest', status: () => {} });
+      // tickRange : on ne lit que les ticks proches du prix (≈ ±16 %), largement assez pour mesurer ±5 % : bien plus rapide qu'un balayage complet
+      const S = await core.loadPool({ chain: k, addr: c.addr, urls: c.rpcs, block: 'latest', status: () => {}, tickRange: 1500 });
       const D = core.derive(S);
       const cost = pct => {
         const up = core.calcRow(S, D, pct), dn = core.calcRow(S, D, -pct);
