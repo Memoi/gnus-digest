@@ -82,20 +82,22 @@
   const cleanSym = x => String(x).replace(/[^\w.$\- ]/g, '').slice(0, 24) || '?';   // les symboles viennent de la chaîne : jamais de HTML
 
   async function rpc(method, params, ctx){
-  const urls = ctx.urls;
+  const urls = ctx.urls, n = urls.length, start = ctx._ok || 0;      // on repart du dernier nœud qui a répondu
   const errs = [];
-  for (const url of urls){
+  for (let k = 0; k < n; k++){
+    const idx = (start + k) % n, url = urls[idx];
     try{
       const r = await fetch(url,{method:'POST',headers:{'content-type':'application/json'},
         body:JSON.stringify({jsonrpc:'2.0',id:1,method,params}),
-        signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(20000) : undefined});
+        signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(8000) : undefined});
       const j = await r.json();
       if (j.error) throw new Error(j.error.message);
+      ctx._ok = idx;
       return j.result;
     }catch(e){ errs.push(url.replace(/^https?:\/\//,'') + ' → ' + (e.message||e)); }
   }
   throw new Error('No RPC reachable. Details: ' + errs.join(' | ') +
-    (location.protocol==='file:' ? '' : ' (page not opened locally: open the file from your PC)'));
+    ((typeof location !== 'undefined' && location.protocol !== 'file:') ? ' (page not opened locally: open the file from your PC)' : ''));
 }
 
 async function multicall(calls, ctx){
@@ -177,16 +179,21 @@ async function loadPool(ctx){
     S.tickCur = slot0.tick;
     S.L = num(liq[0]);
     S.spacing = spacing[0];
-    S.ticks = await loadTicks(addr, S.spacing, ctx);
+    S.ticks = await loadTicks(addr, S.spacing, ctx, S.tickCur);
   } else {
     S.r0 = num(res[0]); S.r1 = num(res[1]);
   }
   return S;
 }
 
-async function loadTicks(addr, spacing, ctx){
+// Mots du registre de ticks à lire : tout le registre, ou seulement la zone autour du prix si `range` (en ticks) est donné
+function tickWordRange(spacing, tickCur, range){
+  if (range && tickCur != null) return [Math.floor((tickCur - range) / spacing) >> 8, Math.floor((tickCur + range) / spacing) >> 8];
+  return [Math.floor(-887272 / spacing) >> 8, Math.floor(887272 / spacing) >> 8];
+}
+async function loadTicks(addr, spacing, ctx, tickCur){
   ctx.status('Reading tick bitmap…');
-  const wmin = Math.floor(-887272/spacing) >> 8, wmax = Math.floor(887272/spacing) >> 8;
+  const [wmin, wmax] = tickWordRange(spacing, tickCur, ctx.tickRange);
   const words = [];
   for (let w=wmin; w<=wmax; w++) words.push(w);
   const bm = await multicall(words.map(w=>({target:addr,iface:ifV3,fn:'tickBitmap',args:[w]})), ctx);
@@ -263,5 +270,5 @@ function calcRow(S, D, pct){
   return Object.assign(r,{crossed:w.crossed,noLiq:w.noLiq});
 }
 
-  return { init, CHAINS, rpc, multicall, loadPool, loadTicks, llamaPrices, walkV3, walkV2, derive, calcRow, tickSqrt, num, cleanSym };
+  return { init, CHAINS, rpc, multicall, loadPool, loadTicks, tickWordRange, llamaPrices, walkV3, walkV2, derive, calcRow, tickSqrt, num, cleanSym };
 });
