@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-14T12:23:41.758Z",
+  "generatedAt": "2026-11-15T00:16:06.413Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
-    "from": "2026-11-08",
-    "to": "2026-11-14",
+    "from": "2026-11-09",
+    "to": "2026-11-15",
     "commits": 75,
     "automated": 100,
     "repos": 13,
@@ -66,7 +66,7 @@
           "GeniusNetwork: Upgraded: rocksdb-backup: record develop-merge erase x cold-storage gap seed; bump SuperGenius po…",
           "GeniusNetwork: Updated: workstream STATE: log erase-vs-cold-storage semantic gap as next-milestone seed (post d…"
         ],
-        "summary": "A new roadmap was defined, storage backup was rewritten for better archiving, the milestone audit was passed, payout address features were added, and the build process was set to use internal servers."
+        "summary": "Network documentation was expanded with a new roadmap and requirements, and backup and cold‑storage processes were refined. New payout address getters were added and the build system was switched to self‑hosted runners."
       },
       {
         "name": "SDK & developer tools",
@@ -100,7 +100,7 @@
           "GeniusSDK: Updated: only use self hosted runners; change build pointer (+2 more)",
           "thirdparty: Updated: merge origin/develop into dev_db_storage; remove warning causing undef (+1 more)"
         ],
-        "summary": "A payout address feature was introduced, a numeric keypad component was added, idempotency handling was improved, passwords are now hashed, and token rotation was implemented, while build scripts were streamlined."
+        "summary": "The SDK gained a function to retrieve payout addresses, added support for idempotency keys, service registration, and rotating refresh tokens, and improved password security by hashing passwords. Additional components such as a numeric keypad were added, and runner configurations were updated."
       },
       {
         "name": "Dashboards & investor tools",
@@ -124,7 +124,7 @@
           "gnus-investor-scenarios: Test work: cover model formatting, lockouts, equity and burn safeguards",
           "gnus-investor-scenarios: Refactored: extract pure formulas, token lockouts, and supply safeguards"
         ],
-        "summary": "Lockout scenarios and CSV export were added for investors, scripts and value formatting were fixed, and the dashboard design was refined for accessibility."
+        "summary": "Investor tools received new lockout scenario calculations, better value formatting, and CSV export capabilities, along with design and accessibility fixes for the dashboard."
       },
       {
         "name": "Cognitive system (AI)",
@@ -147,7 +147,7 @@
           "GeniusCognitiveSystem: Docs: remove GNUS-NEO-SWARM/GQHSM (superseded by GQHSM-CPP); plan GQHSM submodule removal",
           "GNUS-NEO-SWARM: Build/release: remove GQHSM submodule (superseded by Super-Genius/GQHSM-CPP)"
         ],
-        "summary": "An outdated AI submodule was removed from the projects, as it has been replaced by a newer version."
+        "summary": "An outdated AI submodule was removed from the system and the related documentation was updated to reflect its removal."
       },
       {
         "name": "Wallet & apps",
@@ -164,7 +164,7 @@
           "GeniusWallet: Updated: select self hosted runners",
           "GeniusWallet: Updated: gnus_getEarnings carries a real jobsProcessed count; genus_api bindings for task ids/re…; wire gnus_getEarnings jobsProcessed to live task ids"
         ],
-        "summary": "Earnings reporting now shows the actual number of processed jobs and links to task identifiers."
+        "summary": "The wallet now reports the actual number of processed jobs and includes bindings for task identifiers."
       },
       {
         "name": "CI & infrastructure",
@@ -180,7 +180,7 @@
         "highlights": [
           "CIDocker: Updated: CI script to run on self hosted; alma linux docker with commonly used items"
         ],
-        "summary": "Build scripts now run on internal servers and the building environment now includes common tools."
+        "summary": "The automated build process was updated to run on self‑hosted machines and a new Docker image based on Alma Linux with common tools was added."
       }
     ],
     "byType": {
@@ -194,9 +194,54 @@
       "refactored": 1
     },
     "headline": "75 commits by 5 contributors across 13 repos. Most active: GeniusNetwork (16), gnus-investor-scenarios (13), openapi-cpp-scaffolding (12). Plus 100 automated commits. 37 CI builds published.",
-    "summary": "This week the project laid out a new roadmap and made several improvements to data storage and security. New features were added for payouts, investor calculations, and user interfaces, while outdated AI components were removed. Build processes and reporting were also streamlined."
+    "summary": "Documentation and planning for the next network milestone were added, and several storage and backup processes were refined. The SDK gained a new function to retrieve payout addresses and improved its handling of self‑hosted environments. Investor tools received new lockout scenario calculations and formatting fixes, while the AI components removed an outdated submodule."
   },
   "days": [
+    {
+      "date": "2026-11-15",
+      "repos": [
+        {
+          "name": "rlp_enodes",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/rlp_enodes",
+          "commits": 2,
+          "human": 0,
+          "automated": 2,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "automated",
+              "label": "automated updates",
+              "count": 2,
+              "text": "Automated updates (2 commits), e.g. update Base bootstrap nodes [skip ci]"
+            }
+          ]
+        }
+      ],
+      "releases": [],
+      "ciBuilds": {},
+      "domains": [
+        {
+          "name": "Blockchain & network",
+          "commits": 0,
+          "automated": 2,
+          "repos": [
+            {
+              "name": "rlp_enodes",
+              "commits": 0,
+              "automated": 2
+            }
+          ],
+          "labels": []
+        }
+      ],
+      "headline": "2 automated commits (rlp_enodes).",
+      "commits": 0,
+      "automated": 2,
+      "summary": "Only automated updates ran today, with no user‑visible changes."
+    },
     {
       "date": "2026-11-14",
       "repos": [
@@ -229,9 +274,9 @@
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 27,
+          "commits": 48,
           "human": 0,
-          "automated": 27,
+          "automated": 48,
           "branches": [
             "main"
           ],
@@ -239,8 +284,8 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 27,
-              "text": "Automated updates (27 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 48,
+              "text": "Automated updates (48 commits), e.g. update Base bootstrap nodes [skip ci]"
             }
           ]
         }
@@ -251,7 +296,7 @@
         {
           "name": "Blockchain & network",
           "commits": 5,
-          "automated": 27,
+          "automated": 48,
           "repos": [
             {
               "name": "GeniusNetwork",
@@ -261,7 +306,7 @@
             {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 27
+              "automated": 48
             }
           ],
           "labels": [
@@ -270,10 +315,10 @@
           ]
         }
       ],
-      "headline": "5 commits across 1 repo in 1 domain: Blockchain & network (docs, updated). 27 automated commits (rlp_enodes).",
+      "headline": "5 commits across 1 repo in 1 domain: Blockchain & network (docs, updated). 48 automated commits (rlp_enodes).",
       "commits": 5,
-      "automated": 27,
-      "summary": "The roadmap for the next version was created and the storage system was redesigned for better handling of archived data."
+      "automated": 48,
+      "summary": "The network documentation was expanded with a roadmap and requirement list for the upcoming version, and the backup system was updated to support a tiered archive and light node model."
     },
     {
       "date": "2026-11-13",
@@ -440,7 +485,7 @@
       "headline": "8 commits across 4 repos in 2 domains: Blockchain & network (upgraded, updated), Cognitive system (AI) (build/release, docs). 48 automated commits (rlp_enodes).",
       "commits": 8,
       "automated": 48,
-      "summary": "An old AI module was removed and the storage backup system was upgraded, while cleanup processes for cold storage were improved."
+      "summary": "An outdated AI submodule was removed from the system, and the network’s backup and cold‑storage handling were updated to improve data retention and logging."
     },
     {
       "date": "2026-11-12",
@@ -654,9 +699,9 @@
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 25,
+          "commits": 2,
           "human": 0,
-          "automated": 25,
+          "automated": 2,
           "branches": [
             "main"
           ],
@@ -664,8 +709,8 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 25,
-              "text": "Automated updates (25 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 2,
+              "text": "Automated updates (2 commits), e.g. update Base bootstrap nodes [skip ci]"
             }
           ]
         }
@@ -733,7 +778,7 @@
         {
           "name": "Blockchain & network",
           "commits": 2,
-          "automated": 25,
+          "automated": 2,
           "repos": [
             {
               "name": "SuperGenius",
@@ -748,7 +793,7 @@
             {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 25
+              "automated": 2
             }
           ],
           "labels": [
@@ -772,10 +817,10 @@
           ]
         }
       ],
-      "headline": "28 commits across 8 repos in 4 domains: Dashboards & investor tools (added, fixed), SDK & developer tools (added, fixed), Blockchain & network (fixed, updated) +1 more. 25 automated commits (rlp_enodes). 37 CI builds published (SuperGenius ×16, GeniusWallet ×6, GeniusSDK ×15).",
+      "headline": "28 commits across 8 repos in 4 domains: Dashboards & investor tools (added, fixed), SDK & developer tools (added, fixed), Blockchain & network (fixed, updated) +1 more. 2 automated commits (rlp_enodes). 37 CI builds published (SuperGenius ×16, GeniusWallet ×6, GeniusSDK ×15).",
       "commits": 28,
-      "automated": 25,
-      "summary": "A new way to retrieve payout addresses was added, lockout scenarios for investors were introduced, and a numeric keypad component was added to the interface."
+      "automated": 2,
+      "summary": "Investor tools added new lockout scenario calculations and improved value formatting, while the SDK introduced a payout address function and refined its runner configuration. Additional updates improved third‑party storage handling and added a numeric keypad component to the client scaffold."
     },
     {
       "date": "2026-11-11",
@@ -1013,7 +1058,7 @@
       "headline": "17 commits across 6 repos in 4 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, fixed), Wallet & apps (updated) +1 more.",
       "commits": 17,
       "automated": 0,
-      "summary": "The milestone audit was completed, payout address getters were added, and earnings reports now include real job counts."
+      "summary": "The network milestone audit was completed and related documentation recorded, and new payout address getters were added to network accounts. The SDK added support for idempotency keys, and the wallet now reports a real count of processed jobs."
     },
     {
       "date": "2026-11-10",
@@ -1185,7 +1230,7 @@
       "headline": "15 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (fixed, upgraded), Dashboards & investor tools (fixed).",
       "commits": 15,
       "automated": 0,
-      "summary": "Security was enhanced with password hashing and rotating tokens, and the build system was forced to use internal servers; the dashboard design was updated for better accessibility."
+      "summary": "The SDK introduced service registration, rotating refresh tokens, and password hashing for better security, with documentation added. The network build process was adjusted to use self‑hosted runners, and the investor dashboard received design and accessibility improvements."
     },
     {
       "date": "2026-11-09",
@@ -1239,20 +1284,10 @@
       "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work).",
       "commits": 2,
       "automated": 0,
-      "summary": "Password handling was fixed and new tests were added to verify the changes."
-    },
-    {
-      "date": "2026-11-08",
-      "repos": [],
-      "releases": [],
-      "ciBuilds": {},
-      "domains": [],
-      "headline": "A quiet day with no new code activity on GitHub.",
-      "commits": 0,
-      "automated": 0
+      "summary": "The SDK fixed password handling to hash passwords and added tests to verify the changes."
     }
   ],
-  "builder": "v22",
+  "builder": "v23",
   "prs": {
     "prsOpened": 12,
     "prsMerged": 4,
@@ -1399,7 +1434,7 @@
     "mergedPrsTotal": 807
   },
   "readiness": {
-    "fetchedAt": "2026-11-14T12:23:48.090Z",
+    "fetchedAt": "2026-11-15T00:16:14.596Z",
     "staleDays": 60,
     "pages": [
       {
@@ -1474,8 +1509,8 @@
           }
         ],
         "lastEdited": "2026-10-08T20:38:00Z",
-        "statusAgeDays": 37,
-        "editedAgeDays": 37,
+        "statusAgeDays": 38,
+        "editedAgeDays": 38,
         "stale": false,
         "targets": [
           {
@@ -1638,7 +1673,7 @@
         ],
         "lastEdited": "2026-10-08T20:38:00Z",
         "statusAgeDays": null,
-        "editedAgeDays": 37,
+        "editedAgeDays": 38,
         "stale": false,
         "targets": [
           {
@@ -1667,6 +1702,94 @@
     "windowDays": 7,
     "commits": 0,
     "pages": []
+  },
+  "milestones": [
+    {
+      "repo": "GNUS-NEO-SWARM",
+      "title": "ELM Vulkan Implementation",
+      "url": "https://github.com/GeniusVentures/GNUS-NEO-SWARM/milestone/1",
+      "dueOn": null,
+      "percent": 100,
+      "open": 0,
+      "closed": 1
+    },
+    {
+      "repo": "SuperGenius",
+      "title": "TestNet",
+      "url": "https://github.com/GeniusVentures/SuperGenius/milestone/1",
+      "dueOn": null,
+      "percent": 100,
+      "open": 0,
+      "closed": 2
+    },
+    {
+      "repo": "libp2p",
+      "title": "PrivateNetworks",
+      "url": "https://github.com/GeniusVentures/libp2p/milestone/1",
+      "dueOn": null,
+      "percent": 100,
+      "open": 0,
+      "closed": 1
+    },
+    {
+      "repo": "TokenContracts",
+      "title": "TestNet",
+      "url": "https://github.com/GeniusVentures/TokenContracts/milestone/1",
+      "dueOn": null,
+      "percent": 100,
+      "open": 0,
+      "closed": 1
+    },
+    {
+      "repo": "SuperGenius",
+      "title": "Get EVM Bridge and Consensus Working",
+      "url": "https://github.com/GeniusVentures/SuperGenius/milestone/2",
+      "dueOn": null,
+      "percent": 50,
+      "open": 7,
+      "closed": 7
+    },
+    {
+      "repo": "MNN",
+      "title": "ELM Ultra",
+      "url": "https://github.com/GeniusVentures/MNN/milestone/1",
+      "dueOn": null,
+      "percent": 43,
+      "open": 4,
+      "closed": 3
+    },
+    {
+      "repo": "SuperGenius",
+      "title": "PrivateNetoworks",
+      "url": "https://github.com/GeniusVentures/SuperGenius/milestone/3",
+      "dueOn": null,
+      "percent": 0,
+      "open": 1,
+      "closed": 0
+    },
+    {
+      "repo": "SGProcessingManager",
+      "title": "ELM-Integration",
+      "url": "https://github.com/GeniusVentures/SGProcessingManager/milestone/1",
+      "dueOn": null,
+      "percent": 0,
+      "open": 1,
+      "closed": 0
+    },
+    {
+      "repo": "ProofSystem",
+      "title": "TestNet",
+      "url": "https://github.com/GeniusVentures/ProofSystem/milestone/1",
+      "dueOn": null,
+      "percent": 0,
+      "open": 1,
+      "closed": 0
+    }
+  ],
+  "liquidity": {
+    "date": "2026-11-15",
+    "networks": 4,
+    "total": 4
   },
   "changes": {
     "since": "2026-11-10",
@@ -1731,9 +1854,17 @@
       "openPrs": 28,
       "closedIssues": 393,
       "mergedPrs": 807
+    },
+    {
+      "date": "2026-11-15",
+      "commits": 75,
+      "openIssues": 210,
+      "openPrs": 28,
+      "closedIssues": 393,
+      "mergedPrs": 807
     }
   ],
   "aiModel": "openai/gpt-oss-120b",
   "ai": "openai/gpt-oss-120b",
-  "telegramPosted": "2026-11-14"
+  "telegramPosted": "2026-11-15"
 }
