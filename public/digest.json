@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T15:56:43.476Z",
+  "generatedAt": "2026-11-15T16:01:19.050Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -66,7 +66,7 @@
           "GeniusNetwork: Upgraded: rocksdb-backup: record develop-merge erase x cold-storage gap seed; bump SuperGenius po…",
           "GeniusNetwork: Updated: workstream STATE: log erase-vs-cold-storage semantic gap as next-milestone seed (post d…"
         ],
-        "summary": "Documentation added a detailed roadmap for the upcoming version and recorded milestone progress. The backup component was upgraded to support tiered storage and better logging, and cold‑storage garbage collection was improved to retain seal markers."
+        "summary": "A new version roadmap was defined, backup and storage systems were upgraded, payout address features were added, a milestone audit was completed, and the build system was configured to use self‑hosted runners."
       },
       {
         "name": "SDK & developer tools",
@@ -100,7 +100,7 @@
           "GeniusSDK: Updated: only use self hosted runners; change build pointer (+2 more)",
           "thirdparty: Updated: merge origin/develop into dev_db_storage; remove warning causing undef (+1 more)"
         ],
-        "summary": "A new function to retrieve payout addresses was added, and support for self‑hosted runners was enhanced. Additional features such as service registration, rotating refresh tokens, password hashing, and a numeric keypad component were introduced, along with various bug fixes and documentation updates."
+        "summary": "A payout address API was added, security improvements such as password hashing and idempotency keys were made, token rotation and service registration were introduced, a numeric input component was added, and runner handling was refined."
       },
       {
         "name": "Dashboards & investor tools",
@@ -124,7 +124,7 @@
           "gnus-investor-scenarios: Test work: cover model formatting, lockouts, equity and burn safeguards",
           "gnus-investor-scenarios: Refactored: extract pure formulas, token lockouts, and supply safeguards"
         ],
-        "summary": "Lockout scenarios and related calculations were added, with formatting fixes for monetary values and new tests covering model behavior. The dashboard design was refined for better accessibility and visual consistency."
+        "summary": "New lockout scenarios and a cash chart were added, scripts were fixed, tests and formula refactoring were performed, and the user interface was updated for better accessibility."
       },
       {
         "name": "Wallet & apps",
@@ -143,7 +143,7 @@
           "GeniusWallet: Updated: select self hosted runners",
           "GeniusWallet: Updated: gnus_getEarnings carries a real jobsProcessed count; genus_api bindings for task ids/re…; wire gnus_getEarnings jobsProcessed to live task ids"
         ],
-        "summary": "Diagnostic prints were added and refined in the verification process, and the wallet now reports real job counts. Minor updates improved the verification diagnostics."
+        "summary": "Diagnostic output was added to verification, diagnostics were enhanced, earnings tracking was improved, and API bindings were updated."
       },
       {
         "name": "Cognitive system (AI)",
@@ -166,7 +166,7 @@
           "GeniusCognitiveSystem: Docs: remove GNUS-NEO-SWARM/GQHSM (superseded by GQHSM-CPP); plan GQHSM submodule removal",
           "GNUS-NEO-SWARM: Build/release: remove GQHSM submodule (superseded by Super-Genius/GQHSM-CPP)"
         ],
-        "summary": "The GQHSM submodule was removed from the AI system and its documentation, as it is now superseded by a new implementation. Plans for the removal were documented."
+        "summary": "An outdated AI submodule was removed and related documentation was cleaned up."
       },
       {
         "name": "CI & infrastructure",
@@ -182,7 +182,7 @@
         "highlights": [
           "CIDocker: Updated: CI script to run on self hosted; alma linux docker with commonly used items"
         ],
-        "summary": "The CI script was updated to run on self‑hosted AlmaLinux containers with common tools preinstalled."
+        "summary": "The testing system was updated to run on a new self‑hosted Docker environment with common tools."
       }
     ],
     "byType": {
@@ -196,7 +196,7 @@
       "refactored": 1
     },
     "headline": "77 commits by 5 contributors across 13 repos. Most active: GeniusNetwork (16), gnus-investor-scenarios (13), openapi-cpp-scaffolding (12). Plus 100 automated commits. 37 CI builds published.",
-    "summary": "This week saw the rollout of several new features and important clean‑ups across the platform. A detailed roadmap and milestone documentation were added for the network, while the SDK received payout address support and security improvements. Investor tools, the wallet, and the AI system also received functional enhancements and documentation updates."
+    "summary": "This week saw major roadmap planning and storage improvements for the blockchain network, while the SDK added new payout address features and security enhancements. Investor tools received new lockout scenarios and accessibility updates, and the wallet added diagnostic outputs. The AI components were streamlined by removing an old submodule, and the testing infrastructure was updated to use a new self‑hosted Docker environment."
   },
   "days": [
     {
@@ -283,7 +283,7 @@
       "headline": "2 commits across 1 repo in 1 domain: Wallet & apps (added, updated). 34 automated commits (rlp_enodes).",
       "commits": 2,
       "automated": 34,
-      "summary": "Diagnostic messages were added to the wallet verification process, and the existing diagnostics were improved."
+      "summary": "Diagnostic prints were added to the wallet verification process and the diagnostics were enhanced."
     },
     {
       "date": "2026-11-14",
@@ -361,7 +361,7 @@
       "headline": "5 commits across 1 repo in 1 domain: Blockchain & network (docs, updated). 48 automated commits (rlp_enodes).",
       "commits": 5,
       "automated": 48,
-      "summary": "A new roadmap outlining seven phases for the upcoming version was documented, and the backup system was updated to support a tiered archive and light node model."
+      "summary": "A roadmap for version 1.2 was created and backup documentation was updated to describe a new tiered storage model."
     },
     {
       "date": "2026-11-13",
@@ -528,7 +528,7 @@
       "headline": "8 commits across 4 repos in 2 domains: Blockchain & network (upgraded, updated), Cognitive system (AI) (build/release, docs). 18 automated commits (rlp_enodes).",
       "commits": 8,
       "automated": 18,
-      "summary": "A submodule related to GQHSM was removed from the AI system and its documentation was updated, and the backup component received upgrades to better track storage gaps and logging. Cold‑storage garbage collection was improved to keep seal markers during eviction."
+      "summary": "An outdated AI submodule was removed and the documentation cleaned up; backup and storage systems in the blockchain network were upgraded to track gaps and retain markers."
     },
     {
       "date": "2026-11-12",
@@ -839,7 +839,7 @@
       "headline": "28 commits across 8 repos in 4 domains: Dashboards & investor tools (added, fixed), SDK & developer tools (added, fixed), Blockchain & network (fixed, updated) +1 more. 37 CI builds published (GeniusWallet ×6, SuperGenius ×16, GeniusSDK ×15).",
       "commits": 28,
       "automated": 0,
-      "summary": "New lockout scenarios and related calculations were added to the investor tools, with formatting fixes and additional tests. The SDK gained a payout address function and improvements for self‑hosted runners, and a numeric keypad component was introduced for the API client scaffolding."
+      "summary": "Investor tools got new lockout scenarios, a cash chart, script fixes, and refactored formulas; the SDK introduced a payout address function and improved runner handling; a new numeric input component was added to the client scaffold."
     },
     {
       "date": "2026-11-11",
@@ -1077,7 +1077,7 @@
       "headline": "17 commits across 6 repos in 4 domains: Blockchain & network (test work, build/release), SDK & developer tools (added, fixed), Wallet & apps (updated) +1 more.",
       "commits": 17,
       "automated": 0,
-      "summary": "The network milestone audit was completed and documentation was updated, while the wallet now reports actual job counts. New payout address getters were added to accounts and nodes, and support for idempotency keys was added to API requests."
+      "summary": "A milestone audit was completed and related documents were archived; the wallet gained better earnings tracking and API updates; payout address retrieval was added to accounts and a key for request idempotency was introduced."
     },
     {
       "date": "2026-11-10",
@@ -1249,7 +1249,7 @@
       "headline": "15 commits across 4 repos in 3 domains: SDK & developer tools (added, fixed), Blockchain & network (fixed, upgraded), Dashboards & investor tools (fixed).",
       "commits": 15,
       "automated": 0,
-      "summary": "The SDK introduced service registration, rotating refresh tokens, and password hashing for user creation, with documentation added. Build processes were adjusted to require self‑hosted runners, and the dashboard received design and accessibility improvements."
+      "summary": "New service registration and rotating security tokens were added, password security was tightened, and the user interface received a numeric input component; the build process was forced to use self‑hosted runners and documentation was updated."
     },
     {
       "date": "2026-11-09",
@@ -1303,7 +1303,7 @@
       "headline": "2 commits across 1 repo in 1 domain: SDK & developer tools (fixed, test work).",
       "commits": 2,
       "automated": 0,
-      "summary": "Password handling was improved by hashing passwords on creation and adding an email index, and tests were added to verify these changes."
+      "summary": "Password handling was improved by fixing hashing and adding tests."
     }
   ],
   "builder": "v24",
@@ -1453,7 +1453,7 @@
     "mergedPrsTotal": 807
   },
   "readiness": {
-    "fetchedAt": "2026-11-15T15:56:50.091Z",
+    "fetchedAt": "2026-11-15T16:01:27.247Z",
     "staleDays": 60,
     "pages": [
       {
