@@ -831,6 +831,14 @@ async function main() {
     // else {
     const todayKey = dayKey(now);
     const allowMultiplePerDay = process.env.TELEGRAM_ALLOW_MULTIPLE_PER_DAY === '1';
+
+    console.log('Telegram configuration:', {
+      tokenPresent: !!tgToken,
+      chatPresent: !!tgChat,
+      allowMultiplePerDay: allowMultiplePerDay,
+      todayKey,
+      alreadyPosted: digest.telegramPosted === todayKey
+    });
     
     if (
       !allowMultiplePerDay &&
