@@ -64,6 +64,11 @@
   .grid2 .card{margin-bottom:0}
   svg.chart{width:100%;height:auto;color:var(--accent);display:block;margin:6px 0 2px}
   .arrow{color:var(--mute);margin:0 6px}
+  nav.jump{font:13px/1.8 system-ui,sans-serif;color:var(--mute);margin:-6px 0 14px}
+  nav.jump a{color:var(--mute);font-weight:400;margin:0;text-decoration:none;border-bottom:1px dotted var(--line)}
+  nav.jump a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  h2{scroll-margin-top:12px}
+  @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
   .sofar{margin-left:8px;font:11px system-ui,sans-serif;color:var(--accent);border:1px solid var(--line);border-radius:8px;padding:0 7px;letter-spacing:0;text-transform:none}
   .autoline{font:13px/1.45 system-ui,sans-serif;color:var(--mute);margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
   .ms{padding:8px 0;border-bottom:1px solid var(--line);font:14px/1.45 system-ui,sans-serif}.ms:last-child{border-bottom:0}
@@ -99,7 +104,7 @@
   nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
   .pr{display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--line);font:14px/1.4 system-ui,sans-serif}
   .pr:last-child{border-bottom:0}
-  .tag{flex:none;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--mute)}
+  .tag{flex:none;min-width:92px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--mute)}
   .tag.merged{color:#2e7d32;border-color:#2e7d32}.tag.opened{color:var(--accent);border-color:var(--accent)}
   .pr a{color:var(--ink);text-decoration:none;font-weight:600}.pr span.m{color:var(--mute)}
 </style>
@@ -109,27 +114,28 @@
   <h1>GitHub digest</h1>
   <p class="sub" id="meta">Loading…</p>
   <nav><a href="./" aria-current="page">Digest</a><a href="liquidity.html">GNUS liquidity</a><a href="archive.html">Archive</a></nav>
+  <nav class="jump" aria-label="Sections on this page">Jump to: <a href="#s-readiness">Readiness</a> · <a href="#s-docs">Docs</a> · <a href="#s-week">This week</a> · <a href="#s-domains">Domains</a> · <a href="#s-prs">Issues &amp; PRs</a> · <span id="jumpMs" hidden><a href="#s-milestones">Milestones</a> · </span><a href="#s-trends">Trends</a> · <a href="#s-daily">Daily</a></nav>
   <div id="banner"></div>
-  <h2>At a glance</h2>
+  <h2 id="s-glance">At a glance</h2>
   <div class="card" id="overview"></div>
-  <h2>Mainnet readiness</h2>
+  <h2 id="s-readiness">Mainnet readiness</h2>
   <div id="changes"></div>
   <div id="readiness"></div>
-  <h2>Documentation changes</h2>
+  <h2 id="s-docs">Documentation changes</h2>
   <div class="card" id="docchanges"></div>
-  <h2>This week</h2>
+  <h2 id="s-week">This week</h2>
   <div class="card" id="week"></div>
-  <h2>Activity by domain</h2>
+  <h2 id="s-domains">Activity by domain</h2>
   <div class="grid2" id="domains"></div>
-  <h2>Issues &amp; pull requests</h2>
+  <h2 id="s-prs">Issues &amp; pull requests</h2>
   <div class="card" id="prs"></div>
   <div id="msWrap" hidden>
-    <h2>GitHub milestones</h2>
+    <h2 id="s-milestones">GitHub milestones</h2>
     <div class="card" id="milestones"></div>
   </div>
-  <h2>Trends</h2>
+  <h2 id="s-trends">Trends</h2>
   <div class="grid2" id="trends"></div>
-  <h2>Daily</h2>
+  <h2 id="s-daily">Daily</h2>
   <div id="days"></div>
   <footer id="foot"></footer>
   <div class="totop"><button type="button" id="toTop">↑ Back to top</button></div>
@@ -291,7 +297,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   if (R) { const ages = R.pages.map(p => p.editedAgeDays).filter(x => x != null); if (ages.length) kvItem('Docs last edited', document.createTextNode(`${Math.min(...ages)} days ago`)); }
   ov.append(kv);
 
-  wk.append(el('div', `${w.from} → ${w.to}`, 'date'), el('div', w.summary || w.headline));
+  wk.append(el('div', `${w.from} → ${w.to} · last 7 days`, 'date'), el('div', w.summary || w.headline));
   const st = el('div', null, 'stats');
   for (const [k, v] of [['commits', w.commits], ['automated commits', w.automated], ['repos', w.repos], ['contributors', w.contributors], ['releases', w.releases], ['CI builds', w.ciBuilds]]) {
     const s = el('span', ` ${k}`); s.prepend(el('b', v)); st.append(s);
@@ -363,6 +369,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   // Jalons de même nom regroupés (« TestNet » dans trois repos = un seul bloc) ; blocs avec échéance d'abord, puis ordre alphabétique.
   if ((d.milestones || []).length) {
     document.getElementById('msWrap').hidden = false;
+    document.getElementById('jumpMs').hidden = false;
     const mb = document.getElementById('milestones');
     const norm = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '');
     const groups = new Map();
@@ -374,18 +381,22 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     }).sort((x, y) => (x.due && y.due) ? x.due.localeCompare(y.due) : x.due ? -1 : y.due ? 1 : x.title.localeCompare(y.title, 'en', { sensitivity: 'base' }));
     const bar = m => { const b = el('div', null, 'mbar'), f = el('i'); f.style.width = Math.max(0, Math.min(100, m.percent)) + '%'; b.append(f); return b; };
     const link = (text, m) => { const a = el('a', text); if (safeUrl(m.url)) { a.href = m.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } return a; };
-    const stats = m => `${m.percent}% · ${m.closed}/${m.open + m.closed} issues closed` + (m.dueOn ? ` · due ${fmtDate(m.dueOn)}` : '');
+    const statsLine = m => {                                          // 100 % mais encore ouvert : prêt à être fermé
+      const s = el('div', `${m.percent}% · ${m.closed}/${m.open + m.closed} issues closed` + (m.dueOn ? ` · due ${fmtDate(m.dueOn)}` : ''), 'm');
+      if (m.percent >= 100) s.append(el('span', 'ready to close', 'sofar'));
+      return s;
+    };
     for (const g of ordered.slice(0, 30)) {
       const block = el('div', null, 'ms');
       if (g.items.length === 1) {                                    // jalon unique : titre + repo sur une ligne
         const m = g.items[0];
-        block.append(link(m.title, m), el('span', ` · ${m.repo}`, 'm'), bar(m), el('div', stats(m), 'm'));
+        block.append(link(m.title, m), el('span', ` · ${m.repo}`, 'm'), bar(m), statsLine(m));
       } else {                                                       // jalon présent dans plusieurs repos : titre une fois, une ligne par repo
         const done = g.items.filter(i => i.percent >= 100).length;
-        const hd = el('div', g.title, 'mh'); hd.append(el('span', ` · ${g.items.length} repositories · ${done} complete`, 'm')); block.append(hd);
+        const hd = el('div', g.title, 'mh'); hd.append(el('span', ` · ${g.items.length} repositories · ${done} ready to close`, 'm')); block.append(hd);
         for (const m of g.items) {
           const sub = el('div', null, 'msub');
-          sub.append(link(m.repo, m), bar(m), el('div', stats(m), 'm'));
+          sub.append(link(m.repo, m), bar(m), statsLine(m));
           block.append(sub);
         }
       }
@@ -431,6 +442,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
   if (!(w.domains || []).length) domBox.append(Object.assign(el('div', 'No activity to group this week.'), { className: 'card' }));
 
   const days = document.getElementById('days');
+  let dayIndex = 0;
   const todayDate = d.days[0] && d.days[0].date;        // la journée en cours au moment de la génération : incomplète
   for (const day of d.days) {
     const c = el('div', null, 'card');
@@ -439,6 +451,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     c.append(dateEl, el('div', day.summary || day.headline));
     if (day.repos.length) {
       const det = el('details'); det.append(el('summary', 'Details'));
+      if (dayIndex < 3) det.open = true;                  // les 3 jours les plus récents sont dépliés, les autres à ouvrir
       const byDom = new Map();
       const autoOnly = day.repos.filter(r => r.human === 0 && r.automated > 0);      // repos qui n'ont eu que des commits automatiques
       for (const r of day.repos.filter(r => !(r.human === 0 && r.automated > 0))) { const k = r.domain || 'Other'; if (!byDom.has(k)) byDom.set(k, []); byDom.get(k).push(r); }
@@ -458,6 +471,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
       c.append(det);
     }
     days.append(c);
+    dayIndex++;
   }
 }).catch(e => { document.getElementById('meta').textContent = 'Could not load digest.json (' + e.message + ')'; });
 </script>
