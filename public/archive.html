@@ -39,9 +39,14 @@
   .day .t{margin:0 0 6px}
   .chips{display:flex;flex-wrap:wrap;gap:6px}
   .chip{font:12px system-ui,sans-serif;border:1px solid var(--line);border-radius:12px;padding:1px 9px;color:var(--mute)}
+  .chip.auto{border-style:dashed}
   .chip.rel a{color:var(--accent);text-decoration:none;font-weight:600}
   .auto{font:11px system-ui,sans-serif;color:var(--mute);margin-left:6px;border:1px dashed var(--line);border-radius:8px;padding:0 6px}
   footer{margin:30px 0 10px;padding-top:14px;border-top:1px solid var(--line);font:13px/1.55 system-ui,sans-serif;color:var(--mute)}
+  .totop{text-align:center;margin:26px 0 8px}
+  .totop button{font:600 14px system-ui,sans-serif;background:var(--panel);color:var(--accent);border:1px solid var(--line);border-radius:20px;padding:8px 18px;cursor:pointer;width:auto}
+  .totop button:hover{border-color:var(--accent)}
+  .totop button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -52,8 +57,10 @@
   <input id="q" type="search" placeholder="Filter by repository, domain or keyword…" aria-label="Filter the archive">
   <div id="weeks"></div>
   <footer>Daily summaries are kept as they were written the day after. Days with no activity are not listed. Written by an AI model when available, otherwise generated from commit messages (marked “auto”); they may contain errors.</footer>
+  <div class="totop"><button type="button" id="toTop">↑ Back to top</button></div>
 </main>
 <script>
+document.getElementById('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
 const safeUrl = u => /^https:\/\/github\.com\//.test(u) ? u : null;
 const fmtDay = s => new Date(s + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -79,7 +86,7 @@ function render(filter) {
       const day = el('div', null, 'day'), d = el('div', fmtDay(e.date), 'd'); if (!e.ai) d.append(el('span', 'auto', 'auto'));
       day.append(d, el('p', e.text, 't'));
       const chips = el('div', null, 'chips');
-      for (const g of (e.domains || [])) chips.append(el('span', `${g.name} · ${g.commits}`, 'chip'));
+      for (const g of (e.domains || [])) chips.append(el('span', g.commits ? `${g.name} · ${g.commits}` : `${g.name} · automated only`, g.commits ? 'chip' : 'chip auto'));
       for (const r of (e.releases || [])) { const c = el('span', null, 'chip rel'), a = el('a', `${r.repo} ${r.tag}`); const u = safeUrl(r.url); if (u) { a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer'; } c.append(a); chips.append(c); }
       if (chips.children.length) day.append(chips);
       det.append(day);
