@@ -33,7 +33,7 @@ jobs:
           # Telegram (facultatif) : secrets TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID ; vides = aucun envoi
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_ALLOW_MULTIPLE_PER_DAY: ${{ vars.TELEGRAM_ALLOW_MULTIPLE_PER_DAY }}
+          TELEGRAM_ALLOW_MULTIPLE_PER_DAY: ${{ vars.TELEGRAM_ALLOW_MULTIPLE_PER_DAY }}   # Variables (pas Secrets) : '1' = plusieurs envois par jour
       - name: Commit result
         run: |
           git config user.name  "digest-bot"
