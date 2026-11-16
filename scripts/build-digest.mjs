@@ -321,6 +321,8 @@ export async function polishWithLLM(digest) {
       'Never attribute work to teams, groups or people: do not write \"the SDK team\", \"the dashboards team\" or \"the other area\"; ' +
       'name the topic instead (for example \"The SDK gained a payout address feature\" or use the passive voice). ' +
       'The domain called \"Other\" is a miscellaneous bucket: just describe its changes without calling it an area or a team. ' +
+      'Never guess what an acronym or internal name means (for example GQHSM or GCS): copy it exactly as written and do not explain it, ' +
+      'and do not call a component \"AI\" unless the data says so. ' +
       'Ignore automated commits and CI builds unless nothing else happened (then mention them in a few words). ' +
       'Also write a 3-sentence summary of the week. Never invent facts that are not in the data. ' +
       'Answer in plain text only, no markdown, no JSON, exactly one line per item: first a line "WEEK: <summary>", ' +
@@ -777,7 +779,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v25';
+  digest.builder = 'v26';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
