@@ -79,7 +79,7 @@ function render(filter) {
     entries.sort((a, b) => b.date.localeCompare(a.date));
     const det = el('details', null, 'week'); if (n++ < 2 || f) det.open = true;
     const repos = new Set(entries.flatMap(e => e.repos || []));
-    const sum = el('summary'); sum.append(document.createTextNode('Week of ' + new Date(wk + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })),
+    const sum = el('summary'); sum.append(document.createTextNode('Week of ' + new Date(wk + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) + ' (Mon–Sun)'),
       el('span', ` · ${entries.reduce((s, e) => s + (e.commits || 0), 0)} commits · ${repos.size} repos · ${entries.length} active day${entries.length === 1 ? '' : 's'}`, 'tot'));
     det.append(sum);
     for (const e of entries) {
