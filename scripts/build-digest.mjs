@@ -3,6 +3,7 @@
 import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
 import { withTimeout, fetchLiquiditySnapshot, updateLiquidityHistory, updateArchive, summarizeMilestones } from './extras.mjs';
 
 const ORG    = process.env.ORG || 'GeniusVentures';
@@ -776,7 +777,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v24';
+  digest.builder = 'v25';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
@@ -818,6 +819,7 @@ async function main() {
   await mkdir('public', { recursive: true });
   await writeFile(ARCHIVE_FILE, JSON.stringify(updateArchive(await loadJson(ARCHIVE_FILE, []), digest)));
   digest.telegramPosted = prev?.telegramPosted || null;
+  digest.telegramLastHash = prev?.telegramLastHash || null;
   await mkdir('public', { recursive: true });
   await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
   await writeFile('public/feed.xml', buildFeed(digest));
@@ -826,23 +828,18 @@ async function main() {
   // Telegram (facultatif : seulement si le jeton et le canal sont configurés)
   const tgToken = process.env.TELEGRAM_BOT_TOKEN, tgChat = process.env.TELEGRAM_CHAT_ID;
   if (tgToken && tgChat) {
-    // const todayKey = dayKey(now);
-    // if (digest.telegramPosted === todayKey && process.env.TELEGRAM_FORCE !== '1') console.log('Telegram: already posted today');
-    // else {
     const todayKey = dayKey(now);
-    const allowMultiplePerDay = process.env.TELEGRAM_ALLOW_MULTIPLE_PER_DAY === '1';
-    
-    if (
-      !allowMultiplePerDay &&
-      digest.telegramPosted === todayKey &&
-      process.env.TELEGRAM_FORCE !== '1'
-    ) {
-      console.log('Telegram: already posted today');
-    } else {
+    const allowMultiple = process.env.TELEGRAM_ALLOW_MULTIPLE_PER_DAY === '1';   // plusieurs envois par jour autorisés
+    const force = process.env.TELEGRAM_FORCE === '1';                              // renvoie même un message identique
+    if (!allowMultiple && !force && digest.telegramPosted === todayKey)
+      console.log('Telegram: already posted today (set TELEGRAM_ALLOW_MULTIPLE_PER_DAY=1 to allow several posts per day)');
+    else {
       const msg = buildTelegramText(digest, now);
+      const hash = msg ? createHash('sha1').update(msg).digest('hex') : null;
       if (!msg) console.log('Telegram: nothing worth posting today');
+      else if (!force && prev?.telegramLastHash === hash) console.log('Telegram: same message as the last post, skipped');   // évite les doublons exacts
       else {
-        try { await postTelegram(tgToken, tgChat, msg); digest.telegramPosted = todayKey; delete digest.telegramError; console.log('Telegram: posted'); }
+        try { await postTelegram(tgToken, tgChat, msg); digest.telegramPosted = todayKey; digest.telegramLastHash = hash; delete digest.telegramError; console.log('Telegram: posted'); }
         catch (e) { digest.telegramError = String(e.message).slice(0, 200); console.warn('Telegram step failed:', e.message); }
         await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
       }
