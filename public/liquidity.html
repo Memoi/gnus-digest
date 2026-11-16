@@ -67,12 +67,17 @@
   .buy .fill{background:var(--buy)} .sell .fill{background:var(--sell)}
   .note{color:var(--mute);font-size:13px;margin-top:22px}
   select{font:inherit;font-family:system-ui,sans-serif;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
+  .totop{text-align:center;margin:26px 0 8px}
+  .totop button{font:600 14px system-ui,sans-serif;background:var(--panel);color:var(--accent);border:1px solid var(--line);border-radius:20px;padding:8px 18px;cursor:pointer;width:auto}
+  .totop button:hover{border-color:var(--accent)}
+  .totop button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   td svg.mini{color:var(--accent);vertical-align:middle;margin:0 0 0 8px}
   td a.tok{color:var(--accent);font-size:12px;text-decoration:none}
   td .gap{color:var(--accent);font-size:12px;font-weight:600}
   .notice{margin-top:8px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;font:14px/1.5 system-ui,sans-serif}
   .notice .nt{font-weight:600;color:var(--accent);margin-bottom:4px}
   @media (max-width:640px){
+    .totop button{width:auto;padding:8px 18px}
     .bar.cmpbar{flex-direction:row;flex-wrap:nowrap;gap:8px}
     .cmpbar button{width:auto;flex:1}
     body{padding:10px;font-size:14px}
@@ -146,6 +151,7 @@ https://cloudflare-eth.com</textarea>
   <div id="out"></div>
 
   <p class="note">Public on-chain information, not financial advice. Estimate for this pool only: pool fees included, but no gas, no other pools' slippage and no arbitrage during the move. Price can jump freely through zones with no liquidity.</p>
+  <div class="totop"><button type="button" id="toTop">↑ Back to top</button></div>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
@@ -327,7 +333,7 @@ $('cmpGo').onclick = () => { for (const k of Object.keys(POOLS)) delete POOLS[k]
 function miniSpark(vals){
   const NS = 'http://www.w3.org/2000/svg', W = 84, H = 22, pad = 2, svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('class', 'mini'); svg.setAttribute('aria-hidden', 'true');
-  const min = Math.min(...vals), max = Math.max(...vals), X = i => pad + i * (W - 2*pad) / (vals.length - 1), Y = v => H - pad - (v - min) / ((max - min) || 1) * (H - 2*pad);
+  const min = Math.min(...vals), max = Math.max(...vals), X = i => pad + i * (W - 2*pad) / (vals.length - 1), flat = (max - min) <= Math.abs(max) * 0.02, Y = v => flat ? H / 2 : H - pad - (v - min) / ((max - min) || 1) * (H - 2*pad);   // écart < 2 % : ligne plate, pas d'effet de loupe
   const pl = document.createElementNS(NS, 'polyline');
   pl.setAttribute('points', vals.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ')); pl.setAttribute('fill', 'none'); pl.setAttribute('stroke', 'currentColor'); pl.setAttribute('stroke-width', '1.6');
   svg.append(pl); return svg;
@@ -336,7 +342,10 @@ function histCell(label, series, formatter){
   const vals = series.filter(v => v != null);
   if (!vals.length) return mkCell(label, '–');
   const last = vals[vals.length - 1], first = vals[0];
-  const change = vals.length > 1 && first ? `${last >= first ? '+' : '−'}${Math.abs(Math.round((last / first - 1) * 100))}% over ${vals.length} days` : null;
+  const pct = vals.length > 1 && first ? (last / first - 1) * 100 : null;
+  const change = pct == null ? null
+    : Math.abs(pct) < 0.05 ? `no change over ${vals.length} days`
+    : `${pct > 0 ? '+' : '−'}${Math.abs(pct) < 10 ? Math.abs(pct).toFixed(1) : Math.round(Math.abs(pct))}% over ${vals.length} days`;
   const td = mkCell(label, formatter(last), change);
   if (vals.length > 1) td.insertBefore(miniSpark(vals), td.querySelector('div'));
   return td;
@@ -387,6 +396,7 @@ function setChain(k){
 }
 $('chain').onchange = () => { setChain($('chain').value); go(); };
 { const q = new URLSearchParams(location.search).get('chain'); setChain(CHAINS[q] ? q : 'ethereum'); }
+document.getElementById('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
 go();
 loadHistory();
 </script>
