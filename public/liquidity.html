@@ -338,9 +338,9 @@ function miniSpark(vals){
   pl.setAttribute('points', vals.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ')); pl.setAttribute('fill', 'none'); pl.setAttribute('stroke', 'currentColor'); pl.setAttribute('stroke-width', '1.6');
   svg.append(pl); return svg;
 }
-function histCell(label, series, formatter){
+function histCell(label, series, formatter, emptyText){
   const vals = series.filter(v => v != null);
-  if (!vals.length) return mkCell(label, '–');
+  if (!vals.length) return mkCell(label, emptyText || '–');
   const last = vals[vals.length - 1], first = vals[0];
   const pct = vals.length > 1 && first ? (last / first - 1) * 100 : null;
   const change = pct == null ? null
@@ -364,8 +364,8 @@ async function loadHistory(){
     tr.append(mkCell('Network', c.label, null, 'pct'),
       histCell('Price', rows.map(r => r && r.priceUsd), v => usd(v)),
       histCell('Pool balance', rows.map(r => r && r.tvlUsd), v => usd(v)),
-      histCell('Buy +5%', rows.map(r => r && r.d5 && r.d5.buy), v => usd(v)),
-      histCell('Sell −5%', rows.map(r => r && r.d5 && r.d5.sell), v => usd(v)));
+      histCell('Buy +5%', rows.map(r => r && r.d5 && r.d5.buy), v => usd(v), rows.some(Boolean) ? 'Not enough liquidity' : '–'),
+      histCell('Sell −5%', rows.map(r => r && r.d5 && r.d5.sell), v => usd(v), rows.some(Boolean) ? 'Not enough liquidity' : '–'));
     body.append(tr);
   }
   $('histNote').textContent = `${hist.length} daily snapshot${hist.length === 1 ? '' : 's'}, since ${hist[0].date}. “Buy” = dollars to spend to push the price up 5%; “Sell” = value of the tokens to sell to push it down 5%.`;
