@@ -5,49 +5,49 @@
     <link>https://gnus-digest.vercel.app/</link>
     <description>Daily digest of the GeniusVentures GitHub activity, written from public commit messages.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 16 Nov 2026 00:48:47 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 16 Nov 2026 08:11:55 GMT</lastBuildDate>
     <atom:link href="https://gnus-digest.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GNUS digest — Sunday 15 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-15</guid>
       <pubDate>Sun, 15 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The wallet added temporary diagnostic prints and enhanced verification diagnostics. Repositories: GeniusWallet, rlp_enodes.</description>
+      <description>Diagnostic prints were added to the wallet verification component and its diagnostics were enhanced. Repositories: GeniusWallet, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Saturday 14 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-14</guid>
       <pubDate>Sat, 14 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The network roadmap and backup documentation were expanded, and the backup system was rewritten to support tiered archive and light node models. Repositories: GeniusNetwork, rlp_enodes.</description>
+      <description>A roadmap and requirements for version 1.2 were documented, and the backup system was updated to support a tiered archive and light node model. Repositories: GeniusNetwork, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Friday 13 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-13</guid>
       <pubDate>Fri, 13 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The AI system removed an outdated submodule and updated its documentation. The network backup and cold‑storage processes were upgraded, and storage cleanup retained markers across eviction. Repositories: GeniusCognitiveSystem, GeniusNetwork, SuperGenius, GNUS-NEO-SWARM, rlp_enodes.</description>
+      <description>The cognitive system removed the GQHSM submodule and updated its documentation, while the network backup component was upgraded and storage garbage collection was improved to retain seal markers. Repositories: GeniusCognitiveSystem, GeniusNetwork, SuperGenius, GNUS-NEO-SWARM.</description>
     </item>
     <item>
       <title>GNUS digest — Thursday 12 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-12</guid>
       <pubDate>Thu, 12 Nov 2026 23:59:00 GMT</pubDate>
-      <description>New lockout scenarios, a warrant resale lockout control, and an investor cash chart were added to the dashboard, along with formatting fixes and test coverage. The SDK added a payout address function, improved self‑hosted runner handling, introduced rotating refresh tokens, and added a numeric keypad component. Repositories: gnus-investor-scenarios, GeniusSDK, thirdparty, openapi-client-scaffold, GeniusWallet, SuperGenius, libp2p, openapi-cpp-scaffolding.</description>
+      <description>Investor scenario tools gained new lockout scenarios, script fixes, extensive tests, and formula refactoring; the SDK added a payout address feature and improved self‑hosted runner handling; third‑party code was merged and warnings cleared; a numeric keypad component was added to the client scaffold. Repositories: gnus-investor-scenarios, GeniusSDK, thirdparty, openapi-client-scaffold, GeniusWallet, SuperGenius, libp2p, openapi-cpp-scaffolding.</description>
     </item>
     <item>
       <title>GNUS digest — Wednesday 11 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-11</guid>
       <pubDate>Wed, 11 Nov 2026 23:59:00 GMT</pubDate>
-      <description>An audit confirmed the network milestone requirements were met, and payout address getters were added to accounts and nodes. The wallet added real earnings counts, and the SDK added support for idempotency keys in requests. Repositories: GeniusNetwork, GeniusWallet, SuperGenius, openapi-cpp-scaffolding, GeniusSDK, CIDocker.</description>
+      <description>The network milestone audit was completed and related documentation archived; the wallet now reports real job counts and API bindings; payout address getters were added to accounts and nodes, and request handling was improved with Idempotency‑Key support. Repositories: GeniusNetwork, GeniusWallet, SuperGenius, openapi-cpp-scaffolding, GeniusSDK, CIDocker.</description>
     </item>
     <item>
       <title>GNUS digest — Tuesday 10 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-10</guid>
       <pubDate>Tue, 10 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The network roadmap and milestone documents were created, and the backup system was updated. The SDK introduced service registration, rotating refresh tokens, and password hashing, while the dashboard got design language and contrast improvements. Repositories: openapi-cpp-scaffolding, SuperGenius, GeniusNetwork, gnus-dashboard.</description>
+      <description>Service registration and rotating refresh tokens were added to the API scaffolding, password handling was secured, and self‑hosted runners were enforced for builds; documentation and design fixes were also applied. Repositories: openapi-cpp-scaffolding, SuperGenius, GeniusNetwork, gnus-dashboard.</description>
     </item>
   </channel>
 </rss>
