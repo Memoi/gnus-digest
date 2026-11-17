@@ -3,6 +3,7 @@ name: Daily GitHub digest
 on:
   schedule:
     - cron: '30 5 * * *'      # tous les jours à 05:30 UTC
+    timezone: 'Europe/Zurich'
   workflow_dispatch:          # lancement manuel possible depuis l'onglet Actions
 
 permissions:
