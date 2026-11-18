@@ -126,6 +126,10 @@
   <div class="wrap"><table id="hist"><thead><tr><th>Network</th><th>Price</th><th>Pool balance</th><th>Buy +5%</th><th>Sell −5%</th></tr></thead><tbody id="histBody"></tbody></table></div>
   <p class="sub" id="histNote" style="margin-top:6px"></p>
 
+  <h2>Trading activity (24 h)</h2>
+  <div class="wrap"><table id="trade"><thead><tr><th>Network</th><th>Volume</th><th>Price change</th><th>Buys / sells</th><th>Liquidity</th></tr></thead><tbody id="tradeBody"></tbody></table></div>
+  <p class="sub" id="tradeNote" style="margin-top:6px">Source: DexScreener (a third party), read directly from your browser. These figures are not verified by this site and can differ from the on-chain readings above.</p>
+
   <h2>Pool explorer</h2>
   <div class="bar">
     <select id="chain" aria-label="Network"><option value="ethereum">Ethereum</option><option value="polygon">Polygon</option><option value="base">Base</option><option value="bsc">BNB Chain</option></select>
@@ -371,6 +375,33 @@ async function loadHistory(){
   $('histNote').textContent = `${hist.length} daily snapshot${hist.length === 1 ? '' : 's'}, since ${hist[0].date}. “Buy” = dollars to spend to push the price up 5%; “Sell” = value of the tokens to sell to push it down 5%.`;
 }
 
+/* ---------------- activité de trading : API publique de DexScreener (tiers) ---------------- */
+async function loadTrading(){
+  const body = $('tradeBody'); body.textContent = '';
+  await Promise.all(Object.entries(CHAINS).map(async ([k, c]) => {
+    const tr = document.createElement('tr'); body.append(tr);               // ligne créée tout de suite : l'ordre des réseaux reste stable
+    tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Loading…'), { colSpan: 4 }));
+    try {
+      const r = await fetch(`https://api.dexscreener.com/latest/dex/pairs/${k}/${c.addr}`, { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const p = ((await r.json()).pairs || [])[0];
+      if (!p) throw new Error('pool not found');
+      const chg = p.priceChange && p.priceChange.h24, tx = p.txns && p.txns.h24, vol = p.volume && p.volume.h24, liq = p.liquidity && p.liquidity.usd;
+      const name = mkCell('Network', '', null, 'pct');
+      const a = document.createElement('a'); a.textContent = c.label; a.href = `https://dexscreener.com/${k}/${c.addr}`; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.style.color = 'inherit';
+      name.append(a);
+      const chgCell = mkCell('Price change', chg == null ? '–' : `${chg > 0 ? '+' : ''}${chg}%`);
+      if (chg != null && chg !== 0) chgCell.style.color = chg > 0 ? 'var(--buy)' : 'var(--sell)';
+      tr.textContent = '';
+      tr.append(name, mkCell('Volume', vol == null ? '–' : usd(vol)), chgCell,
+        mkCell('Buys / sells', tx ? `${tx.buys} / ${tx.sells}` : '–'), mkCell('Liquidity', liq == null ? '–' : usd(liq)));
+    } catch(e){
+      tr.textContent = '';
+      tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Unavailable (' + (e.message || e) + ')'), { colSpan: 4 }));
+    }
+  }));
+}
+
 async function go(){
   $('go').disabled = true;
   try{
@@ -399,6 +430,7 @@ $('chain').onchange = () => { setChain($('chain').value); go(); };
 document.getElementById('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
 go();
 loadHistory();
+loadTrading();
 </script>
 </body>
 </html>
