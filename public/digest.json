@@ -1,16 +1,53 @@
 {
-  "generatedAt": "2026-11-18T14:25:36.379Z",
+  "generatedAt": "2026-11-18T23:25:30.239Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
-    "from": "2026-11-12",
-    "to": "2026-11-18",
-    "commits": 107,
+    "from": "2026-11-13",
+    "to": "2026-11-19",
+    "commits": 87,
     "automated": 100,
-    "repos": 12,
+    "repos": 7,
     "contributors": 4,
+    "contributorList": [
+      {
+        "login": "itsafuu",
+        "commits": 66,
+        "repos": [
+          "GeniusNetwork",
+          "SuperGenius"
+        ]
+      },
+      {
+        "login": "braianxde",
+        "commits": 9,
+        "repos": [
+          "GeniusWallet",
+          "openapi-cpp-scaffolding"
+        ]
+      },
+      {
+        "login": "Super-Genius",
+        "commits": 8,
+        "repos": [
+          "GNUS-NEO-SWARM",
+          "GeniusCognitiveSystem",
+          "SuperGenius",
+          "cmaketemplate",
+          "openapi-cpp-scaffolding"
+        ]
+      },
+      {
+        "login": "carlosgonzalez-ul",
+        "commits": 4,
+        "repos": [
+          "openapi-cpp-scaffolding"
+        ]
+      }
+    ],
+    "unlinkedCommits": 0,
     "releases": 0,
-    "ciBuilds": 37,
+    "ciBuilds": 0,
     "topRepos": [
       {
         "name": "GeniusNetwork",
@@ -18,25 +55,25 @@
       },
       {
         "name": "SuperGenius",
-        "commits": 17
-      },
-      {
-        "name": "gnus-investor-scenarios",
-        "commits": 13
-      },
-      {
-        "name": "GeniusSDK",
-        "commits": 6
+        "commits": 16
       },
       {
         "name": "openapi-cpp-scaffolding",
-        "commits": 5
+        "commits": 12
+      },
+      {
+        "name": "GeniusCognitiveSystem",
+        "commits": 3
+      },
+      {
+        "name": "cmaketemplate",
+        "commits": 2
       }
     ],
     "domains": [
       {
         "name": "Blockchain & network",
-        "commits": 69,
+        "commits": 67,
         "automated": 100,
         "repos": [
           {
@@ -46,12 +83,7 @@
           },
           {
             "name": "SuperGenius",
-            "commits": 17,
-            "automated": 0
-          },
-          {
-            "name": "libp2p",
-            "commits": 1,
+            "commits": 16,
             "automated": 0
           },
           {
@@ -66,60 +98,26 @@
           "GeniusNetwork: Docs: record phase 15 execution session; phase goal verification (27/28 must-haves, human_needed) (+8 more)",
           "SuperGenius: Added: D-05 walk evidence matrix, walk_gaps abort, D-06 per-CID failover budget; /prune/blk evidence production + single-predicate cold-chain consult…"
         ],
-        "summary": "New evidence matrices, plan revisions, and storage improvements were added, along with updated documentation and roadmap phases."
+        "summary": "Plans and documentation for the network were revised, new evidence matrices and durability checks were added, and backup and storage handling were updated across several components."
       },
       {
         "name": "SDK & developer tools",
-        "commits": 16,
+        "commits": 12,
         "automated": 0,
         "repos": [
-          {
-            "name": "GeniusSDK",
-            "commits": 6,
-            "automated": 0
-          },
           {
             "name": "openapi-cpp-scaffolding",
-            "commits": 5,
-            "automated": 0
-          },
-          {
-            "name": "thirdparty",
-            "commits": 3,
-            "automated": 0
-          },
-          {
-            "name": "openapi-client-scaffold",
-            "commits": 2,
+            "commits": 12,
             "automated": 0
           }
         ],
         "highlights": [
-          "openapi-cpp-scaffolding: Fixed: users_list cursor pagination — honor ?cursor=, emit next_cursor",
-          "openapi-cpp-scaffolding: Updated: merge commit '0453f5e7570bfd15cc7f6931f8c22eb43985b966' into qa/persona-walkthrough-fix…",
-          "openapi-cpp-scaffolding: Added: users_list override, identity/roles seed, contract-complete roles",
-          "openapi-cpp-scaffolding: Test work: pin users-list contract + roles seed — RED"
+          "openapi-cpp-scaffolding: Fixed: users_list cursor pagination — honor ?cursor=, emit next_cursor; item-route overrides + type-safe id gate (CR-01, WR-01) (+5 more)",
+          "openapi-cpp-scaffolding: Test work: pagination + item-route + malformed-record coverage (WR-02)",
+          "openapi-cpp-scaffolding: Docs: drop task ID from a pipeline comment",
+          "openapi-cpp-scaffolding: Updated: merge commit '0453f5e7570bfd15cc7f6931f8c22eb43985b966' into qa/persona-walkthrough-fix…"
         ],
-        "summary": "A payout address feature was added, pagination and role handling were improved, and the build process was switched to self‑hosted runners."
-      },
-      {
-        "name": "Dashboards & investor tools",
-        "commits": 13,
-        "automated": 0,
-        "repos": [
-          {
-            "name": "gnus-investor-scenarios",
-            "commits": 13,
-            "automated": 0
-          }
-        ],
-        "highlights": [
-          "gnus-investor-scenarios: Added: wire lockout scenarios to separate calculation module and CSV; warrant resale lockout control and investor cash chart (+1 more)",
-          "gnus-investor-scenarios: Fixed: restore working script and format dollar values to cents; link documentation homepage and format extreme modeled values",
-          "gnus-investor-scenarios: Test work: cover model formatting, lockouts, equity and burn safeguards",
-          "gnus-investor-scenarios: Refactored: extract pure formulas, token lockouts, and supply safeguards"
-        ],
-        "summary": "New lockout scenarios and calculation improvements were introduced, scripts and value formatting were fixed, and additional safety tests were added."
+        "summary": "Pagination now respects cursor parameters and provides next‑cursor information, item‑route handling was improved, and user list overrides with identity and role seeds were introduced."
       },
       {
         "name": "Cognitive system (AI)",
@@ -142,25 +140,7 @@
           "GeniusCognitiveSystem: Docs: remove GNUS-NEO-SWARM/GQHSM (superseded by GQHSM-CPP); plan GQHSM submodule removal",
           "GNUS-NEO-SWARM: Build/release: remove GQHSM submodule (superseded by Super-Genius/GQHSM-CPP)"
         ],
-        "summary": "An outdated submodule was removed and documentation was updated to reflect its replacement."
-      },
-      {
-        "name": "Wallet & apps",
-        "commits": 3,
-        "automated": 0,
-        "repos": [
-          {
-            "name": "GeniusWallet",
-            "commits": 3,
-            "automated": 0
-          }
-        ],
-        "highlights": [
-          "GeniusWallet: Added: diagnostic prints to _verified (temporary, do not merge)",
-          "GeniusWallet: Updated: enhanced _verified diagnostics (temporary)",
-          "GeniusWallet: Updated: select self hosted runners"
-        ],
-        "summary": "Temporary diagnostic prints were added and verification diagnostics were enhanced."
+        "summary": "The GQHSM submodule was removed from multiple projects and the documentation was updated to reflect its removal."
       },
       {
         "name": "Other",
@@ -176,23 +156,85 @@
         "highlights": [
           "cmaketemplate: Updated: thirdparty resolution via project super root; need to make a directory if it doesn't exist"
         ],
-        "summary": "A template project updated its third‑party resolution method, requiring a new directory if missing."
+        "summary": "Third‑party resolution was changed to use a project super root, requiring a new directory if missing."
+      },
+      {
+        "name": "Wallet & apps",
+        "commits": 2,
+        "automated": 0,
+        "repos": [
+          {
+            "name": "GeniusWallet",
+            "commits": 2,
+            "automated": 0
+          }
+        ],
+        "highlights": [
+          "GeniusWallet: Added: diagnostic prints to _verified (temporary, do not merge)",
+          "GeniusWallet: Updated: enhanced _verified diagnostics (temporary)"
+        ],
+        "summary": "Diagnostic output was added and later enhanced in the verification routine for temporary troubleshooting."
       }
     ],
     "byType": {
-      "fixed": 10,
-      "tests": 15,
+      "fixed": 12,
+      "tests": 12,
       "docs": 44,
-      "added": 13,
-      "updated": 21,
+      "updated": 8,
+      "added": 8,
       "upgraded": 1,
-      "build": 2,
-      "refactored": 1
+      "build": 2
     },
-    "headline": "107 commits by 4 contributors across 12 repos. Most active: GeniusNetwork (51), SuperGenius (17), gnus-investor-scenarios (13). Plus 100 automated commits. 37 CI builds published.",
-    "summary": "This week the blockchain and network components saw extensive updates, including new evidence matrices, plan revisions, and storage improvements. The SDK and developer tools added a payout address feature, improved pagination and role handling, and moved to self‑hosted runners. Investor tools, the wallet, and the cognitive system also received enhancements such as new lockout scenarios, diagnostic prints, and the removal of an outdated submodule."
+    "headline": "87 commits by 4 contributors across 7 repos. Most active: GeniusNetwork (51), SuperGenius (16), openapi-cpp-scaffolding (12). Plus 100 automated commits.",
+    "newcomers": [],
+    "summary": "This week saw extensive updates to the blockchain network, including plan revisions, new evidence tracking, and storage improvements. The developer tools were refined with better pagination handling and added support for user list overrides. The cognitive system removed an outdated submodule, and the wallet added temporary diagnostic output."
   },
   "days": [
+    {
+      "date": "2026-11-19",
+      "repos": [
+        {
+          "name": "rlp_enodes",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/rlp_enodes",
+          "commits": 1,
+          "human": 0,
+          "automated": 1,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "automated",
+              "label": "automated updates",
+              "count": 1,
+              "text": "Automated updates (1 commit), e.g. update Base bootstrap nodes [skip ci]"
+            }
+          ]
+        }
+      ],
+      "releases": [],
+      "ciBuilds": {},
+      "domains": [
+        {
+          "name": "Blockchain & network",
+          "commits": 0,
+          "automated": 1,
+          "repos": [
+            {
+              "name": "rlp_enodes",
+              "commits": 0,
+              "automated": 1
+            }
+          ],
+          "labels": []
+        }
+      ],
+      "headline": "1 automated commit (rlp_enodes).",
+      "commits": 0,
+      "automated": 1,
+      "summary": "Only automated updates were applied to the rlp_enodes component."
+    },
     {
       "date": "2026-11-18",
       "repos": [
@@ -228,6 +270,45 @@
           ]
         },
         {
+          "name": "openapi-cpp-scaffolding",
+          "domain": "SDK & developer tools",
+          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
+          "commits": 10,
+          "human": 10,
+          "automated": 0,
+          "branches": [
+            "gsd/quick-261117-o39-identity-users-list-roles-seed",
+            "gsd/quick-261118-g7m-o39-review-criticals",
+            "qa/persona-walkthrough-fixset-merge"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 7,
+              "text": "Fixed: users_list cursor pagination — honor ?cursor=, emit next_cursor; item-route overrides + type-safe id gate (CR-01, WR-01) (+5 more)"
+            },
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 1,
+              "text": "Test work: pagination + item-route + malformed-record coverage (WR-02)"
+            },
+            {
+              "type": "docs",
+              "label": "docs",
+              "count": 1,
+              "text": "Docs: drop task ID from a pipeline comment"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 1,
+              "text": "Updated: merge commit '0453f5e7570bfd15cc7f6931f8c22eb43985b966' into qa/persona-walkthrough-fix…"
+            }
+          ]
+        },
+        {
           "name": "SuperGenius",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/SuperGenius",
@@ -253,38 +334,12 @@
           ]
         },
         {
-          "name": "openapi-cpp-scaffolding",
-          "domain": "SDK & developer tools",
-          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
-          "commits": 2,
-          "human": 2,
-          "automated": 0,
-          "branches": [
-            "gsd/quick-261117-o39-identity-users-list-roles-seed",
-            "qa/persona-walkthrough-fixset-merge"
-          ],
-          "items": [
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: users_list cursor pagination — honor ?cursor=, emit next_cursor"
-            },
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 1,
-              "text": "Updated: merge commit '0453f5e7570bfd15cc7f6931f8c22eb43985b966' into qa/persona-walkthrough-fix…"
-            }
-          ]
-        },
-        {
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 31,
+          "commits": 48,
           "human": 0,
-          "automated": 31,
+          "automated": 48,
           "branches": [
             "main"
           ],
@@ -292,8 +347,8 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 31,
-              "text": "Automated updates (31 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 48,
+              "text": "Automated updates (48 commits), e.g. update Base bootstrap nodes [skip ci]"
             }
           ]
         }
@@ -304,7 +359,7 @@
         {
           "name": "Blockchain & network",
           "commits": 18,
-          "automated": 31,
+          "automated": 48,
           "repos": [
             {
               "name": "GeniusNetwork",
@@ -319,7 +374,7 @@
             {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 31
+              "automated": 48
             }
           ],
           "labels": [
@@ -331,25 +386,27 @@
         },
         {
           "name": "SDK & developer tools",
-          "commits": 2,
+          "commits": 10,
           "automated": 0,
           "repos": [
             {
               "name": "openapi-cpp-scaffolding",
-              "commits": 2,
+              "commits": 10,
               "automated": 0
             }
           ],
           "labels": [
             "fixed",
+            "test work",
+            "docs",
             "updated"
           ]
         }
       ],
-      "headline": "20 commits across 3 repos in 2 domains: Blockchain & network (fixed, test work), SDK & developer tools (fixed, updated). 31 automated commits (rlp_enodes).",
-      "commits": 20,
-      "automated": 31,
-      "summary": "The blockchain network revised plans and recorded a phase session, added evidence matrices and failover handling, and the SDK fixed pagination behavior."
+      "headline": "28 commits across 3 repos in 2 domains: Blockchain & network (fixed, test work), SDK & developer tools (fixed, test work). 48 automated commits (rlp_enodes).",
+      "commits": 28,
+      "automated": 48,
+      "summary": "The network plan was revised and test items were recorded, while documentation of phase execution was added. Pagination handling was corrected and documentation trimmed, and a new evidence matrix and related test scenarios were added to the blockchain component."
     },
     {
       "date": "2026-11-17",
@@ -419,6 +476,7 @@
           "automated": 0,
           "branches": [
             "gsd/quick-261117-o39-identity-users-list-roles-seed",
+            "gsd/quick-261118-g7m-o39-review-criticals",
             "qa/persona-walkthrough-fixset-merge"
           ],
           "items": [
@@ -541,7 +599,7 @@
       "headline": "31 commits across 4 repos in 3 domains: Blockchain & network (added, fixed), SDK & developer tools (added, test work), Other (updated). 48 automated commits (rlp_enodes).",
       "commits": 31,
       "automated": 48,
-      "summary": "The blockchain network added new pattern mapping and phase plans, durability checks were added to storage, and the SDK introduced role overrides and testing; a template project updated its third‑party resolution."
+      "summary": "A pattern map and research phases were added to the network, with documentation updates, and durability checks plus test work were introduced to the blockchain component. User list overrides, identity seeds, and role support were added to the SDK, and third‑party resolution was updated in the miscellaneous component."
     },
     {
       "date": "2026-11-16",
@@ -601,9 +659,9 @@
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 21,
+          "commits": 3,
           "human": 0,
-          "automated": 21,
+          "automated": 3,
           "branches": [
             "main"
           ],
@@ -611,8 +669,8 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 21,
-              "text": "Automated updates (21 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 3,
+              "text": "Automated updates (3 commits), e.g. update Base bootstrap nodes [skip ci]"
             }
           ]
         }
@@ -623,7 +681,7 @@
         {
           "name": "Blockchain & network",
           "commits": 13,
-          "automated": 21,
+          "automated": 3,
           "repos": [
             {
               "name": "GeniusNetwork",
@@ -638,7 +696,7 @@
             {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 21
+              "automated": 3
             }
           ],
           "labels": [
@@ -648,10 +706,10 @@
           ]
         }
       ],
-      "headline": "13 commits across 2 repos in 1 domain: Blockchain & network (fixed, docs). 21 automated commits (rlp_enodes).",
+      "headline": "13 commits across 2 repos in 1 domain: Blockchain & network (fixed, docs). 3 automated commits (rlp_enodes).",
       "commits": 13,
-      "automated": 21,
-      "summary": "The blockchain network refined its plans and recorded execution details, while storage handling tests were updated."
+      "automated": 3,
+      "summary": "The network summary and plans were fixed and updated, and storage backup notes were rewritten. Merge fixes and additional test work were applied to the blockchain component."
     },
     {
       "date": "2026-11-15",
@@ -705,7 +763,7 @@
       "headline": "2 commits across 1 repo in 1 domain: Wallet & apps (added, updated).",
       "commits": 2,
       "automated": 0,
-      "summary": "The wallet added temporary diagnostic prints and improved verification diagnostics."
+      "summary": "Diagnostic prints were added and then enhanced in the wallet verification module."
     },
     {
       "date": "2026-11-14",
@@ -759,7 +817,7 @@
       "headline": "5 commits across 1 repo in 1 domain: Blockchain & network (docs, updated).",
       "commits": 5,
       "automated": 0,
-      "summary": "The blockchain roadmap was documented with new phases and storage backup notes were rewritten."
+      "summary": "A roadmap and requirement list were documented for the upcoming milestone, and the backup model for storage was updated."
     },
     {
       "date": "2026-11-13",
@@ -903,331 +961,28 @@
       "headline": "8 commits across 4 repos in 2 domains: Cognitive system (AI) (build/release, docs), Blockchain & network (upgraded, updated).",
       "commits": 8,
       "automated": 0,
-      "summary": "An outdated submodule was removed from the cognitive system, and the blockchain network updated its storage backup and cold‑storage handling."
-    },
-    {
-      "date": "2026-11-12",
-      "repos": [
-        {
-          "name": "gnus-investor-scenarios",
-          "domain": "Dashboards & investor tools",
-          "url": "https://github.com/GeniusVentures/gnus-investor-scenarios",
-          "commits": 13,
-          "human": 13,
-          "automated": 0,
-          "branches": [
-            "main"
-          ],
-          "items": [
-            {
-              "type": "added",
-              "label": "added",
-              "count": 3,
-              "text": "Added: wire lockout scenarios to separate calculation module and CSV; warrant resale lockout control and investor cash chart (+1 more)"
-            },
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 2,
-              "text": "Fixed: restore working script and format dollar values to cents; link documentation homepage and format extreme modeled values"
-            },
-            {
-              "type": "tests",
-              "label": "test work",
-              "count": 3,
-              "text": "Test work: cover model formatting, lockouts, equity and burn safeguards"
-            },
-            {
-              "type": "refactored",
-              "label": "refactored",
-              "count": 1,
-              "text": "Refactored: extract pure formulas, token lockouts, and supply safeguards"
-            },
-            {
-              "type": "docs",
-              "label": "docs",
-              "count": 1,
-              "text": "Docs: explain module layout, lockouts and GitHub Pages instructions"
-            },
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 3,
-              "text": "Updated: shade warrant resale lockout periods on investor charts; index.html (+1 more)"
-            }
-          ]
-        },
-        {
-          "name": "GeniusSDK",
-          "domain": "SDK & developer tools",
-          "url": "https://github.com/GeniusVentures/GeniusSDK",
-          "commits": 6,
-          "human": 6,
-          "automated": 0,
-          "branches": [
-            "develop",
-            "glm/ci-selfhosted-runners",
-            "glm/payout-address"
-          ],
-          "items": [
-            {
-              "type": "added",
-              "label": "added",
-              "count": 1,
-              "text": "Added: GeniusSDKGetPayoutAddress (SDK-PAYOUT)"
-            },
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: resolve on self-hosted runners and pin fallbacks to them"
-            },
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 4,
-              "text": "Updated: only use self hosted runners; change build pointer (+2 more)"
-            }
-          ]
-        },
-        {
-          "name": "thirdparty",
-          "domain": "SDK & developer tools",
-          "url": "https://github.com/GeniusVentures/thirdparty",
-          "commits": 3,
-          "human": 3,
-          "automated": 0,
-          "branches": [
-            "dev_db_storage",
-            "develop"
-          ],
-          "items": [
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 3,
-              "text": "Updated: merge origin/develop into dev_db_storage; remove warning causing undef (+1 more)"
-            }
-          ]
-        },
-        {
-          "name": "openapi-client-scaffold",
-          "domain": "SDK & developer tools",
-          "url": "https://github.com/GeniusVentures/openapi-client-scaffold",
-          "commits": 2,
-          "human": 2,
-          "automated": 0,
-          "branches": [
-            "quick/261112-jw3-numeric-keypad-input"
-          ],
-          "items": [
-            {
-              "type": "added",
-              "label": "added",
-              "count": 1,
-              "text": "Added: ScaffoldNumericInputWithKeypad composable + onValueTap seam"
-            },
-            {
-              "type": "tests",
-              "label": "test work",
-              "count": 1,
-              "text": "Test work: failing tests for opt-in numeric keypad direct entry"
-            }
-          ]
-        },
-        {
-          "name": "SuperGenius",
-          "domain": "Blockchain & network",
-          "url": "https://github.com/GeniusVentures/SuperGenius",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "dev_blockstore",
-            "dev_coldstorage_additions",
-            "develop",
-            "feature/parallel-masked-xor-verifier-tests",
-            "glm/payout-address-getter"
-          ],
-          "items": [
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: GetPayoutAddress compile errors"
-            }
-          ]
-        },
-        {
-          "name": "openapi-cpp-scaffolding",
-          "domain": "SDK & developer tools",
-          "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "qa/persona-walkthrough-fixset",
-            "qa/persona-walkthrough-fixset-merge"
-          ],
-          "items": [
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 1,
-              "text": "Updated: registerService locator API into the QA fixset scaffold line"
-            }
-          ]
-        },
-        {
-          "name": "GeniusWallet",
-          "domain": "Wallet & apps",
-          "url": "https://github.com/GeniusVentures/GeniusWallet",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "develop"
-          ],
-          "items": [
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 1,
-              "text": "Updated: select self hosted runners"
-            }
-          ]
-        },
-        {
-          "name": "libp2p",
-          "domain": "Blockchain & network",
-          "url": "https://github.com/GeniusVentures/libp2p",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "dev_gossip_bounds"
-          ],
-          "items": [
-            {
-              "type": "updated",
-              "label": "updated",
-              "count": 1,
-              "text": "Updated: remove undef, probably no longer needed, creates warnings if there"
-            }
-          ]
-        }
-      ],
-      "releases": [],
-      "ciBuilds": {
-        "SuperGenius": 16,
-        "GeniusWallet": 6,
-        "GeniusSDK": 15
-      },
-      "domains": [
-        {
-          "name": "Dashboards & investor tools",
-          "commits": 13,
-          "automated": 0,
-          "repos": [
-            {
-              "name": "gnus-investor-scenarios",
-              "commits": 13,
-              "automated": 0
-            }
-          ],
-          "labels": [
-            "added",
-            "fixed",
-            "test work",
-            "refactored",
-            "docs",
-            "updated"
-          ]
-        },
-        {
-          "name": "SDK & developer tools",
-          "commits": 12,
-          "automated": 0,
-          "repos": [
-            {
-              "name": "GeniusSDK",
-              "commits": 6,
-              "automated": 0
-            },
-            {
-              "name": "thirdparty",
-              "commits": 3,
-              "automated": 0
-            },
-            {
-              "name": "openapi-client-scaffold",
-              "commits": 2,
-              "automated": 0
-            },
-            {
-              "name": "openapi-cpp-scaffolding",
-              "commits": 1,
-              "automated": 0
-            }
-          ],
-          "labels": [
-            "added",
-            "fixed",
-            "updated",
-            "test work"
-          ]
-        },
-        {
-          "name": "Blockchain & network",
-          "commits": 2,
-          "automated": 0,
-          "repos": [
-            {
-              "name": "SuperGenius",
-              "commits": 1,
-              "automated": 0
-            },
-            {
-              "name": "libp2p",
-              "commits": 1,
-              "automated": 0
-            }
-          ],
-          "labels": [
-            "fixed",
-            "updated"
-          ]
-        },
-        {
-          "name": "Wallet & apps",
-          "commits": 1,
-          "automated": 0,
-          "repos": [
-            {
-              "name": "GeniusWallet",
-              "commits": 1,
-              "automated": 0
-            }
-          ],
-          "labels": [
-            "updated"
-          ]
-        }
-      ],
-      "headline": "28 commits across 8 repos in 4 domains: Dashboards & investor tools (added, fixed), SDK & developer tools (added, fixed), Blockchain & network (fixed, updated) +1 more. 37 CI builds published (SuperGenius ×16, GeniusWallet ×6, GeniusSDK ×15).",
-      "commits": 28,
-      "automated": 0,
-      "summary": "Investor scenario tools added new lockout scenarios and fixed value formatting, while the SDK introduced a payout address function and switched to self‑hosted runners; a third‑party component was updated and a numeric keypad input was added to a scaffold."
+      "summary": "The cognitive system removed the GQHSM submodule and updated related documentation, while the network upgraded its backup handling and logged a storage gap; cold‑storage retention was improved in the blockchain component."
     }
   ],
-  "builder": "v26",
+  "builder": "v27",
   "prs": {
-    "prsOpened": 6,
+    "prsOpened": 5,
     "prsMerged": 2,
     "prsClosed": 0,
     "issuesOpened": 0,
     "issuesClosed": 0,
     "items": [
+      {
+        "type": "pr",
+        "event": "opened",
+        "repo": "openapi-cpp-scaffolding",
+        "number": 7,
+        "title": "fix(identity): users-list/item-route contract + password stripping + roles seed (o39 + g7m)",
+        "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding/pull/7",
+        "author": "carlosgonzg",
+        "draft": false,
+        "date": "2026-11-18T20:19:18Z"
+      },
       {
         "type": "pr",
         "event": "opened",
@@ -1293,26 +1048,15 @@
         "author": "braianxde",
         "draft": false,
         "date": "2026-11-12T13:35:55Z"
-      },
-      {
-        "type": "pr",
-        "event": "opened",
-        "repo": "SuperGenius",
-        "number": 403,
-        "title": "Fix stuck nodes",
-        "url": "https://github.com/GeniusVentures/SuperGenius/pull/403",
-        "author": "slashyashy",
-        "draft": false,
-        "date": "2026-11-11T21:56:35Z"
       }
     ],
-    "openPrs": 28,
+    "openPrs": 29,
     "openIssues": 210,
     "closedIssuesTotal": 393,
     "mergedPrsTotal": 807
   },
   "readiness": {
-    "fetchedAt": "2026-11-18T14:25:49.244Z",
+    "fetchedAt": "2026-11-18T23:25:38.380Z",
     "staleDays": 60,
     "pages": [
       {
@@ -1387,8 +1131,8 @@
           }
         ],
         "lastEdited": "2026-10-08T20:38:00Z",
-        "statusAgeDays": 41,
-        "editedAgeDays": 41,
+        "statusAgeDays": 42,
+        "editedAgeDays": 42,
         "stale": false,
         "targets": [
           {
@@ -1551,7 +1295,7 @@
         ],
         "lastEdited": "2026-10-08T20:38:00Z",
         "statusAgeDays": null,
-        "editedAgeDays": 41,
+        "editedAgeDays": 42,
         "stale": false,
         "targets": [
           {
@@ -1580,6 +1324,192 @@
     "windowDays": 7,
     "commits": 0,
     "pages": []
+  },
+  "stalePrs": {
+    "days": 14,
+    "count": 19,
+    "items": [
+      {
+        "repo": "SGInterCommunication",
+        "number": 1,
+        "title": "added initial code",
+        "url": "https://github.com/GeniusVentures/SGInterCommunication/pull/1",
+        "author": "kingofthebongo2008",
+        "draft": false,
+        "updated": "2025-09-04T13:06:39Z",
+        "idleDays": 440
+      },
+      {
+        "repo": "Banxa",
+        "number": 1,
+        "title": "Banxa Module",
+        "url": "https://github.com/GeniusVentures/Banxa/pull/1",
+        "author": "TechUp-24",
+        "draft": false,
+        "updated": "2025-09-19T17:52:35Z",
+        "idleDays": 425
+      },
+      {
+        "repo": "gnus-dao-website",
+        "number": 44,
+        "title": "feat: governance dashboard with on-chain voting and Cloudflare Pages migration",
+        "url": "https://github.com/GeniusVentures/gnus-dao-website/pull/44",
+        "author": "Subaskar-S",
+        "draft": false,
+        "updated": "2026-05-20T02:40:15Z",
+        "idleDays": 182
+      },
+      {
+        "repo": "gnus-dao",
+        "number": 1,
+        "title": "chore: update gnus-dao-website submodule to governance dashboard",
+        "url": "https://github.com/GeniusVentures/gnus-dao/pull/1",
+        "author": "Subaskar-S",
+        "draft": false,
+        "updated": "2026-05-31T05:32:24Z",
+        "idleDays": 171
+      },
+      {
+        "repo": "UnityGeniusSDK",
+        "number": 2,
+        "title": "Dev fix interface",
+        "url": "https://github.com/GeniusVentures/UnityGeniusSDK/pull/2",
+        "author": "henriqueaklein",
+        "draft": false,
+        "updated": "2026-07-15T14:53:50Z",
+        "idleDays": 126
+      },
+      {
+        "repo": "UnityGeniusSDK",
+        "number": 4,
+        "title": "Add generic wallet-connect payout screen to GeniusSDK",
+        "url": "https://github.com/GeniusVentures/UnityGeniusSDK/pull/4",
+        "author": "braianxde",
+        "draft": false,
+        "updated": "2026-07-15T22:42:26Z",
+        "idleDays": 126
+      },
+      {
+        "repo": "diamonds-devcontainer",
+        "number": 1,
+        "title": "Develop",
+        "url": "https://github.com/GeniusVentures/diamonds-devcontainer/pull/1",
+        "author": "Super-Genius",
+        "draft": false,
+        "updated": "2026-08-27T23:59:34Z",
+        "idleDays": 82
+      },
+      {
+        "repo": "MNN",
+        "number": 10,
+        "title": "MNN fp4",
+        "url": "https://github.com/GeniusVentures/MNN/pull/10",
+        "author": "itsafuu",
+        "draft": true,
+        "updated": "2026-09-03T20:52:22Z",
+        "idleDays": 76
+      },
+      {
+        "repo": "SuperGenius",
+        "number": 374,
+        "title": "Fix bridge tests",
+        "url": "https://github.com/GeniusVentures/SuperGenius/pull/374",
+        "author": "EduMenges",
+        "draft": false,
+        "updated": "2026-09-18T16:19:54Z",
+        "idleDays": 61
+      },
+      {
+        "repo": "GeniusNetwork",
+        "number": 6,
+        "title": "docs: add GNUS.ai master platform architecture",
+        "url": "https://github.com/GeniusVentures/GeniusNetwork/pull/6",
+        "author": "Super-Genius",
+        "draft": true,
+        "updated": "2026-09-30T19:13:39Z",
+        "idleDays": 49
+      }
+    ]
+  },
+  "ci": {
+    "total": 131,
+    "success": 105,
+    "failure": 26,
+    "rate": 80,
+    "repos": [
+      {
+        "name": "rlp_enodes",
+        "total": 100,
+        "success": 91,
+        "failure": 9,
+        "rate": 91,
+        "topFailing": "Update Bootstrap Node Lists"
+      },
+      {
+        "name": "GeniusSDK",
+        "total": 10,
+        "success": 2,
+        "failure": 8,
+        "rate": 20,
+        "topFailing": "Release Build CI"
+      },
+      {
+        "name": "SuperGenius",
+        "total": 7,
+        "success": 1,
+        "failure": 6,
+        "rate": 14,
+        "topFailing": "Release Build CI"
+      },
+      {
+        "name": "CIDocker",
+        "total": 1,
+        "success": 0,
+        "failure": 1,
+        "rate": 0,
+        "topFailing": "ci-almalinux"
+      },
+      {
+        "name": "GeniusCognitiveSystem",
+        "total": 1,
+        "success": 0,
+        "failure": 1,
+        "rate": 0,
+        "topFailing": "Release Build CI"
+      },
+      {
+        "name": "thirdparty",
+        "total": 2,
+        "success": 1,
+        "failure": 1,
+        "rate": 50,
+        "topFailing": "Multiplatform build and upload"
+      },
+      {
+        "name": "GeniusWallet",
+        "total": 1,
+        "success": 1,
+        "failure": 0,
+        "rate": 100,
+        "topFailing": null
+      },
+      {
+        "name": "gnus-investor-scenarios",
+        "total": 8,
+        "success": 8,
+        "failure": 0,
+        "rate": 100,
+        "topFailing": null
+      },
+      {
+        "name": "GNUS-NEO-SWARM",
+        "total": 1,
+        "success": 1,
+        "failure": 0,
+        "rate": 100,
+        "topFailing": null
+      }
+    ]
   },
   "milestones": [
     {
@@ -1665,12 +1595,12 @@
     }
   ],
   "liquidity": {
-    "date": "2026-11-18",
+    "date": "2026-11-19",
     "networks": 4,
     "total": 4
   },
   "changes": {
-    "since": "2026-11-11",
+    "since": "2026-11-12",
     "readiness": {
       "items": [],
       "trackDeltas": []
@@ -1679,16 +1609,16 @@
       {
         "key": "openPrs",
         "label": "Open PRs",
-        "from": 24,
-        "to": 28,
+        "from": 25,
+        "to": 29,
         "delta": 4
       },
       {
         "key": "mergedPrs",
         "label": "Merged PRs (total)",
-        "from": 805,
+        "from": 806,
         "to": 807,
-        "delta": 2
+        "delta": 1
       }
     ]
   },
@@ -1764,10 +1694,19 @@
       "openPrs": 28,
       "closedIssues": 393,
       "mergedPrs": 807
+    },
+    {
+      "date": "2026-11-19",
+      "commits": 87,
+      "openIssues": 210,
+      "openPrs": 29,
+      "closedIssues": 393,
+      "mergedPrs": 807
     }
   ],
   "aiModel": "openai/gpt-oss-120b",
   "ai": "openai/gpt-oss-120b",
-  "telegramPosted": "2026-11-18",
-  "telegramLastHash": "fcd46ef65c1e07396e7cfb9cea231031e6a73f9c"
+  "telegramPosted": "2026-11-19",
+  "telegramLastHash": "65dd8e7505cfecb15f3adcc73cda54df8139973d",
+  "telegramWarned": null
 }
