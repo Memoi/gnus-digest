@@ -6,7 +6,7 @@ import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import { withTimeout, fetchLiquiditySnapshot, updateLiquidityHistory, updateArchive, summarizeMilestones } from './extras.mjs';
 
-const ORG    = process.env.ORG || 'GeniusVentures';
+export const ORG    = process.env.ORG || 'GeniusVentures';
 const SITE_URL = (process.env.SITE_URL || 'https://gnus-digest.vercel.app').replace(/\/$/, '');
 const DOCS_ORIGIN = process.env.DOCS_ORIGIN || 'https://docs.gnus.ai/';
 const DAYS   = Number(process.env.DAYS || 7);
@@ -15,7 +15,7 @@ const TOKEN  = process.env.GITHUB_TOKEN || '';
 const API    = 'https://api.github.com';
 
 /* ---------------- GitHub API ---------------- */
-async function gh(path, params = {}) {
+export async function gh(path, params = {}) {
   const url = new URL(API + path);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
   const res = await fetch(url, { headers: {
@@ -24,7 +24,7 @@ async function gh(path, params = {}) {
   if (!res.ok) throw new Error(`GitHub ${res.status} on ${url.pathname}`);
   return res.json();
 }
-async function ghAll(path, params = {}, maxPages = 5) {
+export async function ghAll(path, params = {}, maxPages = 5) {
   let out = [];
   for (let page = 1; page <= maxPages; page++) {
     const d = await gh(path, { ...params, per_page: 100, page });
@@ -34,7 +34,7 @@ async function ghAll(path, params = {}, maxPages = 5) {
   return out;
 }
 
-async function ghql(query, variables) {
+export async function ghql(query, variables) {
   if (!TOKEN) throw new Error('GITHUB_TOKEN is required (GraphQL API needs authentication)');
   const res = await fetch(API + '/graphql', { method: 'POST',
     headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json', 'User-Agent': 'gnus-digest' },
@@ -65,7 +65,7 @@ async function fetchCommitsAllBranches(name, since) {
         const cur = byOid.get(c.oid);
         if (cur) cur.branches.add(b.name);
         else byOid.set(c.oid, { sha: c.oid, url: c.url, date: c.committedDate, message: c.message,
-          author: c.author?.user?.login || c.author?.name || 'unknown', branches: new Set([b.name]) });
+          author: c.author?.user?.login || c.author?.name || 'unknown', isLogin: !!c.author?.user?.login, branches: new Set([b.name]) });
       }
     }
     if (!refs.pageInfo.hasNextPage) break;
@@ -148,7 +148,7 @@ function summarizeRepoDay(commits) {
 }
 
 const normSubject = m => cleanSubject(m).toLowerCase().replace(/\d+/g, '#');
-const isBuildRelease = r => r.prerelease || /-(Release|Debug)$/i.test(r.tag || '') || /-(Release|Debug)$/i.test(r.name || '');
+export const isBuildRelease = r => r.prerelease || /-(Release|Debug)$/i.test(r.tag || '') || /-(Release|Debug)$/i.test(r.name || '');
 
 /* ---------------- Domaines (regroupement des repos) ---------------- */
 // Première règle qui correspond gagne ; « * » = joker. Modifiable sans toucher au code : config/domains.json
@@ -181,6 +181,8 @@ export function buildDigest(activity, now = new Date(), days = DAYS, domains = D
 
   const perDay = Object.fromEntries(keys.map(k => [k, { date: k, repos: [], releases: [], ciBuilds: {} }]));
   const contributors = new Set();
+  const people = new Map();          // identifiant GitHub -> commits, repos (commits humains seulement)
+  let unlinked = 0;                  // commits dont l'auteur n'est pas relié à un compte GitHub : comptés, jamais nommés
   const repoHuman = {};
   let autoTotal = 0, ciTotal = 0, namedTotal = 0;
   const typeTotals = {};
@@ -200,7 +202,11 @@ export function buildDigest(activity, now = new Date(), days = DAYS, domains = D
       const k = dayKey(c.date);
       if (!perDay[k]) continue;
       const slot = (byDay[k] ||= { human: [], auto: [] });
-      if (isAuto(c)) slot.auto.push(c); else { slot.human.push(c); contributors.add(c.author); }
+      if (isAuto(c)) slot.auto.push(c); else {
+        slot.human.push(c); contributors.add(c.author);
+        if (c.isLogin) { const e = people.get(c.author) || { login: c.author, commits: 0, repos: new Set() }; e.commits++; e.repos.add(repo.name); people.set(c.author, e); }
+        else unlinked++;
+      }
     }
     for (const [k, { human, auto }] of Object.entries(byDay)) {
       const items = summarizeRepoDay(human);
@@ -259,6 +265,9 @@ export function buildDigest(activity, now = new Date(), days = DAYS, domains = D
   const week = {
     from: keys[keys.length - 1], to: keys[0],
     commits: humanTotal, automated: autoTotal, repos: topRepos.length, contributors: contributors.size,
+    contributorList: [...people.values()].map(x => ({ login: x.login, commits: x.commits, repos: [...x.repos].sort() }))
+      .sort((a, b) => b.commits - a.commits || a.login.localeCompare(b.login)).slice(0, 30),
+    unlinkedCommits: unlinked,
     releases: namedTotal, ciBuilds: ciTotal,
     topRepos: topRepos.slice(0, 5).map(([name, commits]) => ({ name, commits })),
     domains: (() => {
@@ -553,7 +562,7 @@ export function parseReadiness(md) {
 
 export const calendarDaysAgo = (d, now = new Date()) => Math.round((Date.parse(dayKey(now)) - Date.parse(dayKey(d))) / 86400000);
 
-async function fetchDocs() {
+export async function fetchDocs() {
   const repo = await gh(`/repos/${DOCS_REPO}`);
   const tree = await gh(`/repos/${DOCS_REPO}/git/trees/${repo.default_branch}`, { recursive: '1' });
   const pages = [];
@@ -720,7 +729,7 @@ export function buildTelegramText(digest, now = new Date(), site = SITE_URL, pos
   lines.push('', site + '/');
   return lines.join('\n').slice(0, 3900);
 }
-async function postTelegram(token, chat, text) {
+export async function postTelegram(token, chat, text) {
   const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: chat, text, disable_web_page_preview: false }) });
@@ -735,7 +744,7 @@ async function loadJson(path, fallback) { try { const j = JSON.parse(await readF
 const MS_QUERY = `query($org:String!,$after:String){ organization(login:$org){ repositories(first:50,after:$after,privacy:PUBLIC,orderBy:{field:PUSHED_AT,direction:DESC}){
   pageInfo{hasNextPage endCursor}
   nodes{ name isArchived milestones(first:10,states:OPEN,orderBy:{field:DUE_DATE,direction:ASC}){ nodes{ title url dueOn progressPercentage open:issues(states:OPEN){totalCount} closed:issues(states:CLOSED){totalCount} } } } } } }`;
-async function fetchMilestones() {
+export async function fetchMilestones() {
   let nodes = [], after = null;
   for (let page = 0; page < 4; page++) {                                   // jusqu'à 200 repos
     const d = await ghql(MS_QUERY, { org: ORG, after });
@@ -767,6 +776,56 @@ async function liquiditySnapshot(now) {
   return snap;
 }
 
+/* ---------------- PR en attente, santé de la CI, nouveaux contributeurs ---------------- */
+const STALE_PR_QUERY = `query($q:String!){ search(query:$q,type:ISSUE,first:10){ issueCount nodes{ ... on PullRequest{ title url number isDraft updatedAt repository{name} author{login} } } } }`;
+export function summarizeStalePrs(nodes, count, now, days = 14) {
+  return { days, count, items: nodes.filter(n => n && n.title).map(n => ({
+    repo: n.repository.name, number: n.number, title: n.title.slice(0, 140), url: n.url, author: n.author?.login || 'ghost',
+    draft: !!n.isDraft, updated: n.updatedAt, idleDays: Math.floor((now.getTime() - new Date(n.updatedAt).getTime()) / 86400000) })) };
+}
+async function fetchStalePrs(now, days = 14) {
+  const cutoff = new Date(now.getTime() - days * 86400000).toISOString().slice(0, 10);
+  const d = await ghql(STALE_PR_QUERY, { q: `org:${ORG} is:public is:pr is:open updated:<${cutoff} sort:updated-asc` });
+  return summarizeStalePrs(d.search.nodes, d.search.issueCount, now, days);
+}
+
+// runsByRepo : { repo: [ { conclusion, name } ] } ; les exécutions annulées ou ignorées ne comptent ni comme réussite ni comme échec
+export function summarizeCi(runsByRepo) {
+  const rows = [];
+  for (const [name, runs] of Object.entries(runsByRepo)) {
+    let success = 0, failure = 0; const failingByWorkflow = {};
+    for (const r of runs) {
+      if (r.conclusion === 'success') success++;
+      else if (r.conclusion === 'failure' || r.conclusion === 'timed_out') { failure++; failingByWorkflow[r.name] = (failingByWorkflow[r.name] || 0) + 1; }
+    }
+    const total = success + failure;
+    if (!total) continue;
+    const top = Object.entries(failingByWorkflow).sort((a, b) => b[1] - a[1])[0];
+    rows.push({ name, total, success, failure, rate: Math.round(100 * success / total), topFailing: top ? top[0] : null });
+  }
+  rows.sort((a, b) => b.failure - a.failure || a.name.localeCompare(b.name));
+  const total = rows.reduce((s, r) => s + r.total, 0), success = rows.reduce((s, r) => s + r.success, 0);
+  return { total, success, failure: total - success, rate: total ? Math.round(100 * success / total) : null, repos: rows };
+}
+async function fetchCiHealth(repoNames, since) {
+  const runsByRepo = {};
+  for (let i = 0; i < repoNames.length; i += 5)
+    await Promise.all(repoNames.slice(i, i + 5).map(async name => {
+      const d = await gh(`/repos/${ORG}/${name}/actions/runs`, { created: `>=${since.toISOString().slice(0, 10)}`, status: 'completed', per_page: 100 }).catch(() => null);
+      if (d?.workflow_runs) runsByRepo[name] = d.workflow_runs;
+    }));
+  return summarizeCi(runsByRepo);
+}
+
+// state = contenu précédent de contributors.json (null au tout premier lancement : personne n'est alors « nouveau »)
+export function updateContributorsSeen(state, logins, today, windowDays = 7) {
+  const first = !state;
+  const st = { firstSeen: { ...(state?.firstSeen || {}) } };
+  for (const l of logins) if (!(l in st.firstSeen)) st.firstSeen[l] = first ? '0000-00-00' : today;
+  const cutoff = new Date(Date.parse(today) - windowDays * 86400000).toISOString().slice(0, 10);
+  return { state: st, newcomers: logins.filter(l => st.firstSeen[l] >= cutoff) };
+}
+
 /* ---------------- main ---------------- */
 async function main() {
   const now = new Date();
@@ -779,7 +838,7 @@ async function main() {
   const activity = await fetchActivity(since);
   const domains = await loadDomains();
   let digest = buildDigest(activity, now, DAYS, domains);
-  digest.builder = 'v26';
+  digest.builder = 'v27';
   try { digest.prs = await fetchIssuesPrs(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.prsError = String(e.message).slice(0, 200); console.warn('Issues/PR step skipped:', e.message); }
   try { digest.readiness = await fetchDocs(); }
@@ -788,6 +847,16 @@ async function main() {
   try { digest.docsChanges = await fetchDocsChanges(new Date(now.getTime() - DAYS * 86400000)); }
   catch (e) { digest.docsChangesError = String(e.message).slice(0, 200); console.warn('Docs changes step skipped:', e.message); }
 
+  try { digest.stalePrs = await fetchStalePrs(now); }
+  catch (e) { digest.stalePrsError = String(e.message).slice(0, 200); console.warn('Stale PRs step skipped:', e.message); }
+  try { digest.ci = await fetchCiHealth(activity.map(r => r.name), new Date(now.getTime() - DAYS * 86400000)); }
+  catch (e) { digest.ciError = String(e.message).slice(0, 200); console.warn('CI health step skipped:', e.message); }
+  try {                                                             // nouveaux contributeurs : mémoire dans public/contributors.json
+    const res = updateContributorsSeen(await loadJson('public/contributors.json', null), digest.week.contributorList.map(x => x.login), dayKey(now));
+    digest.week.newcomers = res.newcomers;
+    await mkdir('public', { recursive: true });
+    await writeFile('public/contributors.json', JSON.stringify(res.state));
+  } catch (e) { console.warn('Contributors step skipped:', e.message); }
   try { digest.milestones = await fetchMilestones(); }
   catch (e) { digest.milestonesError = String(e.message).slice(0, 200); console.warn('Milestones step skipped:', e.message); }
 
@@ -822,6 +891,7 @@ async function main() {
   await writeFile(ARCHIVE_FILE, JSON.stringify(updateArchive(await loadJson(ARCHIVE_FILE, []), digest)));
   digest.telegramPosted = prev?.telegramPosted || null;
   digest.telegramLastHash = prev?.telegramLastHash || null;
+  digest.telegramWarned = prev?.telegramWarned || null;
   await mkdir('public', { recursive: true });
   await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
   await writeFile('public/feed.xml', buildFeed(digest));
@@ -846,6 +916,17 @@ async function main() {
         await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
       }
     }
+  }
+
+  // Alerte « mode dégradé » : une étape facultative a échoué (IA, liquidité…). Au plus un message par jour.
+  const problems = [['AI summaries', digest.aiError], ['Liquidity', digest.liquidityError], ['Documentation', digest.readinessError], ['Docs changes', digest.docsChangesError],
+    ['Milestones', digest.milestonesError], ['CI health', digest.ciError], ['Stale PRs', digest.stalePrsError], ['Issues and PRs', digest.prsError]]
+    .filter(([, e]) => e).map(([n, e]) => `- ${n}: ${e}`);
+  if (tgToken && tgChat && problems.length && digest.telegramWarned !== dayKey(now)) {
+    const runUrl = process.env.GITHUB_RUN_ID ? `\n${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}` : '';
+    try { await postTelegram(tgToken, tgChat, `⚠ GNUS digest ran with problems (the rest of the page is fine):\n${problems.join('\n')}${runUrl}`.slice(0, 3900)); digest.telegramWarned = dayKey(now); }
+    catch (e) { console.warn('Warning message failed:', e.message); }
+    await writeFile('public/digest.json', JSON.stringify(digest, null, 2));
   }
 }
 if (import.meta.url === pathToFileURL(process.argv[1] || '').href) main().catch(e => { console.error(e); process.exit(1); });
