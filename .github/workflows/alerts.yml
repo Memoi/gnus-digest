@@ -1,0 +1,50 @@
+name: GNUS alerts
+
+# Vérifie toutes les 3 heures : statut de la mainnet, nouvelle vraie release, jalon terminé.
+# N'envoie un message Telegram que si quelque chose a changé. Premier passage : mémorise seulement l'état.
+on:
+  schedule:
+    - cron: '10 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write             # pour committer public/alerts-state.json (la mémoire des alertes)
+
+concurrency:
+  group: gnus-digest-writes   # même groupe que le digest : jamais deux écritures en même temps
+  cancel-in-progress: false
+
+jobs:
+  alerts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check for changes and send alerts
+        run: node scripts/alerts.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG: GeniusVentures
+          SITE_URL: https://gnus-digest.vercel.app
+      - name: Commit alert memory
+        run: |
+          git config user.name  "digest-bot"
+          git config user.email "digest-bot@users.noreply.github.com"
+          git add public/alerts-state.json
+          if git diff --cached --quiet; then echo "Nothing to commit"; else
+            git commit -m "chore: update alerts state"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push
+          fi
+      - name: Notify failure
+        if: failure() && env.TELEGRAM_BOT_TOKEN != ''
+        run: |
+          curl -fsS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=⚠ ${WORKFLOW} failed, alerts may be delayed. Details: ${RUN_URL}" > /dev/null
+        env:
+          WORKFLOW: ${{ github.workflow }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
