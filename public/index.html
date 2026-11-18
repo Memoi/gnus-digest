@@ -64,6 +64,8 @@
   .grid2 .card{margin-bottom:0}
   svg.chart{width:100%;height:auto;color:var(--accent);display:block;margin:6px 0 2px}
   .arrow{color:var(--mute);margin:0 6px}
+  .srow .bad{color:#c0392b;font-weight:600}
+  .srow .mbar{margin:5px 0 2px}
   nav.jump{font:13px/1.8 system-ui,sans-serif;color:var(--mute);margin:-6px 0 14px}
   nav.jump a{color:var(--mute);font-weight:400;margin:0;text-decoration:none;border-bottom:1px dotted var(--line)}
   nav.jump a:hover{color:var(--accent);border-bottom-color:var(--accent)}
@@ -114,7 +116,7 @@
   <h1>GitHub digest</h1>
   <p class="sub" id="meta">Loading…</p>
   <nav><a href="./" aria-current="page">Digest</a><a href="liquidity.html">GNUS liquidity</a><a href="archive.html">Archive</a></nav>
-  <nav class="jump" aria-label="Sections on this page">Jump to: <a href="#s-readiness">Readiness</a> · <a href="#s-docs">Docs</a> · <a href="#s-week">This week</a> · <a href="#s-domains">Domains</a> · <a href="#s-prs">Issues &amp; PRs</a> · <span id="jumpMs" hidden><a href="#s-milestones">Milestones</a> · </span><a href="#s-trends">Trends</a> · <a href="#s-daily">Daily</a></nav>
+  <nav class="jump" aria-label="Sections on this page">Jump to: <a href="#s-readiness">Readiness</a> · <a href="#s-docs">Docs</a> · <a href="#s-week">This week</a> · <a href="#s-domains">Domains</a> · <a href="#s-prs">Issues &amp; PRs</a> · <a href="#s-ci">CI</a> · <a href="#s-people">People</a> · <span id="jumpMs" hidden><a href="#s-milestones">Milestones</a> · </span><a href="#s-trends">Trends</a> · <a href="#s-daily">Daily</a></nav>
   <div id="banner"></div>
   <h2 id="s-glance">At a glance</h2>
   <div class="card" id="overview"></div>
@@ -129,6 +131,10 @@
   <div class="grid2" id="domains"></div>
   <h2 id="s-prs">Issues &amp; pull requests</h2>
   <div class="card" id="prs"></div>
+  <h2 id="s-ci">CI health</h2>
+  <div class="card" id="ci"></div>
+  <h2 id="s-people">Contributors</h2>
+  <div class="card" id="people"></div>
   <div id="msWrap" hidden>
     <h2 id="s-milestones">GitHub milestones</h2>
     <div class="card" id="milestones"></div>
@@ -334,6 +340,19 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     }
     if (!P.items.length) list.append(el('div', 'No issue or pull request activity this week.'));
     prBox.append(list);
+    const SP = d.stalePrs;                                           // PR ouvertes sans activité depuis longtemps
+    if (SP && SP.count) {
+      prBox.append(el('div', `Waiting for attention: ${SP.count} open PR${SP.count === 1 ? '' : 's'} with no activity for ${SP.days}+ days (oldest first)`, 'legend'));
+      const sl = el('div'); sl.style.marginTop = '6px';
+      for (const it of SP.items.slice(0, 8)) {
+        const row = el('div', null, 'pr'), a = el('a', it.title);
+        if (safeUrl(it.url)) { a.href = it.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+        const body = el('div', null, 'b'); body.append(a, el('span', `${it.repo}#${it.number} · ${it.author}${it.draft ? ' · draft' : ''}`, 'm'));
+        row.append(el('span', `${it.idleDays} days idle`, 'tag'), body);
+        sl.append(row);
+      }
+      prBox.append(sl);
+    }
   }
 
   const tr = document.getElementById('trends'), T = d.trend || [];
@@ -402,6 +421,38 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
       }
       mb.append(block);
     }
+  }
+
+  // ---- santé de la CI (7 jours)
+  const ciBox = document.getElementById('ci'), CI = d.ci;
+  if (!CI) ciBox.append(el('div', d.ciError ? `Could not load CI results (${d.ciError})` : 'No data yet.'));
+  else if (!CI.repos.length) ciBox.append(el('div', 'No completed workflow run in the last 7 days.'));
+  else {
+    ciBox.append(el('div', `${CI.total} workflow runs in the last 7 days · ${CI.rate}% passed. Cancelled and skipped runs are not counted.`, 'legend'));
+    for (const r of CI.repos.slice(0, 12)) {
+      const row = el('div', null, 'srow'), a = el('a', r.name);
+      a.href = `https://github.com/${d.org}/${r.name}/actions`; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      row.append(a, el('span', ` · ${r.total} runs · `, 'm'), el('span', `${r.rate}% passed`, r.rate < 80 ? 'bad' : 'm'));
+      const bar = el('div', null, 'mbar'), f = el('i'); f.style.width = r.rate + '%'; bar.append(f); row.append(bar);
+      if (r.failure) row.append(el('div', `${r.failure} failed` + (r.topFailing ? `, mostly “${r.topFailing}”` : ''), 'd'));
+      ciBox.append(row);
+    }
+  }
+
+  // ---- contributeurs de la semaine (identifiants GitHub publics ; les auteurs sans compte lié ne sont pas nommés)
+  const pb = document.getElementById('people'), PL = w.contributorList || [], NEW = new Set(w.newcomers || []);
+  if (!PL.length) pb.append(el('div', 'No commit from an identified GitHub account in the last 7 days.'));
+  else {
+    pb.append(el('div', `${PL.length} contributor${PL.length === 1 ? '' : 's'} with a public GitHub account in the last 7 days`, 'legend'));
+    for (const p of PL.slice(0, 15)) {
+      const row = el('div', null, 'srow'), a = el('a', p.login);
+      a.href = `https://github.com/${encodeURIComponent(p.login)}`; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      row.append(a);
+      if (NEW.has(p.login)) { const nb = el('span', 'new', 'badge done'); nb.style.marginLeft = '8px'; row.append(nb); }
+      row.append(el('span', ` · ${p.commits} commit${p.commits === 1 ? '' : 's'} · ${p.repos.join(', ')}`, 'm'));
+      pb.append(row);
+    }
+    if (w.unlinkedCommits) pb.append(el('div', `${w.unlinkedCommits} more commit${w.unlinkedCommits === 1 ? '' : 's'} come from authors who are not linked to a GitHub account: they are counted but not named.`, 'legend'));
   }
 
   // ---- pied de page : sources et méthode
