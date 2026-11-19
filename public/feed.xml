@@ -5,49 +5,49 @@
     <link>https://gnus-digest.vercel.app/</link>
     <description>Daily digest of the GeniusVentures GitHub activity, written from public commit messages.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 19 Nov 2026 14:36:47 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2026 22:30:08 GMT</lastBuildDate>
     <atom:link href="https://gnus-digest.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GNUS digest — Wednesday 18 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-18</guid>
       <pubDate>Wed, 18 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Revised blockchain network plans after feedback and added new test scenarios, along with updated phase documentation. Fixed cursor‑based pagination and added tests for the SDK, plus minor documentation tweaks. Added evidence matrices and related tests to the blockchain component. Repositories: GeniusNetwork, openapi-cpp-scaffolding, SuperGenius, rlp_enodes.</description>
+      <description>Plans were revised after feedback, new evidence matrices were added, and pagination handling was fixed in the SDK. Repositories: GeniusNetwork, openapi-cpp-scaffolding, SuperGenius, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Tuesday 17 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-17</guid>
       <pubDate>Tue, 17 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Advanced research phases and added a pattern map in the blockchain network, while creating detailed phase plans. Introduced durability checks and related tests in the blockchain component. Added overrides and role seeds to the SDK, and improved third‑party resolution handling in a build template. Repositories: GeniusNetwork, SuperGenius, openapi-cpp-scaffolding, cmaketemplate, rlp_enodes.</description>
+      <description>Research phases and pattern maps were added, durability checks were introduced, and third‑party resolution was updated. Repositories: GeniusNetwork, SuperGenius, openapi-cpp-scaffolding, cmaketemplate, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Monday 16 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-16</guid>
       <pubDate>Mon, 16 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Corrected a summary and updated plans for the blockchain network, recording recent merge actions. Fixed a merge issue in the blockchain component and aligned test cases for storage markers. Repositories: GeniusNetwork, SuperGenius.</description>
+      <description>Plans and summaries were refined, and a merge fix was applied to improve storage handling. Repositories: GeniusNetwork, SuperGenius.</description>
     </item>
     <item>
       <title>GNUS digest — Sunday 15 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-15</guid>
       <pubDate>Sun, 15 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Inserted temporary diagnostic messages into the wallet verification process and improved those diagnostics. Repositories: GeniusWallet.</description>
+      <description>Diagnostic prints were added to the verification module and later enhanced for better troubleshooting. Repositories: GeniusWallet.</description>
     </item>
     <item>
       <title>GNUS digest — Saturday 14 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-14</guid>
       <pubDate>Sat, 14 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Added a roadmap outlining seven phases for the upcoming milestone. Revised the backup system description to support a tiered archive and light node model. Repositories: GeniusNetwork.</description>
+      <description>A new seven‑phase roadmap was added and backup storage notes were rewritten for clarity. Repositories: GeniusNetwork.</description>
     </item>
     <item>
       <title>GNUS digest — Friday 13 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-13</guid>
       <pubDate>Fri, 13 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Removed an old GQHSM component from the cognitive system and updated documentation accordingly. Enhanced backup and storage tracking in the blockchain network. Repositories: GeniusCognitiveSystem, GeniusNetwork, SuperGenius, GNUS-NEO-SWARM.</description>
+      <description>The AI component removed the GQHSM submodule and updated documentation about its removal. The blockchain system updated cold‑storage handling and improved backup records. Repositories: GeniusCognitiveSystem, SuperGenius, GeniusNetwork, GNUS-NEO-SWARM.</description>
     </item>
   </channel>
 </rss>
