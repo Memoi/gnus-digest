@@ -127,8 +127,8 @@
   <p class="sub" id="histNote" style="margin-top:6px"></p>
 
   <h2>Trading activity (24 h)</h2>
-  <div class="wrap"><table id="trade"><thead><tr><th>Network</th><th>Pool</th><th>Volume</th><th>Price change</th><th>Buys / sells</th><th>Liquidity</th></tr></thead><tbody id="tradeBody"></tbody></table></div>
-  <p class="sub" id="tradeNote" style="margin-top:6px">Source: DexScreener (a third party), read directly from your browser. When it does not know the pool above, the table shows the most liquid pool it has for the same token, and says so. These figures are not verified by this site and can differ from the on-chain readings above.</p>
+  <div class="wrap"><table id="trade"><thead><tr><th>Network</th><th>Volume</th><th>Price change</th><th>Buys / sells</th><th>Liquidity</th></tr></thead><tbody id="tradeBody"></tbody></table></div>
+  <p class="sub" id="tradeNote" style="margin-top:6px">Source: DexScreener (a third party), read directly from your browser. These figures are not verified by this site and can differ from the on-chain readings above.</p>
 
   <h2>Pool explorer</h2>
   <div class="bar">
@@ -281,11 +281,6 @@ function compareCells(k, c, S, pct){
     mkCell('Read at', new Date(S.readAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), null),
   ];
 }
-function getPool(k, c){
-  const key = k + ':' + c.addr.toLowerCase();
-  return POOLS[key] || (POOLS[key] = loadPool({ chain: k, addr: c.addr, urls: c.rpcs, block: 'latest', status: () => {} })
-    .catch(e => { delete POOLS[key]; throw e; }));
-}
 async function compareAll(){
   const pct = Math.abs(parseFloat($('cmpPct').value)) || 10;
   const body = $('cmpBody'); body.textContent = '';
@@ -297,7 +292,8 @@ async function compareAll(){
     body.append(tr);
     return (async () => {
       try{
-        const S = await getPool(k, c);
+        const key = k + ':' + c.addr.toLowerCase();
+        const S = POOLS[key] || (POOLS[key] = await loadPool({ chain: k, addr: c.addr, urls: c.rpcs, block: 'latest', status: () => {} }));
         const cells = compareCells(k, c, S, pct);
         tr.textContent = ''; tr.append(...cells);
         const D = derive(S);
@@ -380,41 +376,28 @@ async function loadHistory(){
 }
 
 /* ---------------- activité de trading : API publique de DexScreener (tiers) ---------------- */
-async function dexPairs(url){
-  const r = await fetch(url, { cache: 'no-store' });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  return (await r.json()).pairs || [];
-}
 async function loadTrading(){
   const body = $('tradeBody'); body.textContent = '';
   await Promise.all(Object.entries(CHAINS).map(async ([k, c]) => {
     const tr = document.createElement('tr'); body.append(tr);               // ligne créée tout de suite : l'ordre des réseaux reste stable
-    tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Loading…'), { colSpan: 5 }));
+    tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Loading…'), { colSpan: 4 }));
     try {
-      let p = null, same = true;
-      try { p = (await dexPairs(`https://api.dexscreener.com/latest/dex/pairs/${k}/${c.addr}`))[0] || null; } catch(e) { /* on tente par le token */ }
-      if (!p) {                                                            // pool inconnu de DexScreener : on cherche par l'adresse du token
-        same = false;
-        const S = await getPool(k, c), D = derive(S), token = D.baseIsT0 ? S.tok0 : S.tok1;
-        const pairs = (await dexPairs(`https://api.dexscreener.com/latest/dex/tokens/${token}`)).filter(x => x.chainId === k);
-        p = pairs.sort((x, y) => ((y.liquidity && y.liquidity.usd) || 0) - ((x.liquidity && x.liquidity.usd) || 0))[0] || null;
-        if (!p) throw new Error('token not listed on this network');
-      }
+      const r = await fetch(`https://api.dexscreener.com/latest/dex/pairs/${k}/${c.addr}`, { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const p = ((await r.json()).pairs || [])[0];
+      if (!p) throw new Error('pool not found');
       const chg = p.priceChange && p.priceChange.h24, tx = p.txns && p.txns.h24, vol = p.volume && p.volume.h24, liq = p.liquidity && p.liquidity.usd;
       const name = mkCell('Network', '', null, 'pct');
-      const a = document.createElement('a'); a.textContent = c.label; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.style.color = 'inherit';
-      a.href = (typeof p.url === 'string' && p.url.startsWith('https://dexscreener.com/')) ? p.url : `https://dexscreener.com/${k}/${p.pairAddress || c.addr}`;
+      const a = document.createElement('a'); a.textContent = c.label; a.href = `https://dexscreener.com/${k}/${c.addr}`; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.style.color = 'inherit';
       name.append(a);
       const chgCell = mkCell('Price change', chg == null ? '–' : `${chg > 0 ? '+' : ''}${chg}%`);
       if (chg != null && chg !== 0) chgCell.style.color = chg > 0 ? 'var(--buy)' : 'var(--sell)';
-      const sym = x => String((x && x.symbol) || '?').replace(/[^\w.$\- ]/g, '').slice(0, 20);
-      const poolCell = mkCell('Pool', `${p.dexId || 'dex'} ${sym(p.baseToken)}/${sym(p.quoteToken)}`, same ? 'same pool as above' : 'different pool: the most liquid for this token on DexScreener');
       tr.textContent = '';
-      tr.append(name, poolCell, mkCell('Volume', vol == null ? '–' : usd(vol)), chgCell,
+      tr.append(name, mkCell('Volume', vol == null ? '–' : usd(vol)), chgCell,
         mkCell('Buys / sells', tx ? `${tx.buys} / ${tx.sells}` : '–'), mkCell('Liquidity', liq == null ? '–' : usd(liq)));
     } catch(e){
       tr.textContent = '';
-      tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Unavailable (' + (e.message || e) + ')'), { colSpan: 5 }));
+      tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Unavailable (' + (e.message || e) + ')'), { colSpan: 4 }));
     }
   }));
 }
