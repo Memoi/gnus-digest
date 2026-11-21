@@ -26,7 +26,10 @@ export async function fetchLiquiditySnapshot(core, date) {
       };
       const bBal = (D.baseIsT0 ? S.bal0 : S.bal1) / 10 ** D.dBase, qBal = (D.baseIsT0 ? S.bal1 : S.bal0) / 10 ** D.dQuote;
       out[k] = { pair: `${D.baseSym}/${D.quoteSym}`, v3: !!S.v3, fee: S.fee, priceUsd: fin(D.baseUsd), priceQuote: fin(D.basePrice),
-                 tvlUsd: D.quoteUsd != null ? fin((bBal * D.basePrice + qBal) * D.quoteUsd) : null, d2: cost(2), d5: cost(5), block: S.block };
+                 tvlUsd: D.quoteUsd != null ? fin((bBal * D.basePrice + qBal) * D.quoteUsd) : null, d2: cost(2), d5: cost(5), block: S.block,
+                 // contenu du pool, token par token (quantité et valeur en dollars)
+                 bal: { base: { sym: D.baseSym, amount: fin(bBal), usd: D.baseUsd != null ? fin(bBal * D.baseUsd) : null },
+                        quote: { sym: D.quoteSym, amount: fin(qBal), usd: D.quoteUsd != null ? fin(qBal * D.quoteUsd) : null } } };
     } catch (e) { out[k] = { error: String(e.message || e).slice(0, 160) }; }
   }));
   return { date, chains: out };
