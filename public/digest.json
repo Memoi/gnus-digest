@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T13:38:18.519Z",
+  "generatedAt": "2026-11-21T19:17:19.073Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
@@ -108,7 +108,7 @@
           "GeniusNetwork: Docs: checkpoint rulings recorded - B2 confirmed, X11 promotion re-ruled to one green; dispat…; checkpoint prep - push-state table filled (SuperGenius…",
           "GeniusNetwork: Updated: 19-04 complete - the matrix closed (X10 + X11); wave 5 next (19-05, blocking user check…; 19-03 complete - recovery arm crossed…"
         ],
-        "summary": "The blockchain network saw extensive upgrades, new testing for verification and phase plans, and documentation of checkpoints and research. Features such as pointer steps, downgrade interlock gates, and evidence matrices were added or refined."
+        "summary": "Numerous upgrades, test additions, plan revisions, and documentation updates were made, including new downgrade features and evidence matrices."
       },
       {
         "name": "SDK & developer tools",
@@ -137,7 +137,7 @@
           "openapi-client-scaffold: Fixed: review round — SafeEmit guard, pre-await cubit capture, typed forms",
           "openapi-cpp-scaffolding: Fixed: round-2 review — DELETE hardening, write gates, email index, role resolution, roles routes; harden user routes — permission gates, tenant…"
         ],
-        "summary": "The SDK received hardening updates, improved pagination handling, and new user‑list and role‑seed features, along with related documentation."
+        "summary": "Security hardening, pagination fixes, user‑list overrides, role seeds, and related documentation were updated."
       },
       {
         "name": "Docs & website",
@@ -160,7 +160,7 @@
           "documentation: Fixed: sync document hashes after Codex review fixes; align metadata content hashes with revised standards; include Dart hash",
           "documentation: Docs: pin GitBook revision addressing Codex review findings; repin GitBook source with LLM editorial provenance guidance (+4 more)"
         ],
-        "summary": "Documentation was clarified for template forwarding, document hashes were synchronized, and the GitBook source was updated to reflect review findings."
+        "summary": "Documentation was clarified, document hashes were synchronized, and GitBook references were updated."
       },
       {
         "name": "Other",
@@ -176,7 +176,7 @@
         "highlights": [
           "cmaketemplate: Updated: thirdparty resolution via project super root; need to make a directory if it doesn't exist"
         ],
-        "summary": "Third‑party resolution was updated to use a super‑root directory, with a note to create the directory if missing."
+        "summary": "The template tool’s third‑party resolution was improved with a directory‑creation step."
       },
       {
         "name": "Wallet & apps",
@@ -193,7 +193,7 @@
           "GeniusWallet: Added: diagnostic prints to _verified (temporary, do not merge)",
           "GeniusWallet: Updated: enhanced _verified diagnostics (temporary)"
         ],
-        "summary": "Diagnostic output was added and improved in the wallet verification module."
+        "summary": "Diagnostic prints were added and enhanced for verification purposes."
       },
       {
         "name": "Cognitive system (AI)",
@@ -209,7 +209,7 @@
         "highlights": [
           "GeniusCognitiveSystem: Test work: hoist keystore concurrency loop bound to file scope (MSVC/clang)"
         ],
-        "summary": "A test was added to adjust the keystore concurrency loop scope for different compilers."
+        "summary": "A test change adjusted keystore concurrency handling."
       }
     ],
     "byType": {
@@ -224,7 +224,7 @@
     "newcomers": [
       "slashyashy"
     ],
-    "summary": "This week the blockchain network received the bulk of the changes, including upgrades, new testing, and documentation updates. The SDK and developer tools were refined with security hardening and pagination improvements. Minor updates were made to documentation, the wallet, and the cognitive system."
+    "summary": "The blockchain network saw many upgrades, tests, and documentation updates throughout the week. Development tools received a few improvements and bug fixes, while the documentation site was clarified and synchronized. Minor changes were also made to the wallet diagnostics, a template tool, and the cognitive system."
   },
   "days": [
     {
@@ -297,9 +297,9 @@
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 30,
+          "commits": 41,
           "human": 0,
-          "automated": 30,
+          "automated": 41,
           "branches": [
             "main"
           ],
@@ -307,8 +307,8 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 30,
-              "text": "Automated updates (30 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 41,
+              "text": "Automated updates (41 commits), e.g. update Base bootstrap nodes [skip ci]"
             }
           ]
         }
@@ -319,7 +319,7 @@
         {
           "name": "Blockchain & network",
           "commits": 18,
-          "automated": 30,
+          "automated": 41,
           "repos": [
             {
               "name": "GeniusNetwork",
@@ -334,7 +334,7 @@
             {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 30
+              "automated": 41
             }
           ],
           "labels": [
@@ -345,10 +345,10 @@
           ]
         }
       ],
-      "headline": "18 commits across 2 repos in 1 domain: Blockchain & network (upgraded, test work). 30 automated commits (rlp_enodes).",
+      "headline": "18 commits across 2 repos in 1 domain: Blockchain & network (upgraded, test work). 41 automated commits (rlp_enodes).",
       "commits": 18,
-      "automated": 30,
-      "summary": "The blockchain network was upgraded with new pointer steps and extensive testing for Phase 19, and documentation was updated to record new checkpoints. Additional test work and documentation were added for escrow‑release plans."
+      "automated": 41,
+      "summary": "The blockchain network received upgrades to core components, added new test records and documentation updates."
     },
     {
       "date": "2026-11-20",
@@ -603,7 +603,7 @@
       "headline": "44 commits across 6 repos in 3 domains: Blockchain & network (fixed, test work), SDK & developer tools (updated, docs), Cognitive system (AI) (test work). 58 automated commits (GeniusNetwork, rlp_enodes). 16 CI builds published (GeniusSDK ×16).",
       "commits": 44,
       "automated": 58,
-      "summary": "The blockchain network fixed several open research items, added more testing, and refreshed documentation, while a downgrade feature for interlock gates was introduced and escrow‑release documentation was updated. The SDK received a hardening update and the cognitive system added a keystore concurrency test."
+      "summary": "The blockchain network fixed several issues, added a downgrade feature, and updated documentation; the SDK tools received a security hardening update and the cognitive system added a test change."
     },
     {
       "date": "2026-11-19",
@@ -775,9 +775,9 @@
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 22,
+          "commits": 11,
           "human": 0,
-          "automated": 22,
+          "automated": 11,
           "branches": [
             "main"
           ],
@@ -785,8 +785,8 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 22,
-              "text": "Automated updates (22 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 11,
+              "text": "Automated updates (11 commits), e.g. update Base bootstrap nodes [skip ci]"
             }
           ]
         }
@@ -799,7 +799,7 @@
         {
           "name": "Blockchain & network",
           "commits": 38,
-          "automated": 28,
+          "automated": 17,
           "repos": [
             {
               "name": "GeniusNetwork",
@@ -814,7 +814,7 @@
             {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 22
+              "automated": 11
             }
           ],
           "labels": [
@@ -868,10 +868,10 @@
           ]
         }
       ],
-      "headline": "61 commits across 6 repos in 3 domains: Blockchain & network (added, fixed), Docs & website (docs, fixed), SDK & developer tools (fixed, added). 28 automated commits (GeniusNetwork, rlp_enodes). 16 CI builds published (SuperGenius ×16).",
+      "headline": "61 commits across 6 repos in 3 domains: Blockchain & network (added, fixed), Docs & website (docs, fixed), SDK & developer tools (fixed, added). 17 automated commits (GeniusNetwork, rlp_enodes). 16 CI builds published (SuperGenius ×16).",
       "commits": 61,
-      "automated": 28,
-      "summary": "New research phases and prototype fixes were added to the blockchain network, along with component upgrades and tests to persist verification items. Documentation was clarified and updated, and a seal‑growth harness was added to the network."
+      "automated": 17,
+      "summary": "The blockchain network added new research phases, upgraded components, and added tests, while the website documentation was clarified and document hashes were synchronized."
     },
     {
       "date": "2026-11-18",
@@ -1026,7 +1026,7 @@
       "headline": "32 commits across 3 repos in 2 domains: Blockchain & network (fixed, test work), SDK & developer tools (fixed, test work). 2 automated commits (GeniusNetwork).",
       "commits": 32,
       "automated": 2,
-      "summary": "The blockchain network revised plans after feedback, added new phase documentation, and the SDK improved pagination handling and added tests. An evidence matrix feature was also added to the network."
+      "summary": "The blockchain network revised plans based on feedback and added new test work; the SDK tools fixed pagination, added user‑list overrides and role seeds, and documentation was updated."
     },
     {
       "date": "2026-11-17",
@@ -1188,7 +1188,7 @@
       "headline": "14 commits across 4 repos in 3 domains: Blockchain & network (docs, added), SDK & developer tools (added, test work), Other (updated). 2 automated commits (GeniusNetwork).",
       "commits": 14,
       "automated": 2,
-      "summary": "Documentation for new phase plans was added to the blockchain network, and durability checks were introduced. The SDK added user‑list overrides and role seeds, and a third‑party resolution update was made."
+      "summary": "The blockchain network created new phase plans and added durability checks; the SDK tools added user‑list overrides and role seeds, and a template tool was updated for third‑party resolution."
     },
     {
       "date": "2026-11-16",
@@ -1243,7 +1243,7 @@
       "headline": "3 commits across 1 repo in 1 domain: Blockchain & network (fixed, test work).",
       "commits": 3,
       "automated": 0,
-      "summary": "A merge fix was applied and tests were added to align marker handling and prototype a parallel nonce feature."
+      "summary": "The blockchain network applied a merge fix and added test work related to marker handling."
     },
     {
       "date": "2026-11-15",
@@ -1297,7 +1297,7 @@
       "headline": "2 commits across 1 repo in 1 domain: Wallet & apps (added, updated).",
       "commits": 2,
       "automated": 0,
-      "summary": "Diagnostic prints were added and enhanced in the wallet verification component."
+      "summary": "The wallet added temporary diagnostic prints to aid verification."
     }
   ],
   "builder": "v27",
@@ -1392,7 +1392,7 @@
     "mergedPrsTotal": 811
   },
   "readiness": {
-    "fetchedAt": "2026-11-21T13:38:25.619Z",
+    "fetchedAt": "2026-11-21T19:17:26.605Z",
     "staleDays": 60,
     "pages": [
       {
@@ -1705,7 +1705,7 @@
         "author": "TechUp-24",
         "draft": false,
         "updated": "2025-09-19T17:52:35Z",
-        "idleDays": 427
+        "idleDays": 428
       },
       {
         "repo": "gnus-dao-website",
@@ -1735,7 +1735,7 @@
         "author": "henriqueaklein",
         "draft": false,
         "updated": "2026-07-15T14:53:50Z",
-        "idleDays": 128
+        "idleDays": 129
       },
       {
         "repo": "UnityGeniusSDK",
@@ -1775,7 +1775,7 @@
         "author": "EduMenges",
         "draft": false,
         "updated": "2026-09-18T16:19:54Z",
-        "idleDays": 63
+        "idleDays": 64
       },
       {
         "repo": "GeniusNetwork",
@@ -1785,7 +1785,7 @@
         "author": "Super-Genius",
         "draft": true,
         "updated": "2026-09-30T19:13:39Z",
-        "idleDays": 51
+        "idleDays": 52
       }
     ]
   },
