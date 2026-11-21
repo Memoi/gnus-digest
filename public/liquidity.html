@@ -128,7 +128,7 @@
 
   <h2>Trading activity (24 h)</h2>
   <div class="wrap"><table id="trade"><thead><tr><th>Network</th><th>Pool</th><th>Volume</th><th>Price change</th><th>Buys / sells</th><th>Liquidity</th></tr></thead><tbody id="tradeBody"></tbody></table></div>
-  <p class="sub" id="tradeNote" style="margin-top:6px">Source: DexScreener (a third party), read directly from your browser. When it does not know the pool above, the table shows the most liquid pool it has for the same token, and says so. These figures are not verified by this site and can differ from the on-chain readings above.</p>
+  <p class="sub" id="tradeNote" style="margin-top:6px">Source: GeckoTerminal (a third party), read directly from your browser, with DexScreener as a fallback. If neither knows the pool above, the table shows the most liquid pool DexScreener has for the same token, and says so. These figures are not verified by this site and can differ from the on-chain readings above.</p>
 
   <h2>Pool explorer</h2>
   <div class="bar">
@@ -358,6 +358,17 @@ function histCell(label, series, formatter, emptyText){
   if (vals.length > 1) td.insertBefore(miniSpark(vals), td.querySelector('div'));
   return td;
 }
+// Sous la valeur totale du pool : ce que contient chaque côté de la paire (quantité · valeur en dollars)
+function withBalance(td, row){
+  if (!row || !row.bal) return td;
+  for (const side of [row.bal.base, row.bal.quote]){
+    if (!side) continue;
+    const d = document.createElement('div'); d.className = 'sub'; d.style.margin = '0';
+    d.textContent = `${fmt(side.amount)} ${side.sym}` + (side.usd != null ? ` · ${usd(side.usd)}` : '');
+    td.append(d);
+  }
+  return td;
+}
 async function loadHistory(){
   const body = $('histBody');
   let hist = [];
@@ -371,7 +382,7 @@ async function loadHistory(){
     const tr = document.createElement('tr');
     tr.append(mkCell('Network', c.label, null, 'pct'),
       histCell('Price', rows.map(r => r && r.priceUsd), v => usd(v)),
-      histCell('Pool balance', rows.map(r => r && r.tvlUsd), v => usd(v)),
+      withBalance(histCell('Pool balance', rows.map(r => r && r.tvlUsd), v => usd(v)), [...rows].reverse().find(r => r && r.bal)),
       histCell('Buy +5%', rows.map(r => r && r.d5 && r.d5.buy), v => usd(v), rows.some(Boolean) ? 'Not enough liquidity' : '–'),
       histCell('Sell −5%', rows.map(r => r && r.d5 && r.d5.sell), v => usd(v), rows.some(Boolean) ? 'Not enough liquidity' : '–'));
     body.append(tr);
@@ -380,10 +391,40 @@ async function loadHistory(){
 }
 
 /* ---------------- activité de trading : API publique de DexScreener (tiers) ---------------- */
+const GT_NETWORK = { ethereum: 'eth', polygon: 'polygon_pos', base: 'base', bsc: 'bsc' };   // identifiants de réseau de GeckoTerminal
+async function geckoPool(k, addr){
+  const r = await fetch(`https://api.geckoterminal.com/api/v2/networks/${GT_NETWORK[k]}/pools/${addr}`, { cache: 'no-store' });
+  if (!r.ok) throw new Error('GeckoTerminal HTTP ' + r.status);
+  const d = (await r.json()).data, a = d.attributes, num = x => (x == null || x === '' ? null : Number(x));
+  const tx = a.transactions && a.transactions.h24;
+  return { source: 'GeckoTerminal', same: true,
+    name: String(a.name || '').replace(/[^\w.$\-\/% ]/g, '').slice(0, 40),
+    dex: String((d.relationships && d.relationships.dex && d.relationships.dex.data && d.relationships.dex.data.id) || '').replace(/[^\w\-]/g, '').slice(0, 30),
+    volume: num(a.volume_usd && a.volume_usd.h24), change: num(a.price_change_percentage && a.price_change_percentage.h24),
+    buys: tx ? tx.buys : null, sells: tx ? tx.sells : null, liquidity: num(a.reserve_in_usd),
+    url: `https://www.geckoterminal.com/${GT_NETWORK[k]}/pools/${addr}` };
+}
 async function dexPairs(url){
   const r = await fetch(url, { cache: 'no-store' });
   if (!r.ok) throw new Error('HTTP ' + r.status);
   return (await r.json()).pairs || [];
+}
+// Repli : DexScreener, d'abord par adresse du pool, puis par adresse du token (pool le plus liquide du réseau)
+async function dexFallback(k, c){
+  const sym = x => String((x && x.symbol) || '?').replace(/[^\w.$\- ]/g, '').slice(0, 20);
+  let p = null, same = true;
+  try { p = (await dexPairs(`https://api.dexscreener.com/latest/dex/pairs/${k}/${c.addr}`))[0] || null; } catch(e) { /* on tente par le token */ }
+  if (!p) {
+    same = false;
+    const S = await getPool(k, c), D = derive(S), token = D.baseIsT0 ? S.tok0 : S.tok1;
+    const pairs = (await dexPairs(`https://api.dexscreener.com/latest/dex/tokens/${token}`)).filter(x => x.chainId === k);
+    p = pairs.sort((x, y) => ((y.liquidity && y.liquidity.usd) || 0) - ((x.liquidity && x.liquidity.usd) || 0))[0] || null;
+    if (!p) throw new Error('not found on GeckoTerminal nor DexScreener');
+  }
+  return { source: 'DexScreener', same, name: `${sym(p.baseToken)}/${sym(p.quoteToken)}`, dex: String(p.dexId || '').replace(/[^\w\-]/g, '').slice(0, 30),
+    volume: p.volume && p.volume.h24, change: p.priceChange && p.priceChange.h24, buys: p.txns && p.txns.h24 ? p.txns.h24.buys : null,
+    sells: p.txns && p.txns.h24 ? p.txns.h24.sells : null, liquidity: p.liquidity && p.liquidity.usd,
+    url: (typeof p.url === 'string' && p.url.startsWith('https://dexscreener.com/')) ? p.url : `https://dexscreener.com/${k}/${p.pairAddress || c.addr}` };
 }
 async function loadTrading(){
   const body = $('tradeBody'); body.textContent = '';
@@ -391,27 +432,18 @@ async function loadTrading(){
     const tr = document.createElement('tr'); body.append(tr);               // ligne créée tout de suite : l'ordre des réseaux reste stable
     tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Loading…'), { colSpan: 5 }));
     try {
-      let p = null, same = true;
-      try { p = (await dexPairs(`https://api.dexscreener.com/latest/dex/pairs/${k}/${c.addr}`))[0] || null; } catch(e) { /* on tente par le token */ }
-      if (!p) {                                                            // pool inconnu de DexScreener : on cherche par l'adresse du token
-        same = false;
-        const S = await getPool(k, c), D = derive(S), token = D.baseIsT0 ? S.tok0 : S.tok1;
-        const pairs = (await dexPairs(`https://api.dexscreener.com/latest/dex/tokens/${token}`)).filter(x => x.chainId === k);
-        p = pairs.sort((x, y) => ((y.liquidity && y.liquidity.usd) || 0) - ((x.liquidity && x.liquidity.usd) || 0))[0] || null;
-        if (!p) throw new Error('token not listed on this network');
-      }
-      const chg = p.priceChange && p.priceChange.h24, tx = p.txns && p.txns.h24, vol = p.volume && p.volume.h24, liq = p.liquidity && p.liquidity.usd;
+      let t;
+      try { t = await geckoPool(k, c.addr); } catch(e) { t = await dexFallback(k, c); }     // GeckoTerminal d'abord (garde les pools sans volume), sinon DexScreener
       const name = mkCell('Network', '', null, 'pct');
-      const a = document.createElement('a'); a.textContent = c.label; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.style.color = 'inherit';
-      a.href = (typeof p.url === 'string' && p.url.startsWith('https://dexscreener.com/')) ? p.url : `https://dexscreener.com/${k}/${p.pairAddress || c.addr}`;
+      const a = document.createElement('a'); a.textContent = c.label; a.href = t.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.style.color = 'inherit';
       name.append(a);
-      const chgCell = mkCell('Price change', chg == null ? '–' : `${chg > 0 ? '+' : ''}${chg}%`);
-      if (chg != null && chg !== 0) chgCell.style.color = chg > 0 ? 'var(--buy)' : 'var(--sell)';
-      const sym = x => String((x && x.symbol) || '?').replace(/[^\w.$\- ]/g, '').slice(0, 20);
-      const poolCell = mkCell('Pool', `${p.dexId || 'dex'} ${sym(p.baseToken)}/${sym(p.quoteToken)}`, same ? 'same pool as above' : 'different pool: the most liquid for this token on DexScreener');
+      const chgCell = mkCell('Price change', t.change == null ? '–' : `${t.change > 0 ? '+' : ''}${Math.round(t.change * 100) / 100}%`);
+      if (t.change != null && t.change !== 0) chgCell.style.color = t.change > 0 ? 'var(--buy)' : 'var(--sell)';
+      const poolCell = mkCell('Pool', `${t.dex ? t.dex + ' ' : ''}${t.name}`.trim(),
+        `${t.same ? 'same pool as above' : 'different pool: the most liquid for this token'} · via ${t.source}`);
       tr.textContent = '';
-      tr.append(name, poolCell, mkCell('Volume', vol == null ? '–' : usd(vol)), chgCell,
-        mkCell('Buys / sells', tx ? `${tx.buys} / ${tx.sells}` : '–'), mkCell('Liquidity', liq == null ? '–' : usd(liq)));
+      tr.append(name, poolCell, mkCell('Volume', t.volume == null ? '–' : usd(t.volume)), chgCell,
+        mkCell('Buys / sells', t.buys == null ? '–' : `${t.buys} / ${t.sells}`), mkCell('Liquidity', t.liquidity == null ? '–' : usd(t.liquidity)));
     } catch(e){
       tr.textContent = '';
       tr.append(mkCell('Network', c.label, null, 'pct'), Object.assign(mkCell('', 'Unavailable (' + (e.message || e) + ')'), { colSpan: 5 }));
