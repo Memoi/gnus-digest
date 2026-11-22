@@ -5,49 +5,49 @@
     <link>https://gnus-digest.vercel.app/</link>
     <description>Daily digest of the GeniusVentures GitHub activity, written from public commit messages.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 21 Nov 2026 19:17:19 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 22 Nov 2026 13:30:25 GMT</lastBuildDate>
     <atom:link href="https://gnus-digest.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>GNUS digest — Saturday 21 November</title>
+      <link>https://gnus-digest.vercel.app/</link>
+      <guid isPermaLink="false">gnus-digest-2026-11-21</guid>
+      <pubDate>Sat, 21 Nov 2026 23:59:00 GMT</pubDate>
+      <description>The blockchain network received upgrades to SuperGenius pointers and added test work for phase 19 rulings, along with updated documentation of checkpoint rulings and planning matrices. SuperGenius added test work and documentation for verified escrow‑release plans. Repositories: GeniusNetwork, SuperGenius, rlp_enodes.</description>
+    </item>
     <item>
       <title>GNUS digest — Friday 20 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-20</guid>
       <pubDate>Fri, 20 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The blockchain network fixed several issues, added a downgrade feature, and updated documentation; the SDK tools received a security hardening update and the cognitive system added a test change. Repositories: GeniusNetwork, SuperGenius, openapi-cpp-scaffolding, GeniusCognitiveSystem, GeniusSDK, openapi-client-scaffold, rlp_enodes.</description>
+      <description>The blockchain network fixed several issues, added test work for plan completion, and updated documentation on status and root causes. SuperGenius introduced downgrade interlock features and related tests, while the SDK tool received an identity hardening update and the cognitive system added a concurrency test. Repositories: GeniusNetwork, SuperGenius, openapi-cpp-scaffolding, GeniusCognitiveSystem, GeniusSDK, openapi-client-scaffold, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Thursday 19 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-19</guid>
       <pubDate>Thu, 19 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The blockchain network added new research phases, upgraded components, and added tests, while the website documentation was clarified and document hashes were synchronized. Repositories: GeniusNetwork, SuperGenius, gitbook, documentation, openapi-cpp-scaffolding, openapi-client-scaffold, rlp_enodes.</description>
+      <description>The blockchain network added new phase research, fixed manifest declarations, and upgraded components, while also adding tests for human verification persistence. Documentation was clarified and hashes were synchronized, and SuperGenius added a seal‑growth probe harness with accompanying tests. Repositories: GeniusNetwork, SuperGenius, gitbook, documentation, openapi-cpp-scaffolding, openapi-client-scaffold.</description>
     </item>
     <item>
       <title>GNUS digest — Wednesday 18 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-18</guid>
       <pubDate>Wed, 18 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The blockchain network revised plans based on feedback and added new test work; the SDK tools fixed pagination, added user‑list overrides and role seeds, and documentation was updated. Repositories: GeniusNetwork, openapi-cpp-scaffolding, SuperGenius.</description>
+      <description>The blockchain network revised its plans after feedback and added related tests and documentation. The SDK tools were updated to improve pagination handling and added tests, while SuperGenius introduced an evidence matrix and failover budgeting with accompanying tests. Repositories: GeniusNetwork, openapi-cpp-scaffolding, SuperGenius.</description>
     </item>
     <item>
       <title>GNUS digest — Tuesday 17 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-17</guid>
       <pubDate>Tue, 17 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The blockchain network created new phase plans and added durability checks; the SDK tools added user‑list overrides and role seeds, and a template tool was updated for third‑party resolution. Repositories: GeniusNetwork, SuperGenius, openapi-cpp-scaffolding, cmaketemplate.</description>
+      <description>Phase plans and evidence‑aware documentation were created for the blockchain network. SuperGenius added durability checks and live smoke tests, and the SDK tools received new user list overrides and role seeding with tests. The miscellaneous component updated its third‑party resolution process. Repositories: GeniusNetwork, SuperGenius, openapi-cpp-scaffolding, cmaketemplate.</description>
     </item>
     <item>
       <title>GNUS digest — Monday 16 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-16</guid>
       <pubDate>Mon, 16 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The blockchain network applied a merge fix and added test work related to marker handling. Repositories: SuperGenius.</description>
-    </item>
-    <item>
-      <title>GNUS digest — Sunday 15 November</title>
-      <link>https://gnus-digest.vercel.app/</link>
-      <guid isPermaLink="false">gnus-digest-2026-11-15</guid>
-      <pubDate>Sun, 15 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The wallet added temporary diagnostic prints to aid verification. Repositories: GeniusWallet.</description>
+      <description>SuperGenius fixed a merge issue and added tests for marker resurrection and a parallel nonce prototype. Repositories: SuperGenius.</description>
     </item>
   </channel>
 </rss>
