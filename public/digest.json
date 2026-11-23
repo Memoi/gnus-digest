@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-11-22T13:30:25.256Z",
+  "generatedAt": "2026-11-23T16:19:11.526Z",
   "org": "GeniusVentures",
   "timezone": "Europe/Zurich",
   "week": {
-    "from": "2026-11-16",
-    "to": "2026-11-22",
-    "commits": 172,
-    "automated": 120,
-    "repos": 9,
-    "contributors": 5,
+    "from": "2026-11-17",
+    "to": "2026-11-23",
+    "commits": 260,
+    "automated": 121,
+    "repos": 10,
+    "contributors": 6,
     "contributorList": [
       {
         "login": "itsafuu",
-        "commits": 124,
+        "commits": 122,
         "repos": [
           "GeniusNetwork",
           "GeniusSDK",
@@ -20,11 +20,17 @@
         ]
       },
       {
+        "login": "slashyashy",
+        "commits": 81,
+        "repos": [
+          "SuperGenius"
+        ]
+      },
+      {
         "login": "Super-Genius",
-        "commits": 23,
+        "commits": 22,
         "repos": [
           "GeniusCognitiveSystem",
-          "SuperGenius",
           "cmaketemplate",
           "documentation",
           "gitbook",
@@ -45,26 +51,23 @@
           "openapi-client-scaffold",
           "openapi-cpp-scaffolding"
         ]
-      },
-      {
-        "login": "slashyashy",
-        "commits": 7,
-        "repos": [
-          "SuperGenius"
-        ]
       }
     ],
-    "unlinkedCommits": 0,
+    "unlinkedCommits": 17,
     "releases": 0,
     "ciBuilds": 32,
     "topRepos": [
+      {
+        "name": "SuperGenius",
+        "commits": 122
+      },
       {
         "name": "GeniusNetwork",
         "commits": 80
       },
       {
-        "name": "SuperGenius",
-        "commits": 51
+        "name": "GeniusWallet",
+        "commits": 17
       },
       {
         "name": "openapi-cpp-scaffolding",
@@ -73,27 +76,23 @@
       {
         "name": "gitbook",
         "commits": 10
-      },
-      {
-        "name": "documentation",
-        "commits": 8
       }
     ],
     "domains": [
       {
         "name": "Blockchain & network",
-        "commits": 131,
+        "commits": 202,
         "automated": 120,
         "repos": [
+          {
+            "name": "SuperGenius",
+            "commits": 122,
+            "automated": 0
+          },
           {
             "name": "GeniusNetwork",
             "commits": 80,
             "automated": 20
-          },
-          {
-            "name": "SuperGenius",
-            "commits": 51,
-            "automated": 0
           },
           {
             "name": "rlp_enodes",
@@ -102,17 +101,17 @@
           }
         ],
         "highlights": [
-          "GeniusNetwork: Upgraded: SuperGenius pointer - 19-05 dispatch-instrument lane steps (3b5885d2f); SuperGenius pointer - 19-02 erase-arm cases (X3/X8/X5)",
-          "GeniusNetwork: Test work (3 commits), e.g. the Phase 19 rulings record - matrix + quarantine + runbook + both-lanes reading + B1/B…; plan complete - the matrix closed…",
-          "GeniusNetwork: Docs: checkpoint rulings recorded - B2 confirmed, X11 promotion re-ruled to one green; dispat…; checkpoint prep - push-state table filled (SuperGenius…",
-          "GeniusNetwork: Updated: 19-04 complete - the matrix closed (X10 + X11); wave 5 next (19-05, blocking user check…; 19-03 complete - recovery arm crossed…"
+          "SuperGenius: Fixed: record cleanup repair and bridge reruns; release unconfirmed ordinary funding on rollback (+2 more)",
+          "SuperGenius: Upgraded: close verified phase with network upgrade out of scope",
+          "SuperGenius: Test work (5 commits), e.g. reproduce unconfirmed funding reservation leak; bind restart probe to current canonical bytes",
+          "SuperGenius: Refactored: format final baseline changed lines"
         ],
-        "summary": "The blockchain network received multiple upgrades to SuperGenius pointers, added and revised phase research plans, introduced downgrade interlock features, and expanded testing for human verification, escrow releases, and evidence matrices."
+        "summary": "Several fixes were made to clean up records and improve funding handling. New features for recovering data, reducing system warnings, and tracking evidence were added, and a lot of testing and documentation were updated."
       },
       {
         "name": "SDK & developer tools",
         "commits": 20,
-        "automated": 0,
+        "automated": 1,
         "repos": [
           {
             "name": "openapi-cpp-scaffolding",
@@ -122,7 +121,7 @@
           {
             "name": "openapi-client-scaffold",
             "commits": 3,
-            "automated": 0
+            "automated": 1
           },
           {
             "name": "GeniusSDK",
@@ -131,12 +130,12 @@
           }
         ],
         "highlights": [
+          "openapi-client-scaffold: Fixed: review round — SafeEmit guard, pre-await cubit capture, typed forms",
           "openapi-cpp-scaffolding: Updated: gsd/quick-261118-g7m-o39-review-criticals (identity round-2 hardening)",
           "GeniusSDK: Docs: some documentation on manual deployment of service update for staging net",
-          "openapi-client-scaffold: Fixed: review round — SafeEmit guard, pre-await cubit capture, typed forms",
           "openapi-cpp-scaffolding: Fixed: round-2 review — DELETE hardening, write gates, email index, role resolution, roles routes; harden user routes — permission gates, tenant…"
         ],
-        "summary": "The SDK tools were hardened with identity round‑2 updates, improved pagination handling, added user list overrides and role seeding, and received documentation updates."
+        "summary": "Safety checks were added to the client code and pagination handling was improved in the C++ tools. Documentation was updated to guide manual deployment and other tasks."
       },
       {
         "name": "Docs & website",
@@ -159,7 +158,25 @@
           "documentation: Fixed: sync document hashes after Codex review fixes; align metadata content hashes with revised standards; include Dart hash",
           "documentation: Docs: pin GitBook revision addressing Codex review findings; repin GitBook source with LLM editorial provenance guidance (+4 more)"
         ],
-        "summary": "Documentation was clarified for cmaketemplate forwarding, document hashes and metadata were synchronized to new standards, and GitBook revisions were updated and pinned."
+        "summary": "Documentation was clarified to explain template forwarding and include paths. Document identifiers and metadata were aligned with new standards, and source versions were locked in place."
+      },
+      {
+        "name": "Wallet & apps",
+        "commits": 17,
+        "automated": 0,
+        "repos": [
+          {
+            "name": "GeniusWallet",
+            "commits": 17,
+            "automated": 0
+          }
+        ],
+        "highlights": [
+          "GeniusWallet: Fixed: a frozen init feed reads Still starting up with a Retry; rename stays disabled until the wallet name actually changes (+10 more)",
+          "GeniusWallet: Test work: pump a frame before tapping Rename so the enabled action lands; guard the quiz against repeated recovery words",
+          "GeniusWallet: Updated: wallet sgns_config sets is_processor false (key absent defaulted true, wallets grabbed…; point wallet bundle assets at the slave-local privnet…"
+        ],
+        "summary": "Startup messages were corrected and the process for changing the wallet name was refined. Configuration settings were adjusted and extra testing was performed to ensure reliable recovery."
       },
       {
         "name": "Other",
@@ -175,7 +192,7 @@
         "highlights": [
           "cmaketemplate: Updated: thirdparty resolution via project super root; need to make a directory if it doesn't exist"
         ],
-        "summary": "The miscellaneous component updated its third‑party resolution to use a super root directory, adding a note to create the directory if missing."
+        "summary": "The build template was updated to resolve third‑party components through a central location, creating missing directories automatically."
       },
       {
         "name": "Cognitive system (AI)",
@@ -191,34 +208,35 @@
         "highlights": [
           "GeniusCognitiveSystem: Test work: hoist keystore concurrency loop bound to file scope (MSVC/clang)"
         ],
-        "summary": "A test was added to move the keystore concurrency loop to file scope for better compiler compatibility."
+        "summary": "A test change was made to improve how the keystore handles concurrent operations."
       }
     ],
     "byType": {
-      "tests": 43,
-      "docs": 85,
-      "added": 13,
-      "fixed": 20,
-      "upgraded": 5,
-      "updated": 6
+      "fixed": 43,
+      "added": 20,
+      "tests": 68,
+      "updated": 10,
+      "refactored": 4,
+      "docs": 109,
+      "upgraded": 6
     },
-    "headline": "172 commits by 5 contributors across 9 repos. Most active: GeniusNetwork (80), SuperGenius (51), openapi-cpp-scaffolding (16). Plus 120 automated commits. 32 CI builds published.",
+    "headline": "260 commits by 6 contributors across 10 repos. Most active: SuperGenius (122), GeniusNetwork (80), GeniusWallet (17). Plus 121 automated commits. 32 CI builds published.",
     "newcomers": [
       "slashyashy"
     ],
-    "summary": "This week saw extensive work on the blockchain and network domain, including upgrades, plan revisions, and new testing for phase research and escrow releases. The SDK and developer tools received security hardening, pagination improvements, and new user management features. Documentation was clarified and synchronized, and a small amount of work was done on the cognitive system and miscellaneous components."
+    "summary": "This week saw a broad set of improvements across the blockchain network, developer tools, documentation, and the wallet application. New recovery, downgrade, and evidence features were added to the core system, while safety checks and pagination handling were refined in the SDK. Documentation was updated for clarity and consistency, and minor build template adjustments were made."
   },
   "days": [
     {
-      "date": "2026-11-22",
+      "date": "2026-11-23",
       "repos": [
         {
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 29,
+          "commits": 35,
           "human": 0,
-          "automated": 29,
+          "automated": 35,
           "branches": [
             "main"
           ],
@@ -226,8 +244,27 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 29,
-              "text": "Automated updates (29 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 35,
+              "text": "Automated updates (35 commits), e.g. update Base bootstrap nodes [skip ci]"
+            }
+          ]
+        },
+        {
+          "name": "openapi-client-scaffold",
+          "domain": "SDK & developer tools",
+          "url": "https://github.com/GeniusVentures/openapi-client-scaffold",
+          "commits": 1,
+          "human": 0,
+          "automated": 1,
+          "branches": [
+            "gsd/cubit-module-templates"
+          ],
+          "items": [
+            {
+              "type": "automated",
+              "label": "automated updates",
+              "count": 1,
+              "text": "Automated updates (1 commit), e.g. form dispose/controller parity for bools, num.tryParse for number fields, numeric valid…"
             }
           ]
         }
@@ -238,25 +275,235 @@
         {
           "name": "Blockchain & network",
           "commits": 0,
-          "automated": 29,
+          "automated": 35,
           "repos": [
             {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 29
+              "automated": 35
+            }
+          ],
+          "labels": []
+        },
+        {
+          "name": "SDK & developer tools",
+          "commits": 0,
+          "automated": 1,
+          "repos": [
+            {
+              "name": "openapi-client-scaffold",
+              "commits": 0,
+              "automated": 1
             }
           ],
           "labels": []
         }
       ],
-      "headline": "29 automated commits (rlp_enodes).",
+      "headline": "36 automated commits (rlp_enodes, openapi-client-scaffold).",
       "commits": 0,
-      "automated": 29,
-      "summary": "Only automated processes ran for the rlp_enodes repository, with no visible manual changes."
+      "automated": 36,
+      "summary": "Only automated background updates were applied, with no visible changes to the software."
+    },
+    {
+      "date": "2026-11-22",
+      "repos": [
+        {
+          "name": "GeniusWallet",
+          "domain": "Wallet & apps",
+          "url": "https://github.com/GeniusVentures/GeniusWallet",
+          "commits": 17,
+          "human": 17,
+          "automated": 0,
+          "branches": [
+            "wallet-fixes-test"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 12,
+              "text": "Fixed: a frozen init feed reads Still starting up with a Retry; rename stays disabled until the wallet name actually changes (+10 more)"
+            },
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 2,
+              "text": "Test work: pump a frame before tapping Rename so the enabled action lands; guard the quiz against repeated recovery words"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 3,
+              "text": "Updated: wallet sgns_config sets is_processor false (key absent defaulted true, wallets grabbed…; point wallet bundle assets at the slave-local privnet (net 963, 3-member trust genesis,… (+1 more)"
+            }
+          ]
+        },
+        {
+          "name": "SuperGenius",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/SuperGenius",
+          "commits": 16,
+          "human": 16,
+          "automated": 0,
+          "branches": [
+            "gsd/phase-21.1-escrow-payout-slot-identity-double-payout-prevention"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 4,
+              "text": "Fixed: record cleanup repair and bridge reruns; release unconfirmed ordinary funding on rollback (+2 more)"
+            },
+            {
+              "type": "upgraded",
+              "label": "upgraded",
+              "count": 1,
+              "text": "Upgraded: close verified phase with network upgrade out of scope"
+            },
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 5,
+              "text": "Test work (5 commits), e.g. reproduce unconfirmed funding reservation leak; bind restart probe to current canonical bytes"
+            },
+            {
+              "type": "refactored",
+              "label": "refactored",
+              "count": 1,
+              "text": "Refactored: format final baseline changed lines"
+            },
+            {
+              "type": "docs",
+              "label": "docs",
+              "count": 5,
+              "text": "Docs: verify final source and retain operator checkpoint; retain full build and network verification (+3 more)"
+            }
+          ]
+        },
+        {
+          "name": "rlp_enodes",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/rlp_enodes",
+          "commits": 48,
+          "human": 0,
+          "automated": 48,
+          "branches": [
+            "main"
+          ],
+          "items": [
+            {
+              "type": "automated",
+              "label": "automated updates",
+              "count": 48,
+              "text": "Automated updates (48 commits), e.g. update Base bootstrap nodes [skip ci]"
+            }
+          ]
+        }
+      ],
+      "releases": [],
+      "ciBuilds": {},
+      "domains": [
+        {
+          "name": "Wallet & apps",
+          "commits": 17,
+          "automated": 0,
+          "repos": [
+            {
+              "name": "GeniusWallet",
+              "commits": 17,
+              "automated": 0
+            }
+          ],
+          "labels": [
+            "fixed",
+            "test work",
+            "updated"
+          ]
+        },
+        {
+          "name": "Blockchain & network",
+          "commits": 16,
+          "automated": 48,
+          "repos": [
+            {
+              "name": "SuperGenius",
+              "commits": 16,
+              "automated": 0
+            },
+            {
+              "name": "rlp_enodes",
+              "commits": 0,
+              "automated": 48
+            }
+          ],
+          "labels": [
+            "fixed",
+            "upgraded",
+            "test work",
+            "refactored",
+            "docs"
+          ]
+        }
+      ],
+      "headline": "33 commits across 2 repos in 2 domains: Wallet & apps (fixed, test work), Blockchain & network (fixed, upgraded). 48 automated commits (rlp_enodes).",
+      "commits": 33,
+      "automated": 48,
+      "summary": "The wallet application received fixes to its startup messages and name‑change behavior, plus a configuration tweak. The blockchain network component was repaired to clean up records, adjust funding handling, and added test work."
     },
     {
       "date": "2026-11-21",
       "repos": [
+        {
+          "name": "SuperGenius",
+          "domain": "Blockchain & network",
+          "url": "https://github.com/GeniusVentures/SuperGenius",
+          "commits": 65,
+          "human": 65,
+          "automated": 0,
+          "branches": [
+            "dev_coldstorage_additions",
+            "gsd/phase-21.1-escrow-payout-slot-identity-double-payout-prevention"
+          ],
+          "items": [
+            {
+              "type": "added",
+              "label": "added",
+              "count": 7,
+              "text": "Added: recover validated canonical nonce certificates; bind historical payout effects to exact canonical certificate evidence (+5 more)"
+            },
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 8,
+              "text": "Fixed: recover pruned holds from canonical certificates; reject null transaction decode outcomes (+6 more)"
+            },
+            {
+              "type": "tests",
+              "label": "test work",
+              "count": 26,
+              "text": "Test work (26 commits), e.g. tier-1 fail-closed lane steps in the dispatch instrument - every cold dispatch proves t…; X11 the full-wire refusal-failover-under-concurrent-erase leg - the matrix's one true-t…"
+            },
+            {
+              "type": "refactored",
+              "label": "refactored",
+              "count": 3,
+              "text": "Refactored: extract locked owner verification; extract shared UTXO payment rollback (+1 more)"
+            },
+            {
+              "type": "docs",
+              "label": "docs",
+              "count": 20,
+              "text": "Docs: record required code and security reviews; complete plan 21.1-07 recovery verification (+18 more)"
+            },
+            {
+              "type": "updated",
+              "label": "updated",
+              "count": 1,
+              "text": "Updated: inherit verified Phase 21 prerequisite"
+            }
+          ]
+        },
         {
           "name": "GeniusNetwork",
           "domain": "Blockchain & network",
@@ -295,38 +542,12 @@
           ]
         },
         {
-          "name": "SuperGenius",
-          "domain": "Blockchain & network",
-          "url": "https://github.com/GeniusVentures/SuperGenius",
-          "commits": 7,
-          "human": 7,
-          "automated": 0,
-          "branches": [
-            "dev_coldstorage_additions",
-            "gsd/phase-21.1-escrow-payout-slot-identity-double-payout-prevention"
-          ],
-          "items": [
-            {
-              "type": "tests",
-              "label": "test work",
-              "count": 6,
-              "text": "Test work (6 commits), e.g. tier-1 fail-closed lane steps in the dispatch instrument - every cold dispatch proves t…; X11 the full-wire refusal-failover-under-concurrent-erase leg - the matrix's one true-t…"
-            },
-            {
-              "type": "docs",
-              "label": "docs",
-              "count": 1,
-              "text": "Docs: create verified escrow-release V2 plans"
-            }
-          ]
-        },
-        {
           "name": "rlp_enodes",
           "domain": "Blockchain & network",
           "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 48,
+          "commits": 17,
           "human": 0,
-          "automated": 48,
+          "automated": 17,
           "branches": [
             "main"
           ],
@@ -334,8 +555,8 @@
             {
               "type": "automated",
               "label": "automated updates",
-              "count": 48,
-              "text": "Automated updates (48 commits), e.g. update Base bootstrap nodes [skip ci]"
+              "count": 17,
+              "text": "Automated updates (17 commits), e.g. update Base bootstrap nodes [skip ci]"
             }
           ]
         }
@@ -345,37 +566,40 @@
       "domains": [
         {
           "name": "Blockchain & network",
-          "commits": 18,
-          "automated": 48,
+          "commits": 76,
+          "automated": 17,
           "repos": [
+            {
+              "name": "SuperGenius",
+              "commits": 65,
+              "automated": 0
+            },
             {
               "name": "GeniusNetwork",
               "commits": 11,
               "automated": 0
             },
             {
-              "name": "SuperGenius",
-              "commits": 7,
-              "automated": 0
-            },
-            {
               "name": "rlp_enodes",
               "commits": 0,
-              "automated": 48
+              "automated": 17
             }
           ],
           "labels": [
-            "upgraded",
+            "added",
+            "fixed",
             "test work",
+            "refactored",
             "docs",
-            "updated"
+            "updated",
+            "upgraded"
           ]
         }
       ],
-      "headline": "18 commits across 2 repos in 1 domain: Blockchain & network (upgraded, test work). 48 automated commits (rlp_enodes).",
-      "commits": 18,
-      "automated": 48,
-      "summary": "The blockchain network received upgrades to SuperGenius pointers and added test work for phase 19 rulings, along with updated documentation of checkpoint rulings and planning matrices. SuperGenius added test work and documentation for verified escrow‑release plans."
+      "headline": "76 commits across 2 repos in 1 domain: Blockchain & network (added, fixed). 17 automated commits (rlp_enodes).",
+      "commits": 76,
+      "automated": 17,
+      "summary": "New recovery and verification features were added to the blockchain system, along with fixes and extensive testing. The network layer received upgrades, documentation updates, and further testing."
     },
     {
       "date": "2026-11-20",
@@ -456,6 +680,25 @@
           ]
         },
         {
+          "name": "openapi-client-scaffold",
+          "domain": "SDK & developer tools",
+          "url": "https://github.com/GeniusVentures/openapi-client-scaffold",
+          "commits": 1,
+          "human": 1,
+          "automated": 0,
+          "branches": [
+            "gsd/cubit-module-templates"
+          ],
+          "items": [
+            {
+              "type": "fixed",
+              "label": "fixed",
+              "count": 1,
+              "text": "Fixed: review round — SafeEmit guard, pre-await cubit capture, typed forms"
+            }
+          ]
+        },
+        {
           "name": "openapi-cpp-scaffolding",
           "domain": "SDK & developer tools",
           "url": "https://github.com/GeniusVentures/openapi-cpp-scaffolding",
@@ -511,44 +754,6 @@
               "text": "Docs: some documentation on manual deployment of service update for staging net"
             }
           ]
-        },
-        {
-          "name": "openapi-client-scaffold",
-          "domain": "SDK & developer tools",
-          "url": "https://github.com/GeniusVentures/openapi-client-scaffold",
-          "commits": 1,
-          "human": 1,
-          "automated": 0,
-          "branches": [
-            "gsd/cubit-module-templates"
-          ],
-          "items": [
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: review round — SafeEmit guard, pre-await cubit capture, typed forms"
-            }
-          ]
-        },
-        {
-          "name": "rlp_enodes",
-          "domain": "Blockchain & network",
-          "url": "https://github.com/GeniusVentures/rlp_enodes",
-          "commits": 23,
-          "human": 0,
-          "automated": 23,
-          "branches": [
-            "main"
-          ],
-          "items": [
-            {
-              "type": "automated",
-              "label": "automated updates",
-              "count": 23,
-              "text": "Automated updates (23 commits), e.g. update Base bootstrap nodes [skip ci]"
-            }
-          ]
         }
       ],
       "releases": [],
@@ -559,7 +764,7 @@
         {
           "name": "Blockchain & network",
           "commits": 40,
-          "automated": 33,
+          "automated": 10,
           "repos": [
             {
               "name": "GeniusNetwork",
@@ -570,11 +775,6 @@
               "name": "SuperGenius",
               "commits": 17,
               "automated": 0
-            },
-            {
-              "name": "rlp_enodes",
-              "commits": 0,
-              "automated": 23
             }
           ],
           "labels": [
@@ -590,6 +790,11 @@
           "automated": 0,
           "repos": [
             {
+              "name": "openapi-client-scaffold",
+              "commits": 1,
+              "automated": 0
+            },
+            {
               "name": "openapi-cpp-scaffolding",
               "commits": 1,
               "automated": 0
@@ -598,17 +803,12 @@
               "name": "GeniusSDK",
               "commits": 1,
               "automated": 0
-            },
-            {
-              "name": "openapi-client-scaffold",
-              "commits": 1,
-              "automated": 0
             }
           ],
           "labels": [
+            "fixed",
             "updated",
-            "docs",
-            "fixed"
+            "docs"
           ]
         },
         {
@@ -627,10 +827,10 @@
           ]
         }
       ],
-      "headline": "44 commits across 6 repos in 3 domains: Blockchain & network (fixed, test work), SDK & developer tools (updated, docs), Cognitive system (AI) (test work). 33 automated commits (GeniusNetwork, rlp_enodes). 16 CI builds published (GeniusSDK ×16).",
+      "headline": "44 commits across 6 repos in 3 domains: Blockchain & network (fixed, test work), SDK & developer tools (fixed, updated), Cognitive system (AI) (test work). 10 automated commits (GeniusNetwork). 16 CI builds published (GeniusSDK ×16).",
       "commits": 44,
-      "automated": 33,
-      "summary": "The blockchain network fixed several issues, added test work for plan completion, and updated documentation on status and root causes. SuperGenius introduced downgrade interlock features and related tests, while the SDK tool received an identity hardening update and the cognitive system added a concurrency test."
+      "automated": 10,
+      "summary": "Research‑related fixes and testing were applied to the network component, and downgrade handling was added to the blockchain system with accompanying tests and documentation. Small improvements were also made to developer tools."
     },
     {
       "date": "2026-11-19",
@@ -874,7 +1074,7 @@
       "headline": "61 commits across 6 repos in 3 domains: Blockchain & network (added, fixed), Docs & website (docs, fixed), SDK & developer tools (fixed, added). 6 automated commits (GeniusNetwork). 16 CI builds published (SuperGenius ×16).",
       "commits": 61,
       "automated": 6,
-      "summary": "The blockchain network added new phase research, fixed manifest declarations, and upgraded components, while also adding tests for human verification persistence. Documentation was clarified and hashes were synchronized, and SuperGenius added a seal‑growth probe harness with accompanying tests."
+      "summary": "A new research phase and several fixes were introduced to the network, along with upgrades and testing of verification items. The blockchain component added a probe for growth tracking and related tests, and documentation was clarified."
     },
     {
       "date": "2026-11-18",
@@ -1029,7 +1229,7 @@
       "headline": "32 commits across 3 repos in 2 domains: Blockchain & network (fixed, test work), SDK & developer tools (fixed, test work). 2 automated commits (GeniusNetwork).",
       "commits": 32,
       "automated": 2,
-      "summary": "The blockchain network revised its plans after feedback and added related tests and documentation. The SDK tools were updated to improve pagination handling and added tests, while SuperGenius introduced an evidence matrix and failover budgeting with accompanying tests."
+      "summary": "Plan revisions and testing were performed for the network, and documentation was updated. Developer tools received pagination improvements and related tests. The blockchain system added an evidence matrix and related testing."
     },
     {
       "date": "2026-11-17",
@@ -1191,62 +1391,7 @@
       "headline": "14 commits across 4 repos in 3 domains: Blockchain & network (docs, added), SDK & developer tools (added, test work), Other (updated). 2 automated commits (GeniusNetwork).",
       "commits": 14,
       "automated": 2,
-      "summary": "Phase plans and evidence‑aware documentation were created for the blockchain network. SuperGenius added durability checks and live smoke tests, and the SDK tools received new user list overrides and role seeding with tests. The miscellaneous component updated its third‑party resolution process."
-    },
-    {
-      "date": "2026-11-16",
-      "repos": [
-        {
-          "name": "SuperGenius",
-          "domain": "Blockchain & network",
-          "url": "https://github.com/GeniusVentures/SuperGenius",
-          "commits": 3,
-          "human": 3,
-          "automated": 0,
-          "branches": [
-            "dev_coldstorage_additions",
-            "feature/parallel-masked-xor-verifier-tests"
-          ],
-          "items": [
-            {
-              "type": "fixed",
-              "label": "fixed",
-              "count": 1,
-              "text": "Fixed: merge fix/trust-genesis-bootstrap into dev_coldstorage_additions"
-            },
-            {
-              "type": "tests",
-              "label": "test work",
-              "count": 2,
-              "text": "Test work: align trimmed-marker resurrection case with keep-seal retention; prototype parallel salted nonce masked-XOR verification"
-            }
-          ]
-        }
-      ],
-      "releases": [],
-      "ciBuilds": {},
-      "domains": [
-        {
-          "name": "Blockchain & network",
-          "commits": 3,
-          "automated": 0,
-          "repos": [
-            {
-              "name": "SuperGenius",
-              "commits": 3,
-              "automated": 0
-            }
-          ],
-          "labels": [
-            "fixed",
-            "test work"
-          ]
-        }
-      ],
-      "headline": "3 commits across 1 repo in 1 domain: Blockchain & network (fixed, test work).",
-      "commits": 3,
-      "automated": 0,
-      "summary": "SuperGenius fixed a merge issue and added tests for marker resurrection and a parallel nonce prototype."
+      "summary": "Documentation for a new phase plan was added to the network. The blockchain component introduced durability checks and testing. Developer tools added new overrides and tests, and a build template was updated to handle missing directories."
     }
   ],
   "builder": "v27",
@@ -1341,7 +1486,7 @@
     "mergedPrsTotal": 811
   },
   "readiness": {
-    "fetchedAt": "2026-11-22T13:30:33.138Z",
+    "fetchedAt": "2026-11-23T16:19:23.364Z",
     "staleDays": 60,
     "pages": [
       {
@@ -1416,8 +1561,8 @@
           }
         ],
         "lastEdited": "2026-10-08T20:38:00Z",
-        "statusAgeDays": 45,
-        "editedAgeDays": 45,
+        "statusAgeDays": 46,
+        "editedAgeDays": 46,
         "stale": false,
         "targets": [
           {
@@ -1580,7 +1725,7 @@
         ],
         "lastEdited": "2026-10-08T20:38:00Z",
         "statusAgeDays": null,
-        "editedAgeDays": 45,
+        "editedAgeDays": 46,
         "stale": false,
         "targets": [
           {
@@ -1644,7 +1789,7 @@
         "author": "kingofthebongo2008",
         "draft": false,
         "updated": "2025-09-04T13:06:39Z",
-        "idleDays": 444
+        "idleDays": 445
       },
       {
         "repo": "Banxa",
@@ -1654,7 +1799,7 @@
         "author": "TechUp-24",
         "draft": false,
         "updated": "2025-09-19T17:52:35Z",
-        "idleDays": 428
+        "idleDays": 429
       },
       {
         "repo": "gnus-dao-website",
@@ -1664,7 +1809,7 @@
         "author": "Subaskar-S",
         "draft": false,
         "updated": "2026-05-20T02:40:15Z",
-        "idleDays": 186
+        "idleDays": 187
       },
       {
         "repo": "gnus-dao",
@@ -1674,7 +1819,7 @@
         "author": "Subaskar-S",
         "draft": false,
         "updated": "2026-05-31T05:32:24Z",
-        "idleDays": 175
+        "idleDays": 176
       },
       {
         "repo": "UnityGeniusSDK",
@@ -1684,7 +1829,7 @@
         "author": "henriqueaklein",
         "draft": false,
         "updated": "2026-07-15T14:53:50Z",
-        "idleDays": 129
+        "idleDays": 131
       },
       {
         "repo": "UnityGeniusSDK",
@@ -1694,7 +1839,7 @@
         "author": "braianxde",
         "draft": false,
         "updated": "2026-07-15T22:42:26Z",
-        "idleDays": 129
+        "idleDays": 130
       },
       {
         "repo": "diamonds-devcontainer",
@@ -1704,7 +1849,7 @@
         "author": "Super-Genius",
         "draft": false,
         "updated": "2026-08-27T23:59:34Z",
-        "idleDays": 86
+        "idleDays": 87
       },
       {
         "repo": "MNN",
@@ -1714,7 +1859,7 @@
         "author": "itsafuu",
         "draft": true,
         "updated": "2026-09-03T20:52:22Z",
-        "idleDays": 79
+        "idleDays": 80
       },
       {
         "repo": "SuperGenius",
@@ -1724,7 +1869,7 @@
         "author": "EduMenges",
         "draft": false,
         "updated": "2026-09-18T16:19:54Z",
-        "idleDays": 64
+        "idleDays": 65
       },
       {
         "repo": "GeniusNetwork",
@@ -1734,22 +1879,22 @@
         "author": "Super-Genius",
         "draft": true,
         "updated": "2026-09-30T19:13:39Z",
-        "idleDays": 52
+        "idleDays": 53
       }
     ]
   },
   "ci": {
     "total": 112,
-    "success": 98,
-    "failure": 14,
+    "success": 99,
+    "failure": 13,
     "rate": 88,
     "repos": [
       {
         "name": "rlp_enodes",
         "total": 100,
-        "success": 90,
-        "failure": 10,
-        "rate": 90,
+        "success": 91,
+        "failure": 9,
+        "rate": 91,
         "topFailing": "Update Bootstrap Node Lists"
       },
       {
@@ -1878,12 +2023,12 @@
     }
   ],
   "liquidity": {
-    "date": "2026-11-22",
+    "date": "2026-11-23",
     "networks": 4,
     "total": 4
   },
   "changes": {
-    "since": "2026-11-15",
+    "since": "2026-11-16",
     "readiness": {
       "items": [],
       "trackDeltas": []
@@ -2009,11 +2154,19 @@
       "openPrs": 29,
       "closedIssues": 393,
       "mergedPrs": 811
+    },
+    {
+      "date": "2026-11-23",
+      "commits": 260,
+      "openIssues": 210,
+      "openPrs": 29,
+      "closedIssues": 393,
+      "mergedPrs": 811
     }
   ],
   "aiModel": "openai/gpt-oss-120b",
   "ai": "openai/gpt-oss-120b",
-  "telegramPosted": "2026-11-22",
-  "telegramLastHash": "6aa19e257954fe7c04eebb5cfed7daa82894e7a3",
+  "telegramPosted": "2026-11-23",
+  "telegramLastHash": "60481c2050bbc7d98792720af297d21239589a38",
   "telegramWarned": null
 }
