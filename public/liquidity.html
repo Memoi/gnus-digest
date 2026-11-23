@@ -120,15 +120,15 @@
   </div>
   <div class="wrap"><table id="cmp"><thead><tr><th>Network</th><th>Pool</th><th>Price</th><th>Pool balance</th><th>Buy +X%</th><th>Sell −X%</th><th>Read at</th></tr></thead><tbody id="cmpBody"></tbody></table></div>
   <div id="cmpAlert"></div>
-  <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value, at the current price, of the tokens to sell to push it down by X% (the sale brings in a bit less because of price impact and fees). Each network's default pool; fees included. A price more than 50% away from the other networks is labelled.</p>
+  <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value, at the current price, of the tokens to sell to push it down by X% (the sale brings in a bit less because of price impact and fees). Each network's default pool; fees included. A price more than 50% away from the other networks is labelled. Prices and balances above are read live on the blockchain right now (WETH and BNB dollar prices come from Chainlink).</p>
 
   <h2>Daily history</h2>
   <div class="wrap"><table id="hist"><thead><tr><th>Network</th><th>Price</th><th>Pool balance</th><th>Buy +5%</th><th>Sell −5%</th></tr></thead><tbody id="histBody"></tbody></table></div>
   <p class="sub" id="histNote" style="margin-top:6px"></p>
 
   <h2>Trading activity (24 h)</h2>
-  <div class="wrap"><table id="trade"><thead><tr><th>Network</th><th>Pool</th><th>Volume</th><th>Price change</th><th>Buys / sells</th><th>Liquidity</th></tr></thead><tbody id="tradeBody"></tbody></table></div>
-  <p class="sub" id="tradeNote" style="margin-top:6px">Source: GeckoTerminal (a third party), read directly from your browser, with DexScreener as a fallback. If neither knows the pool above, the table shows the most liquid pool DexScreener has for the same token, and says so. These figures are not verified by this site and can differ from the on-chain readings above.</p>
+  <div class="wrap"><table id="trade"><thead><tr><th>Network</th><th>Pool</th><th>Volume</th><th>Price change</th><th>Buys / sells</th><th>Liquidity (third party)</th></tr></thead><tbody id="tradeBody"></tbody></table></div>
+  <p class="sub" id="tradeNote" style="margin-top:6px">Source: GeckoTerminal (a third party), read directly from your browser, with DexScreener as a fallback. If neither knows the pool above, the table shows the most liquid pool DexScreener has for the same token, and says so. Liquidity here is the third party's own dollar estimate of the pool reserves (its own prices and timing), so it differs slightly from the on-chain balance above. These figures are not verified by this site.</p>
 
   <h2>Pool explorer</h2>
   <div class="bar">
@@ -265,6 +265,9 @@ function compareCells(k, c, S, pct){
   const bBal = (D.baseIsT0 ? S.bal0 : S.bal1) / 10**D.dBase, qBal = (D.baseIsT0 ? S.bal1 : S.bal0) / 10**D.dQuote;
   const tvl = (bBal*basePrice + qBal);
   const money = (qty, valueQuote) => hasUsd ? usd(valueQuote*quoteUsd) : `${fmt(valueQuote)} ${quoteSym}`;
+  // contenu du pool, token par token (quantité · valeur en dollars) : le total est la somme des deux lignes
+  const balCell = mkCell('Pool balance', money(0, tvl), `${fmt(bBal)} ${baseSym}` + (hasUsd ? ` · ${usd(bBal * baseUsd)}` : ''));
+  { const q = document.createElement('div'); q.className = 'sub'; q.style.margin = '0'; q.textContent = `${fmt(qBal)} ${quoteSym}` + (hasUsd ? ` · ${usd(qBal * quoteUsd)}` : ''); balCell.append(q); }
   const poolCell = mkCell('Pool', `${baseSym}/${quoteSym}`, `${S.v3 ? 'v3' : 'v2'} · fee ${+(S.fee*100).toFixed(3)}%${S.stable ? ' · stable curve' : ''}`);
   const tokAddr = D.baseIsT0 ? S.tok0 : S.tok1;                                  // adresse du token de base, cliquable vers l'explorateur
   const tokLink = document.createElement('a'); tokLink.className = 'tok';
@@ -275,7 +278,7 @@ function compareCells(k, c, S, pct){
     mkCell('Network', c.label, null, 'pct'),
     poolCell,
     mkCell('Price', hasUsd ? usd(baseUsd) : `${fmt(basePrice)} ${quoteSym}`, hasUsd ? `${fmt(basePrice)} ${quoteSym}` : null),
-    mkCell('Pool balance', money(0, tvl), `${fmt(bBal)} ${baseSym}`),
+    balCell,
     up.noLiq ? mkCell(`Buy +${pct}%`, 'Not enough liquidity') : mkCell(`Buy +${pct}%`, money(0, up.quote), `${fmt(up.base)} ${baseSym} received`),
     dn.noLiq ? mkCell(`Sell −${pct}%`, 'Not enough liquidity') : mkCell(`Sell −${pct}%`, hasUsd ? usd(dn.base*baseUsd) : `${fmt(dn.base)} ${baseSym}`, `${fmt(dn.base)} ${baseSym} sold`),
     mkCell('Read at', new Date(S.readAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), null),
@@ -358,17 +361,6 @@ function histCell(label, series, formatter, emptyText){
   if (vals.length > 1) td.insertBefore(miniSpark(vals), td.querySelector('div'));
   return td;
 }
-// Sous la valeur totale du pool : ce que contient chaque côté de la paire (quantité · valeur en dollars)
-function withBalance(td, row){
-  if (!row || !row.bal) return td;
-  for (const side of [row.bal.base, row.bal.quote]){
-    if (!side) continue;
-    const d = document.createElement('div'); d.className = 'sub'; d.style.margin = '0';
-    d.textContent = `${fmt(side.amount)} ${side.sym}` + (side.usd != null ? ` · ${usd(side.usd)}` : '');
-    td.append(d);
-  }
-  return td;
-}
 async function loadHistory(){
   const body = $('histBody');
   let hist = [];
@@ -382,12 +374,12 @@ async function loadHistory(){
     const tr = document.createElement('tr');
     tr.append(mkCell('Network', c.label, null, 'pct'),
       histCell('Price', rows.map(r => r && r.priceUsd), v => usd(v)),
-      withBalance(histCell('Pool balance', rows.map(r => r && r.tvlUsd), v => usd(v)), [...rows].reverse().find(r => r && r.bal)),
+      histCell('Pool balance', rows.map(r => r && r.tvlUsd), v => usd(v)),
       histCell('Buy +5%', rows.map(r => r && r.d5 && r.d5.buy), v => usd(v), rows.some(Boolean) ? 'Not enough liquidity' : '–'),
       histCell('Sell −5%', rows.map(r => r && r.d5 && r.d5.sell), v => usd(v), rows.some(Boolean) ? 'Not enough liquidity' : '–'));
     body.append(tr);
   }
-  $('histNote').textContent = `${hist.length} daily snapshot${hist.length === 1 ? '' : 's'}, since ${hist[0].date}. “Buy” = dollars to spend to push the price up 5%; “Sell” = value of the tokens to sell to push it down 5%.`;
+  $('histNote').textContent = `${hist.length} daily snapshot${hist.length === 1 ? '' : 's'}, since ${hist[0].date}. Each value is the snapshot recorded by the daily update (latest: ${hist[hist.length - 1].date}), so it differs from the live readings above by the price moves since then. “Buy” = dollars to spend to push the price up 5%; “Sell” = value of the tokens to sell to push it down 5%.`;
 }
 
 /* ---------------- activité de trading : API publique de DexScreener (tiers) ---------------- */
@@ -439,8 +431,9 @@ async function loadTrading(){
       name.append(a);
       const chgCell = mkCell('Price change', t.change == null ? '–' : `${t.change > 0 ? '+' : ''}${Math.round(t.change * 100) / 100}%`);
       if (t.change != null && t.change !== 0) chgCell.style.color = t.change > 0 ? 'var(--buy)' : 'var(--sell)';
-      const poolCell = mkCell('Pool', `${t.dex ? t.dex + ' ' : ''}${t.name}`.trim(),
-        `${t.same ? 'same pool as above' : 'different pool: the most liquid for this token'} · via ${t.source}`);
+      // sous le nom du pool : rien dans le cas normal (GeckoTerminal, même pool) ; la provenance n'est rappelée que pour un repli
+      const poolNote = !t.same ? `different pool: the most liquid for this token · via ${t.source}` : (t.source !== 'GeckoTerminal' ? `via ${t.source}` : null);
+      const poolCell = mkCell('Pool', `${t.dex ? t.dex + ' ' : ''}${t.name}`.trim(), poolNote);
       tr.textContent = '';
       tr.append(name, poolCell, mkCell('Volume', t.volume == null ? '–' : usd(t.volume)), chgCell,
         mkCell('Buys / sells', t.buys == null ? '–' : `${t.buys} / ${t.sells}`), mkCell('Liquidity', t.liquidity == null ? '–' : usd(t.liquidity)));
