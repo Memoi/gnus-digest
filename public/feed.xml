@@ -5,49 +5,49 @@
     <link>https://gnus-digest.vercel.app/</link>
     <description>Daily digest of the GeniusVentures GitHub activity, written from public commit messages.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 23 Nov 2026 16:19:11 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 24 Nov 2026 16:06:32 GMT</lastBuildDate>
     <atom:link href="https://gnus-digest.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>GNUS digest — Monday 23 November</title>
+      <link>https://gnus-digest.vercel.app/</link>
+      <guid isPermaLink="false">gnus-digest-2026-11-23</guid>
+      <pubDate>Mon, 23 Nov 2026 23:59:00 GMT</pubDate>
+      <description>The blockchain component received a fix for missing build stubs and a compose load problem. A test adjustment was made in the cognitive system to incorporate a compiler fix. Repositories: SuperGenius, GeniusCognitiveSystem, rlp_enodes, openapi-client-scaffold.</description>
+    </item>
     <item>
       <title>GNUS digest — Sunday 22 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-22</guid>
       <pubDate>Sun, 22 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The wallet application received fixes to its startup messages and name‑change behavior, plus a configuration tweak. The blockchain network component was repaired to clean up records, adjust funding handling, and added test work. Repositories: GeniusWallet, SuperGenius, rlp_enodes.</description>
+      <description>The wallet application fixed a startup issue, improved rename handling, added tests, and updated its configuration. The blockchain component repaired record cleanup, adjusted funding rollback, and performed several upgrades and refactoring. Repositories: GeniusWallet, SuperGenius, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Saturday 21 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-21</guid>
       <pubDate>Sat, 21 Nov 2026 23:59:00 GMT</pubDate>
-      <description>New recovery and verification features were added to the blockchain system, along with fixes and extensive testing. The network layer received upgrades, documentation updates, and further testing. Repositories: SuperGenius, GeniusNetwork, rlp_enodes.</description>
+      <description>New support was added to recover validated certificates and handle pruned data in the blockchain system, along with fixes and extensive testing. Additional upgrades and documentation updates were made to the network component. Repositories: SuperGenius, GeniusNetwork.</description>
     </item>
     <item>
       <title>GNUS digest — Friday 20 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-20</guid>
       <pubDate>Fri, 20 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Research‑related fixes and testing were applied to the network component, and downgrade handling was added to the blockchain system with accompanying tests and documentation. Small improvements were also made to developer tools. Repositories: GeniusNetwork, SuperGenius, openapi-client-scaffold, openapi-cpp-scaffolding, GeniusCognitiveSystem, GeniusSDK.</description>
+      <description>The blockchain component introduced a downgrade mechanism for interlock gates and related fixes, and addressed research questions. The cognitive system received a test change, and the SDK tools fixed a review-related issue. Repositories: GeniusNetwork, SuperGenius, GeniusCognitiveSystem, openapi-client-scaffold, openapi-cpp-scaffolding, GeniusSDK.</description>
     </item>
     <item>
       <title>GNUS digest — Thursday 19 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-19</guid>
       <pubDate>Thu, 19 Nov 2026 23:59:00 GMT</pubDate>
-      <description>A new research phase and several fixes were introduced to the network, along with upgrades and testing of verification items. The blockchain component added a probe for growth tracking and related tests, and documentation was clarified. Repositories: GeniusNetwork, SuperGenius, gitbook, documentation, openapi-cpp-scaffolding, openapi-client-scaffold.</description>
+      <description>Research phases and upgrades were added to the blockchain and core components, with accompanying fixes and tests. Documentation was clarified and updated to reflect recent changes. Repositories: GeniusNetwork, SuperGenius, gitbook, documentation, openapi-cpp-scaffolding, openapi-client-scaffold.</description>
     </item>
     <item>
       <title>GNUS digest — Wednesday 18 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-18</guid>
       <pubDate>Wed, 18 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Plan revisions and testing were performed for the network, and documentation was updated. Developer tools received pagination improvements and related tests. The blockchain system added an evidence matrix and related testing. Repositories: GeniusNetwork, openapi-cpp-scaffolding, SuperGenius.</description>
-    </item>
-    <item>
-      <title>GNUS digest — Tuesday 17 November</title>
-      <link>https://gnus-digest.vercel.app/</link>
-      <guid isPermaLink="false">gnus-digest-2026-11-17</guid>
-      <pubDate>Tue, 17 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Documentation for a new phase plan was added to the network. The blockchain component introduced durability checks and testing. Developer tools added new overrides and tests, and a build template was updated to handle missing directories. Repositories: GeniusNetwork, SuperGenius, openapi-cpp-scaffolding, cmaketemplate.</description>
+      <description>The blockchain component revised plans based on feedback and added new documentation. SDK tools improved pagination handling and added tests. New evidence matrix features were added to the core component. Repositories: GeniusNetwork, openapi-cpp-scaffolding, SuperGenius.</description>
     </item>
   </channel>
 </rss>
