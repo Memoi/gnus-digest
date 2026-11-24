@@ -300,7 +300,7 @@ fetch('digest.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
     if (safeUrl(lastRel.url)) { a.href = lastRel.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
     kvItem('Latest release', a, document.createTextNode(` · ${fmtDate(lastRel.date)}`));
   } else kvItem('Latest release', document.createTextNode('None this week' + (w.ciBuilds ? ` (${w.ciBuilds} CI builds)` : '')));
-  if (R) { const ages = R.pages.map(p => p.editedAgeDays).filter(x => x != null); if (ages.length) kvItem('Docs last edited', document.createTextNode(`${Math.min(...ages)} days ago`)); }
+  if (R) { const ages = R.pages.map(p => p.editedAgeDays).filter(x => x != null); if (ages.length) kvItem('Readiness docs last edited', document.createTextNode(`${Math.min(...ages)} days ago`), el('div', 'Release status · Public roadmap', 't')); }
   ov.append(kv);
 
   wk.append(el('div', `${w.from} → ${w.to} · last 7 days`, 'date'), el('div', w.summary || w.headline));
