@@ -84,17 +84,35 @@
   async function rpc(method, params, ctx){
   const urls = ctx.urls, n = urls.length, start = ctx._ok || 0;      // on repart du dernier nœud qui a répondu
   const errs = [];
+  const failedAttempts = [];
+  const events = ctx.rpcEvents || (ctx.rpcEvents = []);
   for (let k = 0; k < n; k++){
     const idx = (start + k) % n, url = urls[idx];
+    const attempt = { chain: ctx.chain || 'unknown', method, url, attempt: k + 1 };
     try{
       const r = await fetch(url,{method:'POST',headers:{'content-type':'application/json'},
         body:JSON.stringify({jsonrpc:'2.0',id:1,method,params}),
         signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(8000) : undefined});
+      if (!r.ok) throw new Error('HTTP ' + r.status);
       const j = await r.json();
-      if (j.error) throw new Error(j.error.message);
+      if (j.error) throw new Error(j.error.message || JSON.stringify(j.error));
+      if (!Object.prototype.hasOwnProperty.call(j, 'result'))
+        throw new Error('Invalid JSON-RPC response: missing result');
       ctx._ok = idx;
+      events.push({ ...attempt, event: 'rpcSuccess', status: r.status,
+        recovered: errs.length > 0, previousFailures: errs.length });
+      if (errs.length) events.push({ ...attempt, event: 'rpcFallback',
+        recoveredFailures: errs.length, failedAttempts: [...failedAttempts] });
       return j.result;
-    }catch(e){ errs.push(url.replace(/^https?:\/\//,'') + ' → ' + (e.message||e)); }
+    }catch(e){
+      const reason = e.message || String(e);
+      const match = reason.match(/^HTTP (\d+)$/);
+      const failure = { ...attempt, event: 'rpcFailure',
+        status: match ? Number(match[1]) : null, reason };
+      events.push(failure);
+      failedAttempts.push(failure);
+      errs.push(url.replace(/^https?:\/\//,'') + ' → ' + reason);
+    }
   }
   throw new Error('No RPC reachable. Details: ' + errs.join(' | ') +
     ((typeof location !== 'undefined' && location.protocol !== 'file:') ? ' (page not opened locally: open the file from your PC)' : ''));

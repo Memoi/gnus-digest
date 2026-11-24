@@ -164,6 +164,7 @@ https://cloudflare-eth.com</textarea>
 const CH = () => CHAINS[$('chain').value];
 // Le calcul vient de pool-core.js (partagé avec le script quotidien)
 PoolCore.init(ethers);
+window.GNUS_RPC_EVENTS = window.GNUS_RPC_EVENTS || [];
 const { CHAINS, derive, calcRow, walkV3, walkV2, tickSqrt, num, cleanSym } = PoolCore;
 async function loadPool(ctx){ return PoolCore.loadPool(ctx); }
 const $ = id => document.getElementById(id);
@@ -171,7 +172,8 @@ const setStatus = (t, err) => { $('status').textContent = t; $('status').classNa
 // Chaque chargement de pool reçoit un contexte {chain, addr, urls, block, status} : plusieurs réseaux peuvent charger en parallèle.
 const POOLS = {};                                                                   // cache : « réseau:adresse » -> pool lu
 const mainCtx = () => ({ chain: $('chain').value, addr: $('addr').value,
-  urls: $('rpcs').value.split('\n').map(x => x.trim()).filter(Boolean), block: 'latest', status: setStatus });
+  urls: $('rpcs').value.split('\n').map(x => x.trim()).filter(Boolean), block: 'latest', status: setStatus,
+  rpcEvents: window.GNUS_RPC_EVENTS });
 
 function fmt(n){
   if (!isFinite(n)) return '∞';
@@ -286,7 +288,8 @@ function compareCells(k, c, S, pct){
 }
 function getPool(k, c){
   const key = k + ':' + c.addr.toLowerCase();
-  return POOLS[key] || (POOLS[key] = loadPool({ chain: k, addr: c.addr, urls: c.rpcs, block: 'latest', status: () => {} })
+  return POOLS[key] || (POOLS[key] = loadPool({ chain: k, addr: c.addr, urls: c.rpcs, block: 'latest', status: () => {},
+    rpcEvents: window.GNUS_RPC_EVENTS })
     .catch(e => { delete POOLS[key]; throw e; }));
 }
 async function compareAll(){
