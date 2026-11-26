@@ -10,7 +10,7 @@
 @media(prefers-color-scheme:dark){:root{--bg:#171814;--panel:#22231e;--ink:#eeede5;--mute:#aaa99f;--line:#414139;--accent:#d8b56c;--good:#75c792;--bad:#f08a80}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
-main{max-width:1120px;margin:0 auto;padding:28px 20px 60px}
+main{max-width:1600px;width:100%;margin:0 auto;padding:28px 20px 60px}
 nav{font-size:14px;margin:0 0 24px}
 nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
 nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
@@ -18,17 +18,30 @@ h1{font-size:clamp(27px,5vw,38px);margin:0 0 4px}
 h2{font-size:18px;margin:24px 0 10px}
 .sub,.muted{color:var(--mute)}
 .sub{margin:0 0 20px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+.panel{width:100%;max-width:1200px;margin:14px auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
 .status{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
+main > .status.muted[style*="margin:8px 0 12px"]{
+  width:100%;
+  max-width:1200px;
+  margin:8px auto 12px!important
+}
 .status strong{font-size:14px}
 .ok{color:var(--good);font-weight:700}
 .err{color:var(--bad);font-weight:700}
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0}
+.controls{width:100%;max-width:1200px;margin:16px auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 button,input{font:inherit;border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:var(--panel);color:var(--ink)}
 button{cursor:pointer;font-weight:650}
 button.active{border-color:var(--accent);color:var(--accent)}
 input{flex:1;min-width:180px}
-.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.table-wrap{
+  width:fit-content;
+  max-width:100%;
+  margin:0 auto;
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--panel)
+}
 table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:13px}
 th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
 th{color:var(--mute);font-weight:650;font-size:12px}
@@ -36,16 +49,43 @@ tr:last-child td{border-bottom:0}
 td.num{text-align:right;font-variant-numeric:tabular-nums}
 td a{color:var(--accent);text-decoration:none}
 .rank{color:var(--mute);width:55px}
-footer{font-size:12px;color:var(--mute);margin-top:16px}
+footer{width:100%;max-width:1200px;margin:16px auto 0;font-size:12px;color:var(--mute)}
 
 .inventory-grid{display:grid;grid-template-columns:1fr;gap:14px}
 .inventory-meta{font-size:12px;color:var(--mute);margin:4px 0 10px}
 .inventory-empty{padding:12px;color:var(--mute);font-size:13px}
-.inventory-table{min-width:760px}
+.inventory-table{width:max-content;max-width:100%;min-width:0;table-layout:auto;white-space:nowrap}
+.inventory-table th,.inventory-table td{white-space:nowrap;overflow-wrap:normal;word-break:normal}
+@media(max-width:900px){
+  .inventory-table{table-layout:auto;min-width:900px}
+  .inventory-table th,.inventory-table td{white-space:normal;overflow-wrap:anywhere}
+}
 .address-cell{font-family:ui-monospace,monospace;font-size:12px}
 
 @media(max-width:600px){main{padding:20px 12px 40px}.panel{padding:12px}th,td{padding:9px 8px}}
+
+  nav.jump {
+    font: 13px/1.8 system-ui, sans-serif;
+    color: var(--mute);
+    margin: -6px 0 14px;
+  }
+  nav.jump a {
+    color: var(--mute);
+    font-weight: 400;
+    margin: 0;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--line);
+  }
+  nav.jump a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  h2[id] {
+    scroll-margin-top: 12px;
+  }
+
 </style>
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
 <main>
@@ -55,15 +95,14 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
     <a href="holders.html" aria-current="page">GNUS holders</a>
     <a href="archive.html">Archive</a>
   </nav>
+  <nav class="jump" id="pageJump" aria-label="Sections on this page">
+    Jump to: <a href="#section-1">Top 50 holders</a> · <a href="#section-2">EIP-7702 wallets</a> · <a href="#section-3">Smart contracts</a> · <a href="#section-4">Multisigs</a>
+  </nav>
 
-  <h1>GNUS Top 50 holders</h1>
-  <p class="sub">Largest GNUS holders on Ethereum and Polygon, with balances checked directly against the blockchain.</p>
 
   <section class="panel">
     <div class="status">
       <strong id="updated">Loading data…</strong>
-      <span id="ethStatus" class="muted">Ethereum: —</span>
-      <span id="polyStatus" class="muted">Polygon: —</span>
     </div>
     <p class="muted" id="blocks" style="margin:10px 0 0">Reference blocks: —</p>
   </section>
@@ -80,31 +119,37 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
     <span id="contract"></span>
   </div>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>Rank</th><th>Address</th><th>Type</th><th style="text-align:right">GNUS</th><th style="text-align:right">Reference block</th></tr>
-      </thead>
-      <tbody id="holders">
-        <tr><td colspan="5">Loading…</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <section class="panel">
+    <h2 id="section-1">Top 50 GNUS holders</h2>
+    <p class="inventory-meta" id="top50Meta">
+      Largest GNUS holders across Ethereum and Polygon, ranked by token balance at the reference blocks shown.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Rank</th><th>Address</th><th>Type</th><th style="text-align:right">GNUS</th><th style="text-align:right">Reference block</th></tr>
+        </thead>
+        <tbody id="holders">
+          <tr><td colspan="5">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
   <section class="panel">
-    <h2>EIP-7702 delegated wallets</h2>
+    <h2 id="section-2">EIP-7702 delegated wallets</h2>
     <p class="inventory-meta" id="eip7702Meta">Loading verified wallet delegations…</p>
     <div class="table-wrap" id="eip7702Table"></div>
   </section>
 
   <section class="panel">
-    <h2>Identified GNUS smart contracts</h2>
+    <h2 id="section-3">Identified GNUS smart contracts</h2>
     <p class="inventory-meta" id="contractsMeta">Loading identified contracts…</p>
     <div class="table-wrap" id="contractsTable"></div>
   </section>
 
   <section class="panel">
-    <h2>GNUS multisigs and treasuries</h2>
+    <h2 id="section-4">GNUS multisigs and treasuries</h2>
     <p class="inventory-meta" id="multisigsMeta">Loading identified multisigs…</p>
     <div class="table-wrap" id="multisigsTable"></div>
   </section>
@@ -112,6 +157,7 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
   <footer>
     Updated automatically every hour by GitHub Actions. Each displayed balance is verified on-chain at the reference block shown. If a scan fails, the last successfully validated dataset remains published.
   </footer>
+  <div class="totop"><button type="button" id="toTop">↑ Back to top</button></div>
 </main>
 
 <script>
@@ -246,17 +292,10 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
       }
 
       $('updated').textContent = `Last update: ${new Date(data.generatedAt).toLocaleString()}`;
-      $('ethStatus').innerHTML = '<span class="ok">Ethereum: 50/50 MATCH</span>';
-      $('polyStatus').innerHTML = '<span class="ok">Polygon: 50/50 MATCH</span>';
       $('blocks').textContent =
         `Ethereum block: ${data.networks.ethereum.referenceBlock.toLocaleString('en-US')} · Polygon block: ${data.networks.polygon.referenceBlock.toLocaleString('en-US')}`;
       render();
 
-      const audit = data.codeAudit || {};
-      if (audit.generatedAt) {
-        const auditDate = new Date(audit.generatedAt).toLocaleString();
-        $('updated').textContent += ` · Code audit: ${auditDate}`;
-      }
     } catch (error) {
       $('updated').innerHTML = `<span class="err">Unable to load holders data: ${error.message}</span>`;
       $('holders').innerHTML = '<tr><td colspan="5">Data unavailable. Please try again later.</td></tr>';
@@ -268,6 +307,12 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
   $('search').addEventListener('input', () => { if (data) render(); });
   load();
 })();
+</script>
+<script>
+document.getElementById('toTop').addEventListener('click', () => window.scrollTo({
+  top: 0,
+  behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+}));
 </script>
 </body>
 </html>

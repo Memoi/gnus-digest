@@ -103,15 +103,40 @@
     td[colspan]{grid-column:1/-1;color:var(--mute)}
     .bg{height:6px}
   }
+
+  nav.jump {
+    font: 13px/1.8 system-ui, sans-serif;
+    color: var(--mute);
+    margin: -6px 0 14px;
+  }
+  nav.jump a {
+    color: var(--mute);
+    font-weight: 400;
+    margin: 0;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--line);
+  }
+  nav.jump a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  h2[id] {
+    scroll-margin-top: 12px;
+  }
+
 </style>
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
 <main>
   <nav><a href="./">Digest</a><a href="liquidity.html" aria-current="page">GNUS liquidity</a><a href="holders.html">GNUS holders</a><a href="archive.html">Archive</a></nav>
+  <nav class="jump" id="pageJump" aria-label="Sections on this page">
+    Jump to: <a href="#section-1">All networks</a> · <a href="#section-2">Daily history</a> · <a href="#section-3">Trading activity</a> · <a href="#section-4">Pool explorer</a>
+  </nav>
   <h1>DEX pool depth</h1>
   <p class="sub">How much buying (or selling) it would actually take to reach each price level. Works with Uniswap, PancakeSwap, Aerodrome and compatible pools. Data is read live from the blockchain, nothing to update.</p>
 
-  <h2>All networks at a glance</h2>
+  <h2 id="section-1">All networks at a glance</h2>
   <div class="bar cmpbar" style="align-items:center">
     <span class="sub" style="margin:0">Compare at ±</span>
     <input id="cmpPct" value="10" inputmode="decimal" style="width:80px" aria-label="Percent move">
@@ -122,15 +147,15 @@
   <div id="cmpAlert"></div>
   <p class="sub" style="margin-top:6px">“Buy” = what it costs to push the price up by X%; “Sell” = the value, at the current price, of the tokens to sell to push it down by X% (the sale brings in a bit less because of price impact and fees). Each network's default pool; fees included. A price more than 50% away from the other networks is labelled. Prices and balances above are read live on the blockchain right now (WETH and BNB dollar prices come from Chainlink).</p>
 
-  <h2>Daily history</h2>
+  <h2 id="section-2">Daily history</h2>
   <div class="wrap"><table id="hist"><thead><tr><th>Network</th><th>Price</th><th>Pool balance</th><th>Buy +5%</th><th>Sell −5%</th></tr></thead><tbody id="histBody"></tbody></table></div>
   <p class="sub" id="histNote" style="margin-top:6px"></p>
 
-  <h2>Trading activity (24 h)</h2>
+  <h2 id="section-3">Trading activity (24 h)</h2>
   <div class="wrap"><table id="trade"><thead><tr><th>Network</th><th>Pool</th><th>Volume</th><th>Price change</th><th>Buys / sells</th><th>Liquidity (third party)</th></tr></thead><tbody id="tradeBody"></tbody></table></div>
   <p class="sub" id="tradeNote" style="margin-top:6px">Source: GeckoTerminal (a third party), read directly from your browser, with DexScreener as a fallback. If neither knows the pool above, the table shows the most liquid pool DexScreener has for the same token, and says so. Liquidity here is the third party's own dollar estimate of the pool reserves (its own prices and timing), so it differs slightly from the on-chain balance above. These figures are not verified by this site.</p>
 
-  <h2>Pool explorer</h2>
+  <h2 id="section-4">Pool explorer</h2>
   <div class="bar">
     <select id="chain" aria-label="Network"><option value="ethereum">Ethereum</option><option value="polygon">Polygon</option><option value="base">Base</option><option value="bsc">BNB Chain</option></select>
     <input id="addr" value="0xf10e8ccdb3f065bf24afa14d08cc6336d4a9a281" spellcheck="false" aria-label="Pool address">
