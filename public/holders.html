@@ -37,6 +37,13 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
 td a{color:var(--accent);text-decoration:none}
 .rank{color:var(--mute);width:55px}
 footer{font-size:12px;color:var(--mute);margin-top:16px}
+
+.inventory-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.inventory-meta{font-size:12px;color:var(--mute);margin:4px 0 10px}
+.inventory-empty{padding:12px;color:var(--mute);font-size:13px}
+.inventory-table{min-width:760px}
+.address-cell{font-family:ui-monospace,monospace;font-size:12px}
+
 @media(max-width:600px){main{padding:20px 12px 40px}.panel{padding:12px}th,td{padding:9px 8px}}
 </style>
 </head>
@@ -84,6 +91,24 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
     </table>
   </div>
 
+  <section class="panel">
+    <h2>EIP-7702 delegated wallets</h2>
+    <p class="inventory-meta" id="eip7702Meta">Loading verified wallet delegations…</p>
+    <div class="table-wrap" id="eip7702Table"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Identified GNUS smart contracts</h2>
+    <p class="inventory-meta" id="contractsMeta">Loading identified contracts…</p>
+    <div class="table-wrap" id="contractsTable"></div>
+  </section>
+
+  <section class="panel">
+    <h2>GNUS multisigs and treasuries</h2>
+    <p class="inventory-meta" id="multisigsMeta">Loading identified multisigs…</p>
+    <div class="table-wrap" id="multisigsTable"></div>
+  </section>
+
   <footer>
     Updated automatically every hour by GitHub Actions. Each displayed balance is verified on-chain at the reference block shown. If a scan fails, the last successfully validated dataset remains published.
   </footer>
@@ -117,7 +142,7 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
         <td><a href="${network === 'ethereum' ? 'https://etherscan.io/address/' : 'https://polygonscan.com/address/'}${encodeURIComponent(h.address)}" target="_blank" rel="noopener">${h.address}</a></td>
         <td>
           ${['Wallet', 'Smart Contract', 'GNUS Multisig'].includes(h.holderType) ? h.holderType : 'Unknown'}
-          ${h.holderDescription
+          ${h.holderDescription && h.holderDescription !== h.holderType
             ? `<div style="font-size:0.8em;opacity:0.75;margin-top:3px">${h.holderDescription}</div>`
             : ''}
         </td>
@@ -125,6 +150,89 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
         <td class="num">${Number(h.referenceBlock).toLocaleString('en-US')}</td>
       </tr>
     `).join('') || '<tr><td colspan="5">No matching address.</td></tr>';
+
+    renderInventories();
+  }
+
+
+  function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[character]);
+  }
+
+  function explorerAddress(networkName, address) {
+    const base = networkName === 'ethereum'
+      ? 'https://etherscan.io/address/'
+      : 'https://polygonscan.com/address/';
+    return base + encodeURIComponent(address);
+  }
+
+  function inventoryTable(items, kind) {
+    if (!Array.isArray(items) || items.length === 0) {
+      return '<div class="inventory-empty">No verified entries in the current Top 50.</div>';
+    }
+
+    const rows = items.map(item => {
+      const networkName = item.network === 'ethereum' ? 'Ethereum' : 'Polygon';
+      const address = escapeHTML(item.address);
+      const href = escapeHTML(explorerAddress(item.network, item.address));
+      const role = escapeHTML(item.role);
+      const balance = number(item.gnus);
+      const rank = escapeHTML(item.rank);
+      const block = escapeHTML(Number(item.referenceBlock).toLocaleString('en-US'));
+
+      let detail = role;
+      if (kind === 'eip7702') {
+        detail = `Delegates to <span class="address-cell">${escapeHTML(item.delegatedImplementation || '—')}</span>`;
+      }
+
+      return `
+        <tr>
+          <td>${networkName}</td>
+          <td class="rank">#${rank}</td>
+          <td class="address-cell"><a href="${href}" target="_blank" rel="noopener">${address}</a></td>
+          <td>${detail}</td>
+          <td class="num">${balance}</td>
+          <td class="num">${block}</td>
+        </tr>
+      `;
+    }).join('');
+
+    return `
+      <table class="inventory-table">
+        <thead>
+          <tr>
+            <th>Network</th><th>Rank</th><th>Address</th>
+            <th>${kind === 'eip7702' ? 'Delegated implementation' : 'Identification'}</th>
+            <th style="text-align:right">GNUS</th>
+            <th style="text-align:right">Reference block</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  }
+
+  function renderInventories() {
+    const eip = (data.eip7702Wallets || []).filter(item => item.network === network);
+    const contracts = (data.verifiedContracts || []).filter(item => item.network === network);
+    const multisigs = (data.multisigs || []).filter(item => item.network === network);
+
+    $('eip7702Meta').textContent =
+      `${eip.length} delegated wallets verified from 23-byte EIP-7702 delegation code on ${network === 'ethereum' ? 'Ethereum' : 'Polygon'}.`;
+    $('contractsMeta').textContent =
+      `${contracts.length} identified contracts with bytecode at their reference blocks.`;
+    $('multisigsMeta').textContent =
+      `${multisigs.length} identified multisigs with bytecode at their reference blocks.`;
+
+    $('eip7702Table').innerHTML = inventoryTable(eip, 'eip7702');
+    $('contractsTable').innerHTML = inventoryTable(contracts, 'contracts');
+    $('multisigsTable').innerHTML = inventoryTable(multisigs, 'multisigs');
   }
 
   async function load() {
@@ -143,6 +251,12 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
       $('blocks').textContent =
         `Ethereum block: ${data.networks.ethereum.referenceBlock.toLocaleString('en-US')} · Polygon block: ${data.networks.polygon.referenceBlock.toLocaleString('en-US')}`;
       render();
+
+      const audit = data.codeAudit || {};
+      if (audit.generatedAt) {
+        const auditDate = new Date(audit.generatedAt).toLocaleString();
+        $('updated').textContent += ` · Code audit: ${auditDate}`;
+      }
     } catch (error) {
       $('updated').innerHTML = `<span class="err">Unable to load holders data: ${error.message}</span>`;
       $('holders').innerHTML = '<tr><td colspan="5">Data unavailable. Please try again later.</td></tr>';
