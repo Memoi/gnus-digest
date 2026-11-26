@@ -58,7 +58,7 @@ const classifiedIndex = Object.fromEntries(
   classified.headers.map((h, i) => [h, i])
 );
 
-for (const field of ["network", "address", "classification"]) {
+for (const field of ["network", "address", "classification", "identification"]) {
   if (classifiedIndex[field] === undefined) {
     throw new Error(`Missing classified CSV column: ${field}`);
   }
@@ -73,6 +73,7 @@ for (const row of classified.rows) {
 
   const address = row[classifiedIndex.address]?.toLowerCase();
   const classification = row[classifiedIndex.classification];
+  const identification = row[classifiedIndex.identification] || "";
 
   if (!networkKey || !address) {
     throw new Error("Invalid row in classified CSV");
@@ -97,7 +98,7 @@ for (const row of classified.rows) {
     throw new Error(`Duplicate classification: ${key}`);
   }
 
-  labels.set(key, holderType);
+  labels.set(key, { holderType, holderDescription: identification });
 }
 
 if (labels.size !== 100) {
@@ -120,13 +121,14 @@ for (const networkKey of ["ethereum", "polygon"]) {
 
   for (const holder of holders) {
     const key = `${networkKey}:${holder.address.toLowerCase()}`;
-    const holderType = labels.get(key);
+    const label = labels.get(key);
 
-    if (!holderType) {
+    if (!label) {
       throw new Error(`Missing classification: ${key}`);
     }
 
-    holder.holderType = holderType;
+    holder.holderType = label.holderType;
+    holder.holderDescription = label.holderDescription;
     updated++;
   }
 }
@@ -152,6 +154,11 @@ if (mainIndex.holder_type === undefined) {
   mainIndex.holder_type = mainCsv.headers.length - 1;
 }
 
+if (mainIndex.holder_description === undefined) {
+  mainCsv.headers.push("holder_description");
+  mainIndex.holder_description = mainCsv.headers.length - 1;
+}
+
 let csvUpdated = 0;
 
 for (const row of mainCsv.rows) {
@@ -161,13 +168,14 @@ for (const row of mainCsv.rows) {
 
   const address = row[mainIndex.address]?.toLowerCase();
   const key = `${networkKey}:${address}`;
-  const holderType = labels.get(key);
+  const label = labels.get(key);
 
-  if (!networkKey || !holderType) {
+  if (!networkKey || !label) {
     throw new Error(`Missing CSV classification: ${key}`);
   }
 
-  row[mainIndex.holder_type] = holderType;
+  row[mainIndex.holder_type] = label.holderType;
+  row[mainIndex.holder_description] = label.holderDescription;
   csvUpdated++;
 }
 
@@ -190,6 +198,7 @@ fs.renameSync(csvTemporary, MAIN_CSV_FILE);
 
 console.log("Holder categories applied:", updated);
 console.log("Main CSV categories applied:", csvUpdated);
-console.log("CSV column: holder_type");
+console.log("CSV columns: holder_type, holder_description");
+console.log("Holder descriptions applied:", updated);
 console.log("Ethereum:", data.networks.ethereum.holders.length);
 console.log("Polygon:", data.networks.polygon.holders.length);

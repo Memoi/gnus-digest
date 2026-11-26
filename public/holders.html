@@ -111,27 +111,14 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
     $('ethButton').classList.toggle('active', network === 'ethereum');
     $('polyButton').classList.toggle('active', network === 'polygon');
 
-    const contractDescriptions = {
-      ethereum: {
-        '0xf10e8ccdb3f065bf24afa14d08cc6336d4a9a281': 'Uniswap V3 Liquidity Pool',
-        '0xc86e1a194aa2c15a07e259a3bb1c7d05a8505153': 'Gnosis Safe Multisig',
-        '0x9679519e246cfdc8d6681bd7abf0d6467375f5ce': 'Token Vesting Contract',
-        '0x665b8e9e6f133eb5690f8a7df6a484a9a09a1d92': 'Gnosis Safe Multisig',
-        '0x90c1818a86d55c2872ba56dc05408dd0606f409f': 'Gnosis Safe Multisig'
-      },
-      polygon: {
-        '0x45126b956401daaec92afba2a9953e14b16fb83f': 'Uniswap V3 Liquidity Pool'
-      }
-    };
-
     $('holders').innerHTML = holders.map(h => `
       <tr>
         <td class="rank">${h.rank}</td>
         <td><a href="${network === 'ethereum' ? 'https://etherscan.io/address/' : 'https://polygonscan.com/address/'}${encodeURIComponent(h.address)}" target="_blank" rel="noopener">${h.address}</a></td>
         <td>
           ${['Wallet', 'Smart Contract', 'GNUS Multisig'].includes(h.holderType) ? h.holderType : 'Unknown'}
-          ${contractDescriptions[network]?.[h.address.toLowerCase()]
-            ? `<div style="font-size:0.8em;opacity:0.75;margin-top:3px">${contractDescriptions[network][h.address.toLowerCase()]}</div>`
+          ${h.holderDescription
+            ? `<div style="font-size:0.8em;opacity:0.75;margin-top:3px">${h.holderDescription}</div>`
             : ''}
         </td>
         <td class="num">${number(h.gnus)}</td>
