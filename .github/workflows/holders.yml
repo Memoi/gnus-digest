@@ -1,0 +1,52 @@
+name: GNUS Top 50 holders
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gnus-digest-writes
+  cancel-in-progress: false
+
+jobs:
+  holders:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build and validate Ethereum + Polygon Top 50
+        run: node --version && node scripts/build-holders.mjs
+        env:
+          ROUTESCAN_API_KEY: ${{ secrets.ROUTESCAN_API_KEY }}
+          ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+
+      - name: Commit validated data
+        run: |
+          git config user.name "digest-bot"
+          git config user.email "digest-bot@users.noreply.github.com"
+          git add public/gnus-top50.json public/gnus-top50.csv
+          if git diff --cached --quiet; then
+            echo "No holder data changes"
+          else
+            git commit -m "chore: update GNUS top 50 holders"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push
+          fi
+
+      - name: Notify failure
+        if: failure() && env.TELEGRAM_BOT_TOKEN != ''
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -fsS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=⚠ GNUS Top 50 holders failed. Previous validated data is preserved. Details: ${RUN_URL}" \
+            > /dev/null

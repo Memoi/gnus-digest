@@ -1,0 +1,944 @@
+{
+  "token": "GNUS",
+  "generatedAt": "2026-11-26T00:11:14.721Z",
+  "description": "Top 50 holders par réseau, soldes vérifiés individuellement on-chain",
+  "decimals": 18,
+  "validation": {
+    "ethereum": {
+      "verified": 50,
+      "total": 50,
+      "status": "MATCH"
+    },
+    "polygon": {
+      "verified": 50,
+      "total": 50,
+      "status": "MATCH"
+    }
+  },
+  "networks": {
+    "ethereum": {
+      "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+      "referenceBlock": 26495692,
+      "source": "Routescan Holders API + Routescan RPC",
+      "pages": 34,
+      "entriesReceived": 3384,
+      "uniqueAddresses": 3384,
+      "holdersCount": 50,
+      "holders": [
+        {
+          "network": "Ethereum",
+          "rank": 1,
+          "address": "0xF10E8cCdb3F065BF24AFA14d08cc6336d4a9A281",
+          "raw": "108692132734227536338675",
+          "gnus": "108692.132734227536338675",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 2,
+          "address": "0xc86E1A194aA2c15a07E259A3bb1c7D05a8505153",
+          "raw": "73377948358675136756320",
+          "gnus": "73377.948358675136756320",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 3,
+          "address": "0x63519227Dff4E278c02c9735ae5E4EC3478A1740",
+          "raw": "29748633777347817298590",
+          "gnus": "29748.633777347817298590",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 4,
+          "address": "0x0067e6158dbB3C02Fcf4b29737f7a50232d4d1A6",
+          "raw": "25788315869801121344710",
+          "gnus": "25788.315869801121344710",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 5,
+          "address": "0xd1DE6442EBc7c0F59De0869E6E475E6142e9d481",
+          "raw": "25191766131792806417178",
+          "gnus": "25191.766131792806417178",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 6,
+          "address": "0x9679519E246cFDC8d6681bD7ABf0d6467375f5cE",
+          "raw": "20000000000000000000000",
+          "gnus": "20000.000000000000000000",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 7,
+          "address": "0xEFD9BFa174F19AB9D8283F992d911040Df6Ee402",
+          "raw": "18000001018673584066217",
+          "gnus": "18000.001018673584066217",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 8,
+          "address": "0x01f32267444977613C47830ee6173cF881D9718f",
+          "raw": "12861816927947289427529",
+          "gnus": "12861.816927947289427529",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 9,
+          "address": "0xdb2d65476e91f69fdE755A7c0231b8556D88436A",
+          "raw": "12850000000000000078402",
+          "gnus": "12850.000000000000078402",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 10,
+          "address": "0x8Eb2fA914a9e1c7760B29236BC2E3Bdc3912379E",
+          "raw": "12454512455295805731522",
+          "gnus": "12454.512455295805731522",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 11,
+          "address": "0x337C9cDDfe6681c1eA2D7dA67Dd4380227eF993D",
+          "raw": "12037043251245435423475",
+          "gnus": "12037.043251245435423475",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 12,
+          "address": "0xcBa7fD7A6506bbA7F8cb9c5befe5A7C682c81F72",
+          "raw": "12025003522238636666628",
+          "gnus": "12025.003522238636666628",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 13,
+          "address": "0x665B8e9E6F133eB5690F8A7dF6a484A9A09a1d92",
+          "raw": "11524148301811206547971",
+          "gnus": "11524.148301811206547971",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 14,
+          "address": "0x370a467d5E8e6386CbCbcABe470f955d600d42C2",
+          "raw": "11200000000000000000000",
+          "gnus": "11200.000000000000000000",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 15,
+          "address": "0x28A0e5545fEB802DEf6eEdf1B5851B0296deC3a1",
+          "raw": "10800000000000000000000",
+          "gnus": "10800.000000000000000000",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 16,
+          "address": "0x90c1818a86d55C2872Ba56dc05408dd0606f409f",
+          "raw": "10396949085467008197891",
+          "gnus": "10396.949085467008197891",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 17,
+          "address": "0xdC4A2e329D0686Bc08A868D9A0628D16b9fE2d77",
+          "raw": "10149869928988828434119",
+          "gnus": "10149.869928988828434119",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 18,
+          "address": "0xA11C00b0953badd099AD1385DbF8975b80a99824",
+          "raw": "10010000000000000000000",
+          "gnus": "10010.000000000000000000",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 19,
+          "address": "0x544b0cF7C2d57DeecDE0c0AdC538A0aC4658E005",
+          "raw": "9754200103961362845136",
+          "gnus": "9754.200103961362845136",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 20,
+          "address": "0x2aDdE82D2f86742Cf7deb6F4558722C722F03eC7",
+          "raw": "9700561071373690526143",
+          "gnus": "9700.561071373690526143",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 21,
+          "address": "0x773E9a8557745Be083FF91D2713d74a80581b2DE",
+          "raw": "9500000000000000000000",
+          "gnus": "9500.000000000000000000",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 22,
+          "address": "0x2D081ED0a841b0ae6d3679229b7e035a4d5eaF2a",
+          "raw": "8702537790125662749644",
+          "gnus": "8702.537790125662749644",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 23,
+          "address": "0x5aeba558bD5aF49f1fBcbC69e31A2689573F0Cb9",
+          "raw": "8541960553333966462071",
+          "gnus": "8541.960553333966462071",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 24,
+          "address": "0x0b1dD81b07B2B446973A8F6F2294653EB82d9bC7",
+          "raw": "8141341873533017370363",
+          "gnus": "8141.341873533017370363",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 25,
+          "address": "0xAa8a9FFDD7610a8B08c87968a6190680fEee6793",
+          "raw": "8101183876610835276709",
+          "gnus": "8101.183876610835276709",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 26,
+          "address": "0xE73186EE413ED5d53b4F7F8580A953210dE3aA1a",
+          "raw": "8057694693229408827200",
+          "gnus": "8057.694693229408827200",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 27,
+          "address": "0x3CE2e67Ed67bF7b13892b1F85aa1854B1cCd7909",
+          "raw": "7680243833100593672184",
+          "gnus": "7680.243833100593672184",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 28,
+          "address": "0x652492D0D65AEb83E8406fEfA3EC5F45EEbdf388",
+          "raw": "7572000000000000000000",
+          "gnus": "7572.000000000000000000",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 29,
+          "address": "0x61f28bd695654baCBA0d2fe087fb608DF50a11D4",
+          "raw": "7535575608004578819620",
+          "gnus": "7535.575608004578819620",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 30,
+          "address": "0x538Acf87c803ad963090F91f2464cc4f2E54D539",
+          "raw": "7511319376544379205982",
+          "gnus": "7511.319376544379205982",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 31,
+          "address": "0xDF28949Ff6E4D4f59ADe2505F265414870066d18",
+          "raw": "7276537522272029772175",
+          "gnus": "7276.537522272029772175",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 32,
+          "address": "0x4d69477d32f82b78103db4EbA8d81A9d5294586F",
+          "raw": "7106141081826357176317",
+          "gnus": "7106.141081826357176317",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 33,
+          "address": "0xdba320BB4E9411C2684b541083d76fEC91B4c147",
+          "raw": "7089963014762341815045",
+          "gnus": "7089.963014762341815045",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 34,
+          "address": "0x4fd4f1Be368F3849761264BB645f7a0f2e0547AE",
+          "raw": "7081138259144678697461",
+          "gnus": "7081.138259144678697461",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 35,
+          "address": "0x65a7C3Cb6d1C3cEf361063C57936d9d4c9D7bCAB",
+          "raw": "6699055247851043981881",
+          "gnus": "6699.055247851043981881",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 36,
+          "address": "0xB1939298E22258121Cf54844A499911832Ea4E64",
+          "raw": "6647246611048262092974",
+          "gnus": "6647.246611048262092974",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 37,
+          "address": "0xc42EbBC8969C691236d730c2E22B429e68ae1D90",
+          "raw": "6343962953509235359501",
+          "gnus": "6343.962953509235359501",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 38,
+          "address": "0x912Accc3534A03197015F446334e3CFA7783eCf0",
+          "raw": "6194465671782921810938",
+          "gnus": "6194.465671782921810938",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 39,
+          "address": "0xC9570C0ff022000A0d7aB1c62aE777154e9CbE42",
+          "raw": "6134041631370128865584",
+          "gnus": "6134.041631370128865584",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 40,
+          "address": "0xbaD8e0E50f7BB88b5EfdFe127658C30b1BC9d74d",
+          "raw": "6084039797983829822459",
+          "gnus": "6084.039797983829822459",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 41,
+          "address": "0x6e26E1CD15c91713019EAE673E27e234bF4BF7d3",
+          "raw": "6000000000000000000001",
+          "gnus": "6000.000000000000000001",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 42,
+          "address": "0x20e7B03D890F4b18E46580db53d54e25cfdbcaE9",
+          "raw": "5791005192837679471162",
+          "gnus": "5791.005192837679471162",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 43,
+          "address": "0x44A1A921eeE560234AC72b858D32197Fd7BcC656",
+          "raw": "5602866556384324593936",
+          "gnus": "5602.866556384324593936",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 44,
+          "address": "0x800b9BB9e6D8768Bd459BdB85f6945537c019B22",
+          "raw": "5209254453676116780121",
+          "gnus": "5209.254453676116780121",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 45,
+          "address": "0xfDfcc318d5307732cfD2896E00425C8323ca76a7",
+          "raw": "5203849876429728594441",
+          "gnus": "5203.849876429728594441",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 46,
+          "address": "0x8981cE2D2c645e45902aBE98475D81dfe8101704",
+          "raw": "5012013162561654569907",
+          "gnus": "5012.013162561654569907",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 47,
+          "address": "0x13de45Ac0778afB66252e90F4d56A4ecCdb92Aa7",
+          "raw": "4922680701656631159655",
+          "gnus": "4922.680701656631159655",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 48,
+          "address": "0xF1227d0029Fd8EcF88AA9A9D697A4419362F6Fae",
+          "raw": "4813120791329805232582",
+          "gnus": "4813.120791329805232582",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 49,
+          "address": "0x5dCeb3bf3A7b1CAEf0C581B27FdC46436B6A2198",
+          "raw": "4789526238032622990948",
+          "gnus": "4789.526238032622990948",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        },
+        {
+          "network": "Ethereum",
+          "rank": 50,
+          "address": "0xF869842bDc723204a63547C1d293722E0F633CbF",
+          "raw": "4519739268906308110150",
+          "gnus": "4519.739268906308110150",
+          "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
+          "referenceBlock": 26495692
+        }
+      ]
+    },
+    "polygon": {
+      "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+      "tokenId": "0",
+      "referenceBlock": 97964233,
+      "source": "Alchemy NFT API + Routescan RPC",
+      "pages": 1,
+      "entriesReceived": 1452,
+      "uniqueAddresses": 1452,
+      "holdersCount": 50,
+      "holders": [
+        {
+          "network": "Polygon",
+          "rank": 1,
+          "address": "0xBd1f3B857d95F8134D4419215a1622ecd82B9687",
+          "raw": "9375000000000000000000000",
+          "gnus": "9375000.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 2,
+          "address": "0x4Ca714A91f39245b59eF712553491196B177DBb2",
+          "raw": "2770869920607883829059423",
+          "gnus": "2770869.920607883829059423",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 3,
+          "address": "0xFE69f9e7BeefF51c0C8e5511688eb31023fE8e20",
+          "raw": "1392383706055312642963513",
+          "gnus": "1392383.706055312642963513",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 4,
+          "address": "0x6Ac3BDBB58D671f81563998dd9ca561d527E5F43",
+          "raw": "130980000000000000000000",
+          "gnus": "130980.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 5,
+          "address": "0x3430722D1Dd0cBAb41F1040FbE52E68c927cB824",
+          "raw": "100000000000000000000000",
+          "gnus": "100000.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 6,
+          "address": "0x45126b956401DAaec92aFba2a9953E14B16fb83f",
+          "raw": "87805797356280451269682",
+          "gnus": "87805.797356280451269682",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 7,
+          "address": "0x588cd951881Ef861721183bdAD62A7b5cdaEcbc3",
+          "raw": "68000000000000000000000",
+          "gnus": "68000.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 8,
+          "address": "0x647DBF12af56874c9541eb69EA9122EC60dF6371",
+          "raw": "61661903673220545600000",
+          "gnus": "61661.903673220545600000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 9,
+          "address": "0x45A920727578222B6AFA5ce4044dd35A2218c900",
+          "raw": "60216760008000000000000",
+          "gnus": "60216.760008000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 10,
+          "address": "0x51f9E277A454ad8357C0e879E61BAC502e228241",
+          "raw": "59777316638185185186000",
+          "gnus": "59777.316638185185186000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 11,
+          "address": "0xa73a1d02b723D2f0936dDF8A420DC1B52EfC687f",
+          "raw": "50000416326920031447898",
+          "gnus": "50000.416326920031447898",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 12,
+          "address": "0x0067e6158dbB3C02Fcf4b29737f7a50232d4d1A6",
+          "raw": "50000000000000000000000",
+          "gnus": "50000.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 13,
+          "address": "0xd1DE6442EBc7c0F59De0869E6E475E6142e9d481",
+          "raw": "36148962566407480645391",
+          "gnus": "36148.962566407480645391",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 14,
+          "address": "0xBBe81acfbE2B8709Ab52647ce289B769d9B1bF43",
+          "raw": "28700190000000000000000",
+          "gnus": "28700.190000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 15,
+          "address": "0x443228E9777312D236EFC7708f92921851138F85",
+          "raw": "27578827708340268369322",
+          "gnus": "27578.827708340268369322",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 16,
+          "address": "0x0D4e52FDEb7213781Aec76d1Bc44272b8b96Bc6D",
+          "raw": "25777440195473287159967",
+          "gnus": "25777.440195473287159967",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 17,
+          "address": "0xED0146d729DfbC6d67Fab4f2434D5dae031da04A",
+          "raw": "24925874269462809324724",
+          "gnus": "24925.874269462809324724",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 18,
+          "address": "0xe68e88BD2C85AA198ED6472379da6F41d5B52d97",
+          "raw": "23912170000000000000000",
+          "gnus": "23912.170000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 19,
+          "address": "0xdba320BB4E9411C2684b541083d76fEC91B4c147",
+          "raw": "21919851250922888567956",
+          "gnus": "21919.851250922888567956",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 20,
+          "address": "0x0340ecFa31c79e5B8fb14d4cAB4391713670191b",
+          "raw": "21204151386483890307153",
+          "gnus": "21204.151386483890307153",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 21,
+          "address": "0x73F6EB4788665C7681A99A31DED8134aB5BBdAaA",
+          "raw": "20356480781406074495485",
+          "gnus": "20356.480781406074495485",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 22,
+          "address": "0xAA890e99039b4B6C0D008Cbc5f038489828125dE",
+          "raw": "19338753675085867122548",
+          "gnus": "19338.753675085867122548",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 23,
+          "address": "0xA390c06D129A0B0288FE4E33B2540bD9f99DC333",
+          "raw": "18189022071003182522739",
+          "gnus": "18189.022071003182522739",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 24,
+          "address": "0x3F70e6A30c109321927aA7Cb43cAE790D9a4867D",
+          "raw": "16505000000000000000000",
+          "gnus": "16505.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 25,
+          "address": "0x2A0452A14ADFF6d6618F14ceE716926d61D1CDaa",
+          "raw": "15688788932452445705782",
+          "gnus": "15688.788932452445705782",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 26,
+          "address": "0x4BDeA2C68e05BF750c7D2Be2AfE7256612bb041f",
+          "raw": "15039545552056782483437",
+          "gnus": "15039.545552056782483437",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 27,
+          "address": "0xDF28949Ff6E4D4f59ADe2505F265414870066d18",
+          "raw": "14596976490018918706632",
+          "gnus": "14596.976490018918706632",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 28,
+          "address": "0x3080081C33FfaD191439B28e80F677A4223eC33B",
+          "raw": "13000000000000000000000",
+          "gnus": "13000.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 29,
+          "address": "0x56c5495A7Bf9178cD5924AD299027A2760914E86",
+          "raw": "11200182679208559671278",
+          "gnus": "11200.182679208559671278",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 30,
+          "address": "0x5AAB6dD5cDE403AC1b3e8fB88401C661FDeFa44a",
+          "raw": "10906900000000000000000",
+          "gnus": "10906.900000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 31,
+          "address": "0x43a9dA9bAde357843fBE7E5ee3Eedd910F9fAC1e",
+          "raw": "10350000000000000000000",
+          "gnus": "10350.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 32,
+          "address": "0x4810Be79f100ea0C6903D599D1A1b5A923F671B3",
+          "raw": "10000008823101991830980",
+          "gnus": "10000.008823101991830980",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 33,
+          "address": "0x031005887ccd868Dcf48Fe4Dab3f1634b4E7bb97",
+          "raw": "9600000000000000000000",
+          "gnus": "9600.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 34,
+          "address": "0xBc1Fc90F06bd763fad7e7e9283a00ff4b5519bb3",
+          "raw": "9500000000000000000000",
+          "gnus": "9500.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 35,
+          "address": "0x91eFA962889dd5cf7E8C7f5EeF38695557c9edae",
+          "raw": "9184723651953290580010",
+          "gnus": "9184.723651953290580010",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 36,
+          "address": "0x0d86d2Fb94A2B0C838C19d18a9e61f2D8d62B0EF",
+          "raw": "8764412056903965782676",
+          "gnus": "8764.412056903965782676",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 37,
+          "address": "0x41870504417649B4b9F4F47a14BC3B5117388eCB",
+          "raw": "8565234435993336746599",
+          "gnus": "8565.234435993336746599",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 38,
+          "address": "0xF959E63C718C15774D92aD85eCaF0D18aaB44a0c",
+          "raw": "8210000000000000000000",
+          "gnus": "8210.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 39,
+          "address": "0xbD50a98a99438325067302D987ccebA3C7a8a296",
+          "raw": "8099680138710183129699",
+          "gnus": "8099.680138710183129699",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 40,
+          "address": "0xA867aaBd9F861d63EA451549FA429A48fb527362",
+          "raw": "7511048897286146850490",
+          "gnus": "7511.048897286146850490",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 41,
+          "address": "0x6a2aFDb7a81A445A979Aa043B2398e24c5784A02",
+          "raw": "7246070409923404564589",
+          "gnus": "7246.070409923404564589",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 42,
+          "address": "0xd02449cCFdC4DD8eEe3c897ba088d05e492C9c8F",
+          "raw": "7200000000000000000000",
+          "gnus": "7200.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 43,
+          "address": "0xD5Fb61cd1Bc0d0Acc74BC5Bdeed04bD403335985",
+          "raw": "7161690910802379781600",
+          "gnus": "7161.690910802379781600",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 44,
+          "address": "0x4eaB33C5A08726818195C21f9698c3626092c661",
+          "raw": "7128479045408587134086",
+          "gnus": "7128.479045408587134086",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 45,
+          "address": "0x2Be679450D51CD196339198D4D0A9d71E0fe489E",
+          "raw": "6741328925457802577668",
+          "gnus": "6741.328925457802577668",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 46,
+          "address": "0x1e73Acd7De3B9952Fc81e66b83Ab5786ae547f0f",
+          "raw": "6623016321250510366233",
+          "gnus": "6623.016321250510366233",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 47,
+          "address": "0xd53a34e5d62bF74C5D265AF2022682B613f6BF78",
+          "raw": "6616126698856335874638",
+          "gnus": "6616.126698856335874638",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 48,
+          "address": "0xbdD1e9aA23692801288d2429771035A564CDD210",
+          "raw": "6060584708173736011746",
+          "gnus": "6060.584708173736011746",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 49,
+          "address": "0xe2C385Fa67A2a07319B280119A1F0Df04E99da06",
+          "raw": "6002000000000000000000",
+          "gnus": "6002.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        },
+        {
+          "network": "Polygon",
+          "rank": 50,
+          "address": "0x67b1577127FE57B99560b4F19c4d0f07830F8273",
+          "raw": "5850000000000000000000",
+          "gnus": "5850.000000000000000000",
+          "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
+          "referenceBlock": 97964233
+        }
+      ]
+    }
+  },
+  "elapsedSeconds": 71
+}

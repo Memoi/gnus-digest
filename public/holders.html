@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="GNUS top 50 holders on Ethereum and Polygon, verified directly on-chain.">
+<title>GNUS Top 50 holders</title>
+<style>
+:root{color-scheme:light dark;--bg:#f6f3eb;--panel:#fffdf8;--ink:#25251f;--mute:#77766e;--line:#dedbd1;--accent:#98752d;--good:#287a49;--bad:#b43d32}
+@media(prefers-color-scheme:dark){:root{--bg:#171814;--panel:#22231e;--ink:#eeede5;--mute:#aaa99f;--line:#414139;--accent:#d8b56c;--good:#75c792;--bad:#f08a80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1120px;margin:0 auto;padding:28px 20px 60px}
+nav{font-size:14px;margin:0 0 24px}
+nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
+nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
+h1{font-size:clamp(27px,5vw,38px);margin:0 0 4px}
+h2{font-size:18px;margin:24px 0 10px}
+.sub,.muted{color:var(--mute)}
+.sub{margin:0 0 20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+.status{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
+.status strong{font-size:14px}
+.ok{color:var(--good);font-weight:700}
+.err{color:var(--bad);font-weight:700}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0}
+button,input{font:inherit;border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:var(--panel);color:var(--ink)}
+button{cursor:pointer;font-weight:650}
+button.active{border-color:var(--accent);color:var(--accent)}
+input{flex:1;min-width:180px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:13px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--mute);font-weight:650;font-size:12px}
+tr:last-child td{border-bottom:0}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td a{color:var(--accent);text-decoration:none}
+.rank{color:var(--mute);width:55px}
+footer{font-size:12px;color:var(--mute);margin-top:16px}
+@media(max-width:600px){main{padding:20px 12px 40px}.panel{padding:12px}th,td{padding:9px 8px}}
+</style>
+</head>
+<body>
+<main>
+  <nav>
+    <a href="./">Digest</a>
+    <a href="liquidity.html">GNUS liquidity</a>
+    <a href="holders.html" aria-current="page">GNUS holders</a>
+    <a href="archive.html">Archive</a>
+  </nav>
+
+  <h1>GNUS Top 50 holders</h1>
+  <p class="sub">Largest GNUS holders on Ethereum and Polygon, with balances checked directly against the blockchain.</p>
+
+  <section class="panel">
+    <div class="status">
+      <strong id="updated">Loading data…</strong>
+      <span id="ethStatus" class="muted">Ethereum: —</span>
+      <span id="polyStatus" class="muted">Polygon: —</span>
+    </div>
+    <p class="muted" id="blocks" style="margin:10px 0 0">Reference blocks: —</p>
+  </section>
+
+  <div class="controls">
+    <button id="ethButton" class="active" type="button">Ethereum</button>
+    <button id="polyButton" type="button">Polygon</button>
+    <input id="search" type="search" placeholder="Search wallet address…" aria-label="Search wallet address">
+    <a href="gnus-top50.csv" style="color:var(--accent);font-weight:650">Download CSV</a>
+  </div>
+
+  <div class="status muted" style="margin:8px 0 12px">
+    <span id="count">50 holders</span>
+    <span id="contract"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Wallet</th><th style="text-align:right">GNUS</th><th style="text-align:right">Reference block</th></tr>
+      </thead>
+      <tbody id="holders">
+        <tr><td colspan="4">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Updated automatically every hour by GitHub Actions. Each displayed balance is verified on-chain at the reference block shown. If a scan fails, the last successfully validated dataset remains published.
+  </footer>
+</main>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  let data;
+  let network = 'ethereum';
+
+  const number = value => Number(value).toLocaleString('en-US', {
+    maximumFractionDigits: 6
+  });
+
+  function render() {
+    const section = data.networks[network];
+    const query = $('search').value.trim().toLowerCase();
+    const holders = section.holders.filter(h =>
+      h.address.toLowerCase().includes(query)
+    );
+
+    $('count').textContent = `${holders.length} of 50 holders`;
+    $('contract').textContent = `Contract: ${section.contract}`;
+    $('ethButton').classList.toggle('active', network === 'ethereum');
+    $('polyButton').classList.toggle('active', network === 'polygon');
+
+    $('holders').innerHTML = holders.map(h => `
+      <tr>
+        <td class="rank">${h.rank}</td>
+        <td><a href="${network === 'ethereum' ? 'https://etherscan.io/address/' : 'https://polygonscan.com/address/'}${encodeURIComponent(h.address)}" target="_blank" rel="noopener">${h.address}</a></td>
+        <td class="num">${number(h.gnus)}</td>
+        <td class="num">${Number(h.referenceBlock).toLocaleString('en-US')}</td>
+      </tr>
+    `).join('') || '<tr><td colspan="4">No matching address.</td></tr>';
+  }
+
+  async function load() {
+    try {
+      const response = await fetch(`gnus-top50.json?t=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      data = await response.json();
+
+      if (!data.networks?.ethereum?.holders || !data.networks?.polygon?.holders) {
+        throw new Error('Invalid dataset');
+      }
+
+      $('updated').textContent = `Last update: ${new Date(data.generatedAt).toLocaleString()}`;
+      $('ethStatus').innerHTML = '<span class="ok">Ethereum: 50/50 MATCH</span>';
+      $('polyStatus').innerHTML = '<span class="ok">Polygon: 50/50 MATCH</span>';
+      $('blocks').textContent =
+        `Ethereum block: ${data.networks.ethereum.referenceBlock.toLocaleString('en-US')} · Polygon block: ${data.networks.polygon.referenceBlock.toLocaleString('en-US')}`;
+      render();
+    } catch (error) {
+      $('updated').innerHTML = `<span class="err">Unable to load holders data: ${error.message}</span>`;
+      $('holders').innerHTML = '<tr><td colspan="4">Data unavailable. Please try again later.</td></tr>';
+    }
+  }
+
+  $('ethButton').addEventListener('click', () => { network = 'ethereum'; if (data) render(); });
+  $('polyButton').addEventListener('click', () => { network = 'polygon'; if (data) render(); });
+  $('search').addEventListener('input', () => { if (data) render(); });
+  load();
+})();
+</script>
+</body>
+</html>
