@@ -43,7 +43,7 @@
           "gnus": "73377.948358675136756320",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
           "referenceBlock": 26498409,
-          "holderType": "Smart Contract"
+          "holderType": "GNUS Multisig"
         },
         {
           "network": "Ethereum",
@@ -133,7 +133,7 @@
           "gnus": "12037.043251245435423475",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
           "referenceBlock": 26498409,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Ethereum",
@@ -153,7 +153,7 @@
           "gnus": "11524.148301811206547971",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
           "referenceBlock": 26498409,
-          "holderType": "Smart Contract"
+          "holderType": "GNUS Multisig"
         },
         {
           "network": "Ethereum",
@@ -183,7 +183,7 @@
           "gnus": "10396.949085467008197891",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
           "referenceBlock": 26498409,
-          "holderType": "Smart Contract"
+          "holderType": "GNUS Multisig"
         },
         {
           "network": "Ethereum",
@@ -273,7 +273,7 @@
           "gnus": "8101.183876610835276709",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
           "referenceBlock": 26498409,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Ethereum",
@@ -313,7 +313,7 @@
           "gnus": "7535.575608004578819620",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
           "referenceBlock": 26498409,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Ethereum",
@@ -453,7 +453,7 @@
           "gnus": "5602.866556384324593936",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
           "referenceBlock": 26498409,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Ethereum",
@@ -555,7 +555,7 @@
           "gnus": "2770869.920607883829059423",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
           "referenceBlock": 97986029,
-          "holderType": "Smart Contract"
+          "holderType": "GNUS Multisig"
         },
         {
           "network": "Polygon",
@@ -695,7 +695,7 @@
           "gnus": "25777.440195473287159967",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
           "referenceBlock": 97986029,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Polygon",
@@ -795,7 +795,7 @@
           "gnus": "15039.545552056782483437",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
           "referenceBlock": 97986029,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Polygon",
@@ -825,7 +825,7 @@
           "gnus": "11200.182679208559671278",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
           "referenceBlock": 97986029,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Polygon",
@@ -875,7 +875,7 @@
           "gnus": "9500.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
           "referenceBlock": 97986029,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Polygon",
@@ -885,7 +885,7 @@
           "gnus": "9184.723651953290580010",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
           "referenceBlock": 97986029,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Polygon",
@@ -915,7 +915,7 @@
           "gnus": "8210.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
           "referenceBlock": 97986029,
-          "holderType": "Smart Contract"
+          "holderType": "Wallet"
         },
         {
           "network": "Polygon",
@@ -965,7 +965,7 @@
           "gnus": "7161.690910802379781600",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
           "referenceBlock": 97986029,
-          "holderType": "Smart Contract"
+          "holderType": "GNUS Multisig"
         },
         {
           "network": "Polygon",

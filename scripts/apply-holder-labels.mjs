@@ -80,8 +80,10 @@ for (const row of classified.rows) {
 
   const holderType = {
     TEAM_MULTISIG: "GNUS Multisig",
+    GNOSIS_SAFE: "GNUS Multisig",
     SMART_CONTRACT: "Smart Contract",
     POOL: "Smart Contract",
+    VESTING: "Smart Contract",
     EOA: "Wallet"
   }[classification];
 
