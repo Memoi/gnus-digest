@@ -2,6 +2,7 @@ import fs from "node:fs";
 
 const JSON_FILE = "public/gnus-top50.json";
 const CSV_FILE = "public/gnus-top50-classified.csv";
+const MAIN_CSV_FILE = "public/gnus-top50.csv";
 
 function parseCsvLine(line) {
   const fields = [];
@@ -30,34 +31,51 @@ function parseCsvLine(line) {
   return fields;
 }
 
-const csv = fs.readFileSync(CSV_FILE, "utf8")
-  .replace(/^\uFEFF/, "")
-  .trim()
-  .split(/\r?\n/);
+function readCsv(file) {
+  const lines = fs.readFileSync(file, "utf8")
+    .replace(/^\uFEFF/, "")
+    .trim()
+    .split(/\r?\n/);
 
-const headers = parseCsvLine(csv[0]);
-const index = Object.fromEntries(headers.map((h, i) => [h, i]));
+  return {
+    headers: parseCsvLine(lines[0]),
+    rows: lines.slice(1).map(parseCsvLine)
+  };
+}
+
+function serializeCsv(headers, rows) {
+  const escape = value =>
+    `"${String(value ?? "").replace(/"/g, '""')}"`;
+
+  return [
+    headers.map(escape).join(","),
+    ...rows.map(row => row.map(escape).join(","))
+  ].join("\n") + "\n";
+}
+
+const classified = readCsv(CSV_FILE);
+const classifiedIndex = Object.fromEntries(
+  classified.headers.map((h, i) => [h, i])
+);
 
 for (const field of ["network", "address", "classification"]) {
-  if (index[field] === undefined) {
-    throw new Error(`Missing CSV column: ${field}`);
+  if (classifiedIndex[field] === undefined) {
+    throw new Error(`Missing classified CSV column: ${field}`);
   }
 }
 
 const labels = new Map();
 
-for (const line of csv.slice(1)) {
-  const row = parseCsvLine(line);
-  const network = row[index.network];
-  const address = row[index.address]?.toLowerCase();
-  const classification = row[index.classification];
-
+for (const row of classified.rows) {
   const networkKey =
-    network === "Ethereum" ? "ethereum" :
-    network === "Polygon" ? "polygon" : null;
+    row[classifiedIndex.network] === "Ethereum" ? "ethereum" :
+    row[classifiedIndex.network] === "Polygon" ? "polygon" : null;
+
+  const address = row[classifiedIndex.address]?.toLowerCase();
+  const classification = row[classifiedIndex.classification];
 
   if (!networkKey || !address) {
-    throw new Error(`Invalid classified row: ${line}`);
+    throw new Error("Invalid row in classified CSV");
   }
 
   const holderType = {
@@ -71,15 +89,24 @@ for (const line of csv.slice(1)) {
     throw new Error(`Unknown classification: ${classification}`);
   }
 
-  labels.set(`${networkKey}:${address}`, holderType);
+  const key = `${networkKey}:${address}`;
+
+  if (labels.has(key)) {
+    throw new Error(`Duplicate classification: ${key}`);
+  }
+
+  labels.set(key, holderType);
 }
 
 if (labels.size !== 100) {
   throw new Error(`Expected 100 classifications, received ${labels.size}`);
 }
 
+// Update JSON
 const data = JSON.parse(fs.readFileSync(JSON_FILE, "utf8"));
-data.description = "Top 50 holders per network, balances individually verified on-chain";
+data.description =
+  "Top 50 holders per network, balances individually verified on-chain";
+
 let updated = 0;
 
 for (const networkKey of ["ethereum", "polygon"]) {
@@ -106,10 +133,61 @@ if (updated !== 100) {
   throw new Error(`Expected 100 updated holders, got ${updated}`);
 }
 
-const temporary = `${JSON_FILE}.tmp`;
-fs.writeFileSync(temporary, JSON.stringify(data, null, 2) + "\n");
-fs.renameSync(temporary, JSON_FILE);
+// Update the main downloadable CSV
+const mainCsv = readCsv(MAIN_CSV_FILE);
+const mainIndex = Object.fromEntries(
+  mainCsv.headers.map((h, i) => [h, i])
+);
+
+for (const field of ["network", "address"]) {
+  if (mainIndex[field] === undefined) {
+    throw new Error(`Missing main CSV column: ${field}`);
+  }
+}
+
+if (mainIndex.holder_type === undefined) {
+  mainCsv.headers.push("holder_type");
+  mainIndex.holder_type = mainCsv.headers.length - 1;
+}
+
+let csvUpdated = 0;
+
+for (const row of mainCsv.rows) {
+  const networkKey =
+    row[mainIndex.network] === "Ethereum" ? "ethereum" :
+    row[mainIndex.network] === "Polygon" ? "polygon" : null;
+
+  const address = row[mainIndex.address]?.toLowerCase();
+  const key = `${networkKey}:${address}`;
+  const holderType = labels.get(key);
+
+  if (!networkKey || !holderType) {
+    throw new Error(`Missing CSV classification: ${key}`);
+  }
+
+  row[mainIndex.holder_type] = holderType;
+  csvUpdated++;
+}
+
+if (csvUpdated !== 100 || mainCsv.rows.length !== 100) {
+  throw new Error(`Expected 100 CSV rows, got ${csvUpdated}`);
+}
+
+// Write only after all validations have passed
+const jsonTemporary = `${JSON_FILE}.tmp`;
+const csvTemporary = `${MAIN_CSV_FILE}.tmp`;
+
+fs.writeFileSync(jsonTemporary, JSON.stringify(data, null, 2) + "\n");
+fs.writeFileSync(
+  csvTemporary,
+  serializeCsv(mainCsv.headers, mainCsv.rows)
+);
+
+fs.renameSync(jsonTemporary, JSON_FILE);
+fs.renameSync(csvTemporary, MAIN_CSV_FILE);
 
 console.log("Holder categories applied:", updated);
+console.log("Main CSV categories applied:", csvUpdated);
+console.log("CSV column: holder_type");
 console.log("Ethereum:", data.networks.ethereum.holders.length);
 console.log("Polygon:", data.networks.polygon.holders.length);
