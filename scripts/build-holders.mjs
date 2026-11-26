@@ -352,7 +352,7 @@ async function main() {
   const result = {
     token: 'GNUS',
     generatedAt: new Date().toISOString(),
-    description: 'Top 50 holders par réseau, soldes vérifiés individuellement on-chain',
+    description: 'Top 50 holders per network, balances individually verified on-chain',
     decimals: DECIMALS,
     validation: {
       ethereum: { verified: 50, total: 50, status: 'MATCH' },

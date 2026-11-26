@@ -19,20 +19,30 @@ jobs:
     env:
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      ROUTESCAN_API_KEY: ${{ secrets.ROUTESCAN_API_KEY }}
+      ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+
     steps:
       - uses: actions/checkout@v5
 
       - name: Build and validate Ethereum + Polygon Top 50
-        run: node --version && node scripts/build-holders.mjs
-        env:
-          ROUTESCAN_API_KEY: ${{ secrets.ROUTESCAN_API_KEY }}
-          ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+        run: node scripts/build-holders.mjs
 
-      - name: Commit validated data
+      - name: Classify all 100 holders on-chain
+        run: node scripts/classify-holders.mjs
+
+      - name: Apply holder categories to website JSON
+        run: node scripts/apply-holder-labels.mjs
+
+      - name: Commit validated holder data
         run: |
           git config user.name "digest-bot"
           git config user.email "digest-bot@users.noreply.github.com"
-          git add public/gnus-top50.json public/gnus-top50.csv
+
+          git add public/gnus-top50.json \
+                  public/gnus-top50.csv \
+                  public/gnus-top50-classified.csv
+
           if git diff --cached --quiet; then
             echo "No holder data changes"
           else
@@ -48,5 +58,5 @@ jobs:
         run: |
           curl -fsS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=⚠ GNUS Top 50 holders failed. Previous validated data is preserved. Details: ${RUN_URL}" \
+            --data-urlencode "text=GNUS Top 50 holders update failed. Previous validated data is preserved. Details: ${RUN_URL}" \
             > /dev/null

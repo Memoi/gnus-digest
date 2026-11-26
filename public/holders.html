@@ -76,10 +76,10 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
   <div class="table-wrap">
     <table>
       <thead>
-        <tr><th>Rank</th><th>Wallet</th><th style="text-align:right">GNUS</th><th style="text-align:right">Reference block</th></tr>
+        <tr><th>Rank</th><th>Address</th><th>Type</th><th style="text-align:right">GNUS</th><th style="text-align:right">Reference block</th></tr>
       </thead>
       <tbody id="holders">
-        <tr><td colspan="4">Loading…</td></tr>
+        <tr><td colspan="5">Loading…</td></tr>
       </tbody>
     </table>
   </div>
@@ -115,10 +115,11 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
       <tr>
         <td class="rank">${h.rank}</td>
         <td><a href="${network === 'ethereum' ? 'https://etherscan.io/address/' : 'https://polygonscan.com/address/'}${encodeURIComponent(h.address)}" target="_blank" rel="noopener">${h.address}</a></td>
+        <td>${['Wallet', 'Smart Contract', 'GNUS Multisig'].includes(h.holderType) ? h.holderType : 'Unknown'}</td>
         <td class="num">${number(h.gnus)}</td>
         <td class="num">${Number(h.referenceBlock).toLocaleString('en-US')}</td>
       </tr>
-    `).join('') || '<tr><td colspan="4">No matching address.</td></tr>';
+    `).join('') || '<tr><td colspan="5">No matching address.</td></tr>';
   }
 
   async function load() {
@@ -139,7 +140,7 @@ footer{font-size:12px;color:var(--mute);margin-top:16px}
       render();
     } catch (error) {
       $('updated').innerHTML = `<span class="err">Unable to load holders data: ${error.message}</span>`;
-      $('holders').innerHTML = '<tr><td colspan="4">Data unavailable. Please try again later.</td></tr>';
+      $('holders').innerHTML = '<tr><td colspan="5">Data unavailable. Please try again later.</td></tr>';
     }
   }
 
