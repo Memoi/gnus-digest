@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require('/opt/gnus-agent/playwright/node_modules/playwright');
 
 const ROOT = path.resolve('public');
-const OUTPUT = '/tmp/gnus-digest-playwright';
+const OUTPUT = path.join('/tmp', `gnus-digest-playwright-${process.env.USER || 'user'}`);
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 const REPORT = path.join(OUTPUT, `report-${timestamp}.json`);
 
@@ -177,9 +177,15 @@ try {
         const meta = document.querySelector('#meta');
         return meta && !meta.textContent.includes('Loading');
       }, { timeout: 15000 });
-    } else {
+    } else if (name === 'liquidity') {
       await page.waitForSelector('#histBody', { timeout: 10000 });
       await page.waitForTimeout(1500);
+    } else if (name === 'holders') {
+      await page.waitForFunction(() => {
+        const status = document.querySelector('#updated')?.textContent || '';
+        return status.startsWith('Last update:') ||
+          status.includes('Unable to load holders data:');
+      }, { timeout: 15000 });
     }
 
     const title = await page.title();
@@ -230,6 +236,140 @@ try {
     }
 
     let functionalChecks = null;
+
+    if (name === 'holders') {
+      const status = (await page.locator('#updated').innerText()).trim();
+
+      if (!status.startsWith('Last update:')) {
+        throw new Error('Chargement du dataset Holders échoué : ' + status);
+      }
+
+      const initialRows = await page.locator('#holders tr').count();
+
+      if (initialRows !== 50) {
+        throw new Error(`Ethereum : 50 détenteurs attendus, ${initialRows} trouvés`);
+      }
+
+      const ethereumContract = (await page.locator('#contract').innerText()).trim();
+
+      if (!ethereumContract.includes('Contract:')) {
+        throw new Error('Adresse du contrat Ethereum absente');
+      }
+
+      const firstAddress = (
+        await page.locator('#holders tr td:nth-child(2) a').first().innerText()
+      ).trim();
+
+      if (!firstAddress) {
+        throw new Error('Adresse du premier détenteur Ethereum absente');
+      }
+
+      // Vérification de la recherche par adresse exacte.
+      await page.locator('#search').fill(firstAddress);
+
+      const filteredRows = await page.locator('#holders tr').count();
+      const filteredCount = (await page.locator('#count').innerText()).trim();
+
+      if (filteredRows !== 1 || !filteredCount.startsWith('1 of 50')) {
+        throw new Error(
+          `Recherche Holders incorrecte : ${filteredRows} ligne(s), ${filteredCount}`
+        );
+      }
+
+      // Vérification du résultat vide.
+      await page.locator('#search').fill('address-that-does-not-exist-987654321');
+
+      const emptyResult = await page.locator('#holders').innerText();
+
+      if (!emptyResult.includes('No matching address.')) {
+        throw new Error('Le résultat vide de la recherche est incorrect');
+      }
+
+      // Restauration de la liste Ethereum.
+      await page.locator('#search').fill('');
+
+      // Bascule vers Polygon.
+      await page.locator('#polyButton').click();
+
+      const polygonRows = await page.locator('#holders tr').count();
+      const polygonContract = (await page.locator('#contract').innerText()).trim();
+
+      if (polygonRows !== 50) {
+        throw new Error(`Polygon : 50 détenteurs attendus, ${polygonRows} trouvés`);
+      }
+
+      if (!polygonContract.includes('Contract:') ||
+          polygonContract === ethereumContract) {
+        throw new Error('Le contrat Polygon est absent ou identique à Ethereum');
+      }
+
+      const polygonActive = await page.locator('#polyButton').evaluate(
+        element => element.classList.contains('active')
+      );
+
+      if (!polygonActive) {
+        throw new Error('Le bouton Polygon ne devient pas actif');
+      }
+
+      // Retour à Ethereum.
+      await page.locator('#ethButton').click();
+
+      const ethereumActive = await page.locator('#ethButton').evaluate(
+        element => element.classList.contains('active')
+      );
+
+      if (!ethereumActive) {
+        throw new Error('Le bouton Ethereum ne devient pas actif');
+      }
+
+      // Vérification des trois inventaires sans supposer qu'ils sont tous remplis.
+      const inventories = {};
+
+      for (const [key, selector, metaSelector] of [
+        ['eip7702', '#eip7702Table', '#eip7702Meta'],
+        ['contracts', '#contractsTable', '#contractsMeta'],
+        ['multisigs', '#multisigsTable', '#multisigsMeta'],
+      ]) {
+        const container = page.locator(selector);
+        const meta = (await page.locator(metaSelector).innerText()).trim();
+        const rows = await container.locator('table tbody tr').count();
+        const empty = await container.locator('.inventory-empty').count();
+
+        if (!meta) {
+          throw new Error(`Métadonnées absentes pour l'inventaire ${key}`);
+        }
+
+        if (rows === 0 && empty === 0) {
+          throw new Error(`Inventaire ${key} vide sans message explicatif`);
+        }
+
+        inventories[key] = {
+          rows,
+          empty,
+          metadata: meta,
+        };
+      }
+
+      functionalChecks = {
+        dataset: {
+          status,
+          ethereumHolders: initialRows,
+          polygonHolders: polygonRows,
+          ethereumContract,
+          polygonContract,
+        },
+        search: {
+          addressTested: firstAddress,
+          matchingRows: filteredRows,
+          emptyResultVerified: true,
+        },
+        networkSwitch: {
+          ethereum: ethereumActive,
+          polygon: polygonActive,
+        },
+        inventories,
+      };
+    }
 
     if (name === 'liquidity') {
       if (!(await page.locator('#histBody').count())) {
@@ -406,6 +546,7 @@ try {
     ['index', `${BASE}/index.html`],
     ['archive', `${BASE}/archive.html`],
     ['liquidity', `${BASE}/liquidity.html`],
+    ['holders', `${BASE}/holders.html`],
   ];
 
   for (const [name, url] of pages) {

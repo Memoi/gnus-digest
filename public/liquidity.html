@@ -16,124 +16,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://gnus-digest.vercel.app/og.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
-<style>
-  :root{
-    --bg:#f4f1ec; --panel:#fff; --ink:#22201c; --mute:#716b62; --line:#ddd7cc; --accent:#8a4b12;
-    --buy:#2e7d32; --buy-bg:#dbe9d9; --sell:#a8432f; --sell-bg:#f1dcd5;
-  }
-  @media (prefers-color-scheme:dark){:root{
-    --bg:#1d1b18; --panel:#272420; --ink:#ece7de; --mute:#a39b8f; --line:#3a352e; --accent:#e0a367;
-    --buy:#7fc883; --buy-bg:#2b3a2c; --sell:#e08a76; --sell-bg:#40281f;
-  }}
-  *{box-sizing:border-box}
-  body{margin:0;padding:20px;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif}
-  input,textarea,button,select,table,label,.info,details,#status,.note,.sub,nav{font-family:system-ui,sans-serif}
-  main{max-width:1000px;margin:0 auto}
-  h1{font-size:26px;margin:0 0 2px;font-weight:700}
-  h2{font:600 13px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:26px 0 8px}
-  .sub{color:var(--mute);font-size:13px;margin:0 0 22px}
-  nav{font-size:14px;margin:0 0 18px}
-  nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
-  nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
-  .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-  input,textarea,button{font:inherit;font-family:system-ui,sans-serif;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
-  input#addr{flex:1;min-width:300px;font-family:Consolas,monospace;font-size:13px}
-  input#lv{width:100%}
-  button{background:var(--ink);color:var(--bg);border-color:var(--ink);cursor:pointer;font-weight:600}
-  button:disabled{opacity:.5;cursor:wait}
-  button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-  details{margin:6px 0 10px;color:var(--mute)}
-  summary{cursor:pointer;color:var(--accent)}
-  textarea{width:100%;height:80px;font-family:Consolas,monospace;font-size:12px}
-  label{display:block;margin:10px 0 4px;color:var(--mute);font-size:13px}
-  #status{min-height:22px;color:var(--mute);margin:10px 0}
-  #status.err{color:var(--sell)}
-  .info{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
-  .info div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
-  .info b{display:block;font-size:12px;font-weight:600;color:var(--mute)}
-  .info span{font-variant-numeric:tabular-nums;font-size:16px}
-  .wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px}
-  table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
-  th,td{padding:8px 12px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
-  th{font-size:12px;font-weight:600;color:var(--mute)}
-  th:first-child,td:first-child{text-align:left}
-  tr:last-child td{border-bottom:0}
-  td.pct{font-weight:600}
-  .buy td.pct{color:var(--buy)} .sell td.pct{color:var(--sell)}
-  td.viz{width:160px;padding:8px 12px}
-  .bg{height:10px;border-radius:5px}
-  .buy .bg{background:var(--buy-bg)} .sell .bg{background:var(--sell-bg)}
-  .fill{height:100%;border-radius:5px}
-  .buy .fill{background:var(--buy)} .sell .fill{background:var(--sell)}
-  .note{color:var(--mute);font-size:13px;margin-top:22px}
-  select{font:inherit;font-family:system-ui,sans-serif;border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--panel);color:var(--ink)}
-  .totop{text-align:center;margin:26px 0 8px}
-  .totop button{font:600 14px system-ui,sans-serif;background:var(--panel);color:var(--accent);border:1px solid var(--line);border-radius:20px;padding:8px 18px;cursor:pointer;width:auto}
-  .totop button:hover{border-color:var(--accent)}
-  .totop button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  td svg.mini{color:var(--accent);vertical-align:middle;margin:0 0 0 8px}
-  td a.tok{color:var(--accent);font-size:12px;text-decoration:none}
-  td .gap{color:var(--accent);font-size:12px;font-weight:600}
-  .notice{margin-top:8px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;font:14px/1.5 system-ui,sans-serif}
-  .notice .nt{font-weight:600;color:var(--accent);margin-bottom:4px}
-  @media (max-width:640px){
-    .totop button{width:auto;padding:8px 18px}
-    .bar.cmpbar{flex-direction:row;flex-wrap:nowrap;gap:8px}
-    .cmpbar button{width:auto;flex:1}
-    body{padding:10px;font-size:14px}
-    h1{font-size:19px}
-    h2{margin:18px 0 6px;font-size:15px}
-    .bar{flex-direction:column}
-    input#addr{min-width:0;width:100%}
-    input,textarea,button,select{font-size:16px}
-    button,select{width:100%;padding:10px}
-    .info{grid-template-columns:1fr 1fr;gap:6px}
-    .info div:first-child{grid-column:1/-1}
-    .info div{padding:6px 10px}
-    .info span{font-size:14px;overflow-wrap:anywhere}
-    .wrap{background:none;border:0;overflow:visible}
-    table,tbody{display:block}
-    thead{display:none}
-    tr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 8px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px}
-    td,tr:last-child td{display:block;padding:0;border:0;text-align:left;white-space:normal;font-size:13px}
-    td::before{content:attr(data-label);display:block;color:var(--mute);font-size:10.5px;line-height:1.2;margin-bottom:1px}
-    td.pct{grid-column:1/-1;order:-2;font-size:16px}
-    td.viz{grid-column:1/-1;order:-1;width:auto}
-    td.pct::before,td[data-label=""]::before,td.viz::before{display:none}
-    td[colspan]{grid-column:1/-1;color:var(--mute)}
-    .bg{height:6px}
-  }
 
-  nav.jump {
-    font: 13px/1.8 system-ui, sans-serif;
-    color: var(--mute);
-    margin: -6px 0 14px;
-  }
-  nav.jump a {
-    color: var(--mute);
-    font-weight: 400;
-    margin: 0;
-    text-decoration: none;
-    border-bottom: 1px dotted var(--line);
-  }
-  nav.jump a:hover {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
-  h2[id] {
-    scroll-margin-top: 12px;
-  }
-
-</style>
   <link rel="stylesheet" href="site.css">
 </head>
-<body>
+<body class="liquidity-page">
 <main>
   <nav><a href="./">Digest</a><a href="liquidity.html" aria-current="page">GNUS liquidity</a><a href="holders.html">GNUS holders</a><a href="archive.html">Archive</a></nav>
   <nav class="jump" id="pageJump" aria-label="Sections on this page">
     Jump to: <a href="#section-1">All networks</a> · <a href="#section-2">Daily history</a> · <a href="#section-3">Trading activity</a> · <a href="#section-4">Pool explorer</a>
   </nav>
-  <h1>DEX pool depth</h1>
+  <h1 class="sr-only">DEX pool depth</h1>
   <p class="sub">How much buying (or selling) it would actually take to reach each price level. Works with Uniswap, PancakeSwap, Aerodrome and compatible pools. Data is read live from the blockchain, nothing to update.</p>
 
   <h2 id="section-1">All networks at a glance</h2>
@@ -502,5 +394,135 @@ go();
 loadHistory();
 loadTrading();
 </script>
+
+<script>
+/* TRADING_DYNAMIC_COLUMN_WIDTHS */
+(() => {
+  const table = document.getElementById('trade');
+  const wrapper = table && table.closest('.wrap');
+  if (!table || !wrapper) return;
+
+  const mobile = () => window.matchMedia('(max-width: 640px)').matches;
+  let scheduled = false;
+
+  const firstHeader = table.querySelector('thead th');
+  const basePaddingLeft = firstHeader
+    ? parseFloat(getComputedStyle(firstHeader).paddingLeft) : 12;
+  const basePaddingRight = firstHeader
+    ? parseFloat(getComputedStyle(firstHeader).paddingRight) : 12;
+
+  function updateWidths() {
+    if (mobile()) {
+      table.querySelector(':scope > colgroup')?.remove();
+      table.style.removeProperty('width');
+      table.style.removeProperty('table-layout');
+      table.style.removeProperty('border-collapse');
+      table.style.removeProperty('border-spacing');
+      table.querySelectorAll('th, td').forEach(cell => {
+        cell.style.removeProperty('padding-left');
+        cell.style.removeProperty('padding-right');
+      });
+      return;
+    }
+
+    if (!table.rows.length) return;
+
+    const clone = table.cloneNode(true);
+    clone.querySelectorAll(':scope > colgroup').forEach(el => el.remove());
+
+    Object.assign(clone.style, {
+      position: 'absolute',
+      visibility: 'hidden',
+      pointerEvents: 'none',
+      left: '-100000px',
+      top: '0',
+      display: 'table',
+      width: 'max-content',
+      minWidth: '0',
+      maxWidth: 'none',
+      tableLayout: 'auto'
+    });
+
+    clone.querySelectorAll('th, td').forEach(cell => {
+      cell.style.whiteSpace = 'nowrap';
+      cell.style.width = 'auto';
+      cell.style.removeProperty('padding-left');
+      cell.style.removeProperty('padding-right');
+    });
+
+    wrapper.appendChild(clone);
+
+    const columnCount = clone.rows[0].cells.length;
+    const widths = Array(columnCount).fill(0);
+
+    for (const row of clone.rows) {
+      let column = 0;
+
+      for (const cell of row.cells) {
+        const span = cell.colSpan || 1;
+        const measured = cell.getBoundingClientRect().width;
+
+        if (span === 1 && column < columnCount) {
+          widths[column] = Math.max(widths[column], measured);
+        }
+
+        column += span;
+      }
+    }
+
+    clone.remove();
+
+    if (!widths.length || widths.some(w => !Number.isFinite(w) || w <= 0)) return;
+
+    table.querySelector(':scope > colgroup')?.remove();
+
+    const naturalWidth = widths.reduce((sum, width) => sum + width, 0);
+    const extraPadding = Math.max(
+      0,
+      (wrapper.clientWidth - naturalWidth) / (2 * columnCount)
+    );
+
+    table.querySelectorAll('th, td').forEach(cell => {
+      cell.style.paddingLeft = `${basePaddingLeft + extraPadding}px`;
+      cell.style.paddingRight = `${basePaddingRight + extraPadding}px`;
+    });
+
+    table.style.width = 'max-content';
+    table.style.minWidth = '0';
+    table.style.maxWidth = 'none';
+    table.style.tableLayout = 'auto';
+    table.style.borderCollapse = 'collapse';
+    table.style.borderSpacing = '0';
+  }
+
+  function scheduleUpdate() {
+    if (scheduled) return;
+
+    scheduled = true;
+
+    requestAnimationFrame(() => {
+      scheduled = false;
+      updateWidths();
+    });
+  }
+
+  const observer = new MutationObserver(scheduleUpdate);
+  observer.observe(table.tBodies[0] || table, {
+    childList: true,
+    subtree: true,
+    characterData: true
+  });
+
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(scheduleUpdate).observe(wrapper);
+  }
+
+  window.addEventListener('resize', scheduleUpdate);
+
+  updateWidths();
+  requestAnimationFrame(scheduleUpdate);
+})();
+</script>
+
 </body>
 </html>

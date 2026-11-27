@@ -5,96 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="GNUS top 50 holders on Ethereum and Polygon, verified directly on-chain.">
 <title>GNUS Top 50 holders</title>
-<style>
-:root{color-scheme:light dark;--bg:#f6f3eb;--panel:#fffdf8;--ink:#25251f;--mute:#77766e;--line:#dedbd1;--accent:#98752d;--good:#287a49;--bad:#b43d32}
-@media(prefers-color-scheme:dark){:root{--bg:#171814;--panel:#22231e;--ink:#eeede5;--mute:#aaa99f;--line:#414139;--accent:#d8b56c;--good:#75c792;--bad:#f08a80}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
-main{max-width:1600px;width:100%;margin:0 auto;padding:28px 20px 60px}
-nav{font-size:14px;margin:0 0 24px}
-nav a{color:var(--accent);margin-right:14px;text-decoration:none;font-weight:600}
-nav a[aria-current]{color:var(--ink);border-bottom:2px solid var(--accent)}
-h1{font-size:clamp(27px,5vw,38px);margin:0 0 4px}
-h2{font-size:18px;margin:24px 0 10px}
-.sub,.muted{color:var(--mute)}
-.sub{margin:0 0 20px}
-.panel{width:100%;max-width:1200px;margin:14px auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
-.status{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
-main > .status.muted[style*="margin:8px 0 12px"]{
-  width:100%;
-  max-width:1200px;
-  margin:8px auto 12px!important
-}
-.status strong{font-size:14px}
-.ok{color:var(--good);font-weight:700}
-.err{color:var(--bad);font-weight:700}
-.controls{width:100%;max-width:1200px;margin:16px auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-button,input{font:inherit;border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:var(--panel);color:var(--ink)}
-button{cursor:pointer;font-weight:650}
-button.active{border-color:var(--accent);color:var(--accent)}
-input{flex:1;min-width:180px}
-.table-wrap{
-  width:fit-content;
-  max-width:100%;
-  margin:0 auto;
-  overflow-x:auto;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:var(--panel)
-}
-table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:13px}
-th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
-th{color:var(--mute);font-weight:650;font-size:12px}
-tr:last-child td{border-bottom:0}
-td.num{text-align:right;font-variant-numeric:tabular-nums}
-td a{color:var(--accent);text-decoration:none}
-.rank{color:var(--mute);width:55px}
-footer{width:100%;max-width:1200px;margin:16px auto 0;font-size:12px;color:var(--mute)}
 
-.inventory-grid{display:grid;grid-template-columns:1fr;gap:14px}
-.inventory-meta{font-size:12px;color:var(--mute);margin:4px 0 10px}
-.inventory-empty{padding:12px;color:var(--mute);font-size:13px}
-.inventory-table{width:max-content;max-width:100%;min-width:0;table-layout:auto;white-space:nowrap}
-.inventory-table th,.inventory-table td{white-space:nowrap;overflow-wrap:normal;word-break:normal}
-@media(max-width:900px){
-  .inventory-table{table-layout:auto;min-width:900px}
-  .inventory-table th,.inventory-table td{white-space:normal;overflow-wrap:anywhere}
-}
-.address-cell{font-family:ui-monospace,monospace;font-size:12px}
-
-@media(max-width:600px){main{padding:20px 12px 40px}.panel{padding:12px}th,td{padding:9px 8px}}
-
-  nav.jump {
-    font: 13px/1.8 system-ui, sans-serif;
-    color: var(--mute);
-    margin: -6px 0 14px;
-  }
-  nav.jump a {
-    color: var(--mute);
-    font-weight: 400;
-    margin: 0;
-    text-decoration: none;
-    border-bottom: 1px dotted var(--line);
-  }
-  nav.jump a:hover {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
-  h2[id] {
-    scroll-margin-top: 12px;
-  }
-
-</style>
   <link rel="stylesheet" href="site.css">
 </head>
-<body>
+<body class="holders-page">
 <main>
-  <nav>
-    <a href="./">Digest</a>
-    <a href="liquidity.html">GNUS liquidity</a>
-    <a href="holders.html" aria-current="page">GNUS holders</a>
-    <a href="archive.html">Archive</a>
-  </nav>
+  <nav><a href="./">Digest</a><a href="liquidity.html">GNUS liquidity</a><a href="holders.html" aria-current="page">GNUS holders</a><a href="archive.html">Archive</a></nav>
+  <h1 class="sr-only">GNUS holders</h1>
   <nav class="jump" id="pageJump" aria-label="Sections on this page">
     Jump to: <a href="#section-1">Top 50 holders</a> · <a href="#section-2">EIP-7702 wallets</a> · <a href="#section-3">Smart contracts</a> · <a href="#section-4">Multisigs</a>
   </nav>
@@ -314,5 +231,118 @@ document.getElementById('toTop').addEventListener('click', () => window.scrollTo
   behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 }));
 </script>
+
+<script>
+/* HOLDERS_DYNAMIC_COLUMN_WIDTHS */
+(() => {
+  function sizeTable(table, wrapper) {
+    if (!table || !wrapper || !table.rows.length) return;
+
+    const clone = table.cloneNode(true);
+    clone.classList.add('holders-measure-clone');
+    clone.querySelectorAll('colgroup').forEach(node => node.remove());
+
+    Object.assign(clone.style, {
+      position: 'absolute',
+      visibility: 'hidden',
+      pointerEvents: 'none',
+      left: '-100000px',
+      top: '0',
+      width: 'max-content',
+      minWidth: '0',
+      maxWidth: 'none',
+      tableLayout: 'auto'
+    });
+
+    wrapper.appendChild(clone);
+
+    const cells = Array.from(clone.rows[0].cells);
+    const widths = cells.map(cell => cell.getBoundingClientRect().width);
+    clone.remove();
+
+    if (!widths.length || widths.some(width => !Number.isFinite(width) || width <= 0)) return;
+
+    const naturalWidth = widths.reduce((sum, width) => sum + width, 0);
+    const targetWidth = Math.max(naturalWidth, wrapper.clientWidth);
+    const extraPerColumn = Math.max(0, targetWidth - naturalWidth) / widths.length;
+
+    let colgroup = table.querySelector(':scope > colgroup');
+    if (!colgroup) {
+      colgroup = document.createElement('colgroup');
+      table.insertBefore(colgroup, table.firstChild);
+    }
+
+    while (colgroup.children.length < widths.length) {
+      colgroup.appendChild(document.createElement('col'));
+    }
+    while (colgroup.children.length > widths.length) {
+      colgroup.lastElementChild.remove();
+    }
+
+    widths.forEach((width, index) => {
+      colgroup.children[index].style.width =
+        `${width + extraPerColumn}px`;
+    });
+
+    table.style.width = `${targetWidth}px`;
+    table.style.minWidth = '0';
+    table.style.maxWidth = 'none';
+    table.style.tableLayout = 'fixed';
+  }
+
+  function updateAll() {
+    document.querySelectorAll('.holders-page .panel .table-wrap').forEach(wrapper => {
+      const table = wrapper.querySelector(':scope > table');
+      if (table) sizeTable(table, wrapper);
+    });
+  }
+
+  let scheduled = false;
+  function scheduleUpdate() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      updateAll();
+    });
+  }
+
+  function init() {
+    updateAll();
+
+    document.querySelectorAll('.holders-page .panel .table-wrap').forEach(wrapper => {
+      if ('ResizeObserver' in window) {
+        new ResizeObserver(scheduleUpdate).observe(wrapper);
+      }
+    });
+
+    new MutationObserver(records => {
+      const relevant = records.some(record =>
+        [...record.addedNodes, ...record.removedNodes].some(node =>
+          node.nodeType === 1 &&
+          !node.classList.contains('holders-measure-clone') &&
+          node.tagName !== 'COLGROUP' &&
+          node.tagName !== 'COL'
+        )
+      );
+      if (relevant) scheduleUpdate();
+    }).observe(document.querySelector('.holders-page main') || document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    window.addEventListener('resize', scheduleUpdate);
+    setTimeout(scheduleUpdate, 300);
+    setTimeout(scheduleUpdate, 1000);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
 </body>
 </html>
