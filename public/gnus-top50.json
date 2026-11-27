@@ -1,6 +1,6 @@
 {
   "token": "GNUS",
-  "generatedAt": "2026-11-27T11:54:13.849Z",
+  "generatedAt": "2026-11-27T20:52:14.407Z",
   "description": "Top 50 holders per network, balances individually verified on-chain",
   "decimals": 18,
   "validation": {
@@ -18,7 +18,7 @@
   "networks": {
     "ethereum": {
       "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-      "referenceBlock": 26506367,
+      "referenceBlock": 26509053,
       "source": "Routescan Holders API + Routescan RPC",
       "pages": 34,
       "entriesReceived": 3384,
@@ -32,7 +32,7 @@
           "raw": "108692132734227536338675",
           "gnus": "108692.132734227536338675",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Smart Contract",
           "holderDescription": "Uniswap V3 GNUS/WETH",
           "codeAudit": {
@@ -51,7 +51,7 @@
           "raw": "73377948358675136756320",
           "gnus": "73377.948358675136756320",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "GNUS Multisig",
           "holderDescription": "Gnosis Safe multisig",
           "codeAudit": {
@@ -70,7 +70,7 @@
           "raw": "29748633777347817298590",
           "gnus": "29748.633777347817298590",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -89,7 +89,7 @@
           "raw": "25788315869801121344710",
           "gnus": "25788.315869801121344710",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -108,7 +108,7 @@
           "raw": "25191766131792806417178",
           "gnus": "25191.766131792806417178",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -127,7 +127,7 @@
           "raw": "20000000000000000000000",
           "gnus": "20000.000000000000000000",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Smart Contract",
           "holderDescription": "GNUS Vesting Contract",
           "codeAudit": {
@@ -146,7 +146,7 @@
           "raw": "18000001018673584066217",
           "gnus": "18000.001018673584066217",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -165,7 +165,7 @@
           "raw": "12861816927947289427529",
           "gnus": "12861.816927947289427529",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -184,7 +184,7 @@
           "raw": "12850000000000000078402",
           "gnus": "12850.000000000000078402",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -203,7 +203,7 @@
           "raw": "12454512455295805731522",
           "gnus": "12454.512455295805731522",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -222,7 +222,7 @@
           "raw": "12037043251245435423475",
           "gnus": "12037.043251245435423475",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -241,7 +241,7 @@
           "raw": "12025003522238636666628",
           "gnus": "12025.003522238636666628",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -260,7 +260,7 @@
           "raw": "11524148301811206547971",
           "gnus": "11524.148301811206547971",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "GNUS Multisig",
           "holderDescription": "Gnosis Safe multisig",
           "codeAudit": {
@@ -279,7 +279,7 @@
           "raw": "11200000000000000000000",
           "gnus": "11200.000000000000000000",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -298,7 +298,7 @@
           "raw": "10800000000000000000000",
           "gnus": "10800.000000000000000000",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -317,7 +317,7 @@
           "raw": "10396949085467008197891",
           "gnus": "10396.949085467008197891",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "GNUS Multisig",
           "holderDescription": "Gnosis Safe multisig",
           "codeAudit": {
@@ -336,7 +336,7 @@
           "raw": "10149869928988828434119",
           "gnus": "10149.869928988828434119",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -355,7 +355,7 @@
           "raw": "10010000000000000000000",
           "gnus": "10010.000000000000000000",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -374,7 +374,7 @@
           "raw": "9754200103961362845136",
           "gnus": "9754.200103961362845136",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -393,7 +393,7 @@
           "raw": "9700561071373690526143",
           "gnus": "9700.561071373690526143",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -412,7 +412,7 @@
           "raw": "9500000000000000000000",
           "gnus": "9500.000000000000000000",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -431,7 +431,7 @@
           "raw": "8702537790125662749644",
           "gnus": "8702.537790125662749644",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -450,7 +450,7 @@
           "raw": "8541960553333966462071",
           "gnus": "8541.960553333966462071",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -469,7 +469,7 @@
           "raw": "8141341873533017370363",
           "gnus": "8141.341873533017370363",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -488,7 +488,7 @@
           "raw": "8101183876610835276709",
           "gnus": "8101.183876610835276709",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -507,7 +507,7 @@
           "raw": "8057694693229408827200",
           "gnus": "8057.694693229408827200",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -526,7 +526,7 @@
           "raw": "7680243833100593672184",
           "gnus": "7680.243833100593672184",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -545,7 +545,7 @@
           "raw": "7572000000000000000000",
           "gnus": "7572.000000000000000000",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -564,7 +564,7 @@
           "raw": "7535575608004578819620",
           "gnus": "7535.575608004578819620",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -583,7 +583,7 @@
           "raw": "7511319376544379205982",
           "gnus": "7511.319376544379205982",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -602,7 +602,7 @@
           "raw": "7276537522272029772175",
           "gnus": "7276.537522272029772175",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -621,7 +621,7 @@
           "raw": "7106141081826357176317",
           "gnus": "7106.141081826357176317",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -640,7 +640,7 @@
           "raw": "7089963014762341815045",
           "gnus": "7089.963014762341815045",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -659,7 +659,7 @@
           "raw": "7081138259144678697461",
           "gnus": "7081.138259144678697461",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -678,7 +678,7 @@
           "raw": "6699055247851043981881",
           "gnus": "6699.055247851043981881",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -697,7 +697,7 @@
           "raw": "6647246611048262092974",
           "gnus": "6647.246611048262092974",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -716,7 +716,7 @@
           "raw": "6343962953509235359501",
           "gnus": "6343.962953509235359501",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -735,7 +735,7 @@
           "raw": "6194465671782921810938",
           "gnus": "6194.465671782921810938",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Smart Contract",
           "holderDescription": "GNUS Vesting Beacon Proxy",
           "codeAudit": {
@@ -754,7 +754,7 @@
           "raw": "6134041631370128865584",
           "gnus": "6134.041631370128865584",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -773,7 +773,7 @@
           "raw": "6084039797983829822459",
           "gnus": "6084.039797983829822459",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -792,7 +792,7 @@
           "raw": "6000000000000000000001",
           "gnus": "6000.000000000000000001",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -811,7 +811,7 @@
           "raw": "5791005192837679471162",
           "gnus": "5791.005192837679471162",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -830,7 +830,7 @@
           "raw": "5602866556384324593936",
           "gnus": "5602.866556384324593936",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -849,7 +849,7 @@
           "raw": "5209254453676116780121",
           "gnus": "5209.254453676116780121",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -868,7 +868,7 @@
           "raw": "5203849876429728594441",
           "gnus": "5203.849876429728594441",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -887,7 +887,7 @@
           "raw": "5012013162561654569907",
           "gnus": "5012.013162561654569907",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -906,7 +906,7 @@
           "raw": "4922680701656631159655",
           "gnus": "4922.680701656631159655",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -925,7 +925,7 @@
           "raw": "4813120791329805232582",
           "gnus": "4813.120791329805232582",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -944,7 +944,7 @@
           "raw": "4789526238032622990948",
           "gnus": "4789.526238032622990948",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -963,7 +963,7 @@
           "raw": "4519739268906308110150",
           "gnus": "4519.739268906308110150",
           "contract": "0x614577036f0a024dbc1c88ba616b394dd65d105a",
-          "referenceBlock": 26506367,
+          "referenceBlock": 26509053,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -980,7 +980,7 @@
     "polygon": {
       "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
       "tokenId": "0",
-      "referenceBlock": 98049945,
+      "referenceBlock": 98071465,
       "source": "Alchemy NFT API + Routescan RPC",
       "pages": 1,
       "entriesReceived": 1453,
@@ -994,7 +994,7 @@
           "raw": "9375000000000000000000000",
           "gnus": "9375000.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Smart Contract",
           "holderDescription": "GNUS Vesting Beacon Proxy",
           "codeAudit": {
@@ -1013,7 +1013,7 @@
           "raw": "2770869920607883829059423",
           "gnus": "2770869.920607883829059423",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "GNUS Multisig",
           "holderDescription": "Gnosis Safe multisig",
           "codeAudit": {
@@ -1032,7 +1032,7 @@
           "raw": "1392383706055312642963513",
           "gnus": "1392383.706055312642963513",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Smart Contract",
           "holderDescription": "GNUS Vesting Beacon Proxy",
           "codeAudit": {
@@ -1051,7 +1051,7 @@
           "raw": "130980000000000000000000",
           "gnus": "130980.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1070,7 +1070,7 @@
           "raw": "100000000000000000000000",
           "gnus": "100000.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1089,7 +1089,7 @@
           "raw": "87941764356280451269681",
           "gnus": "87941.764356280451269681",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Smart Contract",
           "holderDescription": "Uniswap V3 GNUS/WETH",
           "codeAudit": {
@@ -1108,7 +1108,7 @@
           "raw": "68000000000000000000000",
           "gnus": "68000.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1127,7 +1127,7 @@
           "raw": "61661903673220545600000",
           "gnus": "61661.903673220545600000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1146,7 +1146,7 @@
           "raw": "60216760008000000000000",
           "gnus": "60216.760008000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "GNUS Multisig",
           "holderDescription": "GNUS Main Treasury",
           "codeAudit": {
@@ -1165,7 +1165,7 @@
           "raw": "59777316638185185186000",
           "gnus": "59777.316638185185186000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1184,7 +1184,7 @@
           "raw": "50000416326920031447898",
           "gnus": "50000.416326920031447898",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1203,7 +1203,7 @@
           "raw": "50000000000000000000000",
           "gnus": "50000.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1222,7 +1222,7 @@
           "raw": "36148962566407480645391",
           "gnus": "36148.962566407480645391",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1241,7 +1241,7 @@
           "raw": "28700190000000000000000",
           "gnus": "28700.190000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1260,7 +1260,7 @@
           "raw": "27578827708340268369322",
           "gnus": "27578.827708340268369322",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1279,7 +1279,7 @@
           "raw": "25777440195473287159967",
           "gnus": "25777.440195473287159967",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -1298,7 +1298,7 @@
           "raw": "24925874269462809324724",
           "gnus": "24925.874269462809324724",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1317,7 +1317,7 @@
           "raw": "23912170000000000000000",
           "gnus": "23912.170000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1336,7 +1336,7 @@
           "raw": "21919851250922888567956",
           "gnus": "21919.851250922888567956",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1355,7 +1355,7 @@
           "raw": "21204151386483890307153",
           "gnus": "21204.151386483890307153",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1374,7 +1374,7 @@
           "raw": "20356480781406074495485",
           "gnus": "20356.480781406074495485",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1393,7 +1393,7 @@
           "raw": "19338753675085867122548",
           "gnus": "19338.753675085867122548",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1412,7 +1412,7 @@
           "raw": "18189022071003182522739",
           "gnus": "18189.022071003182522739",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "GNUS Multisig",
           "holderDescription": "GNUS Secondary Treasury",
           "codeAudit": {
@@ -1431,7 +1431,7 @@
           "raw": "16505000000000000000000",
           "gnus": "16505.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1450,7 +1450,7 @@
           "raw": "15688788932452445705782",
           "gnus": "15688.788932452445705782",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1469,7 +1469,7 @@
           "raw": "15039545552056782483437",
           "gnus": "15039.545552056782483437",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -1488,7 +1488,7 @@
           "raw": "14596976490018918706632",
           "gnus": "14596.976490018918706632",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1507,7 +1507,7 @@
           "raw": "13000000000000000000000",
           "gnus": "13000.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1526,7 +1526,7 @@
           "raw": "11200182679208559671278",
           "gnus": "11200.182679208559671278",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -1545,7 +1545,7 @@
           "raw": "10906900000000000000000",
           "gnus": "10906.900000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1564,7 +1564,7 @@
           "raw": "10350000000000000000000",
           "gnus": "10350.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1583,7 +1583,7 @@
           "raw": "10000008823101991830980",
           "gnus": "10000.008823101991830980",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1602,7 +1602,7 @@
           "raw": "9600000000000000000000",
           "gnus": "9600.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1621,7 +1621,7 @@
           "raw": "9500000000000000000000",
           "gnus": "9500.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -1640,7 +1640,7 @@
           "raw": "9184723651953290580010",
           "gnus": "9184.723651953290580010",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -1659,7 +1659,7 @@
           "raw": "8764412056903965782676",
           "gnus": "8764.412056903965782676",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1678,7 +1678,7 @@
           "raw": "8565234435993336746599",
           "gnus": "8565.234435993336746599",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1697,7 +1697,7 @@
           "raw": "8210000000000000000000",
           "gnus": "8210.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "EIP-7702 delegated wallet",
           "codeAudit": {
@@ -1716,7 +1716,7 @@
           "raw": "8099680138710183129699",
           "gnus": "8099.680138710183129699",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1735,7 +1735,7 @@
           "raw": "7511048897286146850490",
           "gnus": "7511.048897286146850490",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1754,7 +1754,7 @@
           "raw": "7246070409923404564589",
           "gnus": "7246.070409923404564589",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1773,7 +1773,7 @@
           "raw": "7200000000000000000000",
           "gnus": "7200.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1792,7 +1792,7 @@
           "raw": "7161690910802379781600",
           "gnus": "7161.690910802379781600",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "GNUS Multisig",
           "holderDescription": "Gnosis Safe multisig",
           "codeAudit": {
@@ -1811,7 +1811,7 @@
           "raw": "7128479045408587134086",
           "gnus": "7128.479045408587134086",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1830,7 +1830,7 @@
           "raw": "6741328925457802577668",
           "gnus": "6741.328925457802577668",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1849,7 +1849,7 @@
           "raw": "6623016321250510366233",
           "gnus": "6623.016321250510366233",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1868,7 +1868,7 @@
           "raw": "6616126698856335874638",
           "gnus": "6616.126698856335874638",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1887,7 +1887,7 @@
           "raw": "6060584708173736011746",
           "gnus": "6060.584708173736011746",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1906,7 +1906,7 @@
           "raw": "6002000000000000000000",
           "gnus": "6002.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1925,7 +1925,7 @@
           "raw": "5850000000000000000000",
           "gnus": "5850.000000000000000000",
           "contract": "0x127E47abA094a9a87D084a3a93732909Ff031419",
-          "referenceBlock": 98049945,
+          "referenceBlock": 98071465,
           "holderType": "Wallet",
           "holderDescription": "Wallet",
           "codeAudit": {
@@ -1940,18 +1940,18 @@
       ]
     }
   },
-  "elapsedSeconds": 70.31,
+  "elapsedSeconds": 68.38,
   "codeAudit": {
-    "generatedAt": "2026-11-27T11:56:05.535Z",
+    "generatedAt": "2026-11-27T20:54:04.472Z",
     "method": "eth_getCode at each holder referenceBlock",
     "networks": {
       "ethereum": {
         "chainId": 1,
-        "referenceBlock": 26506367
+        "referenceBlock": 26509053
       },
       "polygon": {
         "chainId": 137,
-        "referenceBlock": 98049945
+        "referenceBlock": 98071465
       }
     },
     "checkedAddresses": 100,
@@ -1965,7 +1965,7 @@
       "rank": 11,
       "address": "0x337C9cDDfe6681c1eA2D7dA67Dd4380227eF993D",
       "gnus": "12037.043251245435423475",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b"
     },
@@ -1974,7 +1974,7 @@
       "rank": 25,
       "address": "0xAa8a9FFDD7610a8B08c87968a6190680fEee6793",
       "gnus": "8101.183876610835276709",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b"
     },
@@ -1983,7 +1983,7 @@
       "rank": 29,
       "address": "0x61f28bd695654baCBA0d2fe087fb608DF50a11D4",
       "gnus": "7535.575608004578819620",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b"
     },
@@ -1992,7 +1992,7 @@
       "rank": 43,
       "address": "0x44A1A921eeE560234AC72b858D32197Fd7BcC656",
       "gnus": "5602.866556384324593936",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b"
     },
@@ -2001,7 +2001,7 @@
       "rank": 16,
       "address": "0x0D4e52FDEb7213781Aec76d1Bc44272b8b96Bc6D",
       "gnus": "25777.440195473287159967",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b"
     },
@@ -2010,7 +2010,7 @@
       "rank": 26,
       "address": "0x4BDeA2C68e05BF750c7D2Be2AfE7256612bb041f",
       "gnus": "15039.545552056782483437",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b"
     },
@@ -2019,7 +2019,7 @@
       "rank": 29,
       "address": "0x56c5495A7Bf9178cD5924AD299027A2760914E86",
       "gnus": "11200.182679208559671278",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x7702cb554e6bfb442cb743a7df23154544a7176c"
     },
@@ -2028,7 +2028,7 @@
       "rank": 34,
       "address": "0xBc1Fc90F06bd763fad7e7e9283a00ff4b5519bb3",
       "gnus": "9500.000000000000000000",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b"
     },
@@ -2037,7 +2037,7 @@
       "rank": 35,
       "address": "0x91eFA962889dd5cf7E8C7f5EeF38695557c9edae",
       "gnus": "9184.723651953290580010",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b"
     },
@@ -2046,7 +2046,7 @@
       "rank": 38,
       "address": "0xF959E63C718C15774D92aD85eCaF0D18aaB44a0c",
       "gnus": "8210.000000000000000000",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "EIP-7702 delegated wallet",
       "delegatedImplementation": "0x490aac77c960b0569c8e446ac7e12490bd44ca1d"
     }
@@ -2057,7 +2057,7 @@
       "rank": 1,
       "address": "0xF10E8cCdb3F065BF24AFA14d08cc6336d4a9A281",
       "gnus": "108692.132734227536338675",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "Uniswap V3 GNUS/WETH",
       "delegatedImplementation": null
     },
@@ -2066,7 +2066,7 @@
       "rank": 6,
       "address": "0x9679519E246cFDC8d6681bD7ABf0d6467375f5cE",
       "gnus": "20000.000000000000000000",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "GNUS Vesting Contract",
       "delegatedImplementation": null
     },
@@ -2075,7 +2075,7 @@
       "rank": 38,
       "address": "0x912Accc3534A03197015F446334e3CFA7783eCf0",
       "gnus": "6194.465671782921810938",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "GNUS Vesting Beacon Proxy",
       "delegatedImplementation": null
     },
@@ -2084,7 +2084,7 @@
       "rank": 1,
       "address": "0xBd1f3B857d95F8134D4419215a1622ecd82B9687",
       "gnus": "9375000.000000000000000000",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "GNUS Vesting Beacon Proxy",
       "delegatedImplementation": null
     },
@@ -2093,7 +2093,7 @@
       "rank": 3,
       "address": "0xFE69f9e7BeefF51c0C8e5511688eb31023fE8e20",
       "gnus": "1392383.706055312642963513",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "GNUS Vesting Beacon Proxy",
       "delegatedImplementation": null
     },
@@ -2102,7 +2102,7 @@
       "rank": 6,
       "address": "0x45126b956401DAaec92aFba2a9953E14B16fb83f",
       "gnus": "87941.764356280451269681",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "Uniswap V3 GNUS/WETH",
       "delegatedImplementation": null
     }
@@ -2113,7 +2113,7 @@
       "rank": 2,
       "address": "0xc86E1A194aA2c15a07E259A3bb1c7D05a8505153",
       "gnus": "73377.948358675136756320",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "Gnosis Safe multisig",
       "delegatedImplementation": null
     },
@@ -2122,7 +2122,7 @@
       "rank": 13,
       "address": "0x665B8e9E6F133eB5690F8A7dF6a484A9A09a1d92",
       "gnus": "11524.148301811206547971",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "Gnosis Safe multisig",
       "delegatedImplementation": null
     },
@@ -2131,7 +2131,7 @@
       "rank": 16,
       "address": "0x90c1818a86d55C2872Ba56dc05408dd0606f409f",
       "gnus": "10396.949085467008197891",
-      "referenceBlock": "26506367",
+      "referenceBlock": "26509053",
       "role": "Gnosis Safe multisig",
       "delegatedImplementation": null
     },
@@ -2140,7 +2140,7 @@
       "rank": 2,
       "address": "0x4Ca714A91f39245b59eF712553491196B177DBb2",
       "gnus": "2770869.920607883829059423",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "Gnosis Safe multisig",
       "delegatedImplementation": null
     },
@@ -2149,7 +2149,7 @@
       "rank": 9,
       "address": "0x45A920727578222B6AFA5ce4044dd35A2218c900",
       "gnus": "60216.760008000000000000",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "GNUS Main Treasury",
       "delegatedImplementation": null
     },
@@ -2158,7 +2158,7 @@
       "rank": 23,
       "address": "0xA390c06D129A0B0288FE4E33B2540bD9f99DC333",
       "gnus": "18189.022071003182522739",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "GNUS Secondary Treasury",
       "delegatedImplementation": null
     },
@@ -2167,7 +2167,7 @@
       "rank": 43,
       "address": "0xD5Fb61cd1Bc0d0Acc74BC5Bdeed04bD403335985",
       "gnus": "7161.690910802379781600",
-      "referenceBlock": "98049945",
+      "referenceBlock": "98071465",
       "role": "Gnosis Safe multisig",
       "delegatedImplementation": null
     }
