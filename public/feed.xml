@@ -5,49 +5,49 @@
     <link>https://gnus-digest.vercel.app/</link>
     <description>Daily digest of the GeniusVentures GitHub activity, written from public commit messages.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 27 Nov 2026 15:26:38 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 28 Nov 2026 14:25:27 GMT</lastBuildDate>
     <atom:link href="https://gnus-digest.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>GNUS digest — Friday 27 November</title>
+      <link>https://gnus-digest.vercel.app/</link>
+      <guid isPermaLink="false">gnus-digest-2026-11-27</guid>
+      <pubDate>Fri, 27 Nov 2026 23:59:00 GMT</pubDate>
+      <description>The blockchain network added regression tests for malformed block parameters and improved database retry logic. The SDK now rejects a second instance using the same data directory and reads job data fully. The processing manager added validation for block parameters on the job‑cost path. Repositories: SuperGenius, GeniusSDK, SGProcessingManager, rlp_enodes.</description>
+    </item>
     <item>
       <title>GNUS digest — Thursday 26 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-26</guid>
       <pubDate>Thu, 26 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The wallet was updated to use shared AI rules. Multinode tests in the cognitive system were changed to run on the loopback address. Repositories: GeniusWallet, GeniusCognitiveSystem, rlp_enodes.</description>
+      <description>The wallet incorporated shared AI rules from the development agent. The AI system adjusted its multinode tests to use the loopback address. Repositories: GeniusWallet, GeniusCognitiveSystem, rlp_enodes.</description>
     </item>
     <item>
       <title>GNUS digest — Wednesday 25 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-25</guid>
       <pubDate>Wed, 25 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Security threat verification was added to the network and session records were fixed, with milestone files cleaned up. The cognitive system pinned all build pipelines to self‑hosted runners and updated its CI validation. Repositories: GeniusNetwork, GeniusCognitiveSystem, rlp_enodes.</description>
+      <description>The blockchain network introduced security threat verification, cleaned up old requirement files and archived milestone data. The AI system switched all build pipelines to self‑hosted runners and merged related updates. Repositories: GeniusNetwork, GeniusCognitiveSystem.</description>
     </item>
     <item>
       <title>GNUS digest — Tuesday 24 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-24</guid>
       <pubDate>Tue, 24 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Network and SuperGenius fixes addressed cold‑storage tags and dispatch upgrades, while the cognitive system added an architecture‑review skill and synced documentation. Generated SDK models were refreshed. Repositories: GeniusNetwork, SuperGenius, GeniusCognitiveSystem, openapi-cpp-scaffolding, thirdparty.</description>
+      <description>The blockchain network applied several fixes and upgraded dispatch components, the AI system added a new architecture‑review skill and updated related documents, and the SDK refreshed generated model documentation. Repositories: GeniusNetwork, SuperGenius, GeniusCognitiveSystem, openapi-cpp-scaffolding, thirdparty.</description>
     </item>
     <item>
       <title>GNUS digest — Monday 23 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-23</guid>
       <pubDate>Mon, 23 Nov 2026 23:59:00 GMT</pubDate>
-      <description>Network and SuperGenius fixed iOS cold‑storage tag issues and other build stubs, and the cognitive system incorporated a test fix for MSVC/clang. Repositories: GeniusNetwork, SuperGenius, GeniusCognitiveSystem, openapi-client-scaffold.</description>
+      <description>The blockchain network fixed build stubs and updated documentation, while the AI system added a test fix for MSVC/clang. An automated scaffold update was recorded for the SDK tools. Repositories: GeniusNetwork, SuperGenius, GeniusCognitiveSystem, openapi-client-scaffold.</description>
     </item>
     <item>
       <title>GNUS digest — Sunday 22 November</title>
       <link>https://gnus-digest.vercel.app/</link>
       <guid isPermaLink="false">gnus-digest-2026-11-22</guid>
       <pubDate>Sun, 22 Nov 2026 23:59:00 GMT</pubDate>
-      <description>The wallet fixed a frozen startup feed and rename behavior, added tests for rename actions, and updated its configuration. SuperGenius repaired record cleanup, upgraded phases, and tested funding reservation leaks. Repositories: GeniusWallet, SuperGenius.</description>
-    </item>
-    <item>
-      <title>GNUS digest — Saturday 21 November</title>
-      <link>https://gnus-digest.vercel.app/</link>
-      <guid isPermaLink="false">gnus-digest-2026-11-21</guid>
-      <pubDate>Sat, 21 Nov 2026 23:59:00 GMT</pubDate>
-      <description>SuperGenius added recovery of nonce certificates, improved handling of payouts and pruned holds, and performed extensive testing and refactoring. GeniusNetwork updated pointers, performed test work, and recorded checkpoint rulings. Repositories: SuperGenius, GeniusNetwork.</description>
+      <description>The wallet fixed startup messages and disabled rename until the name actually changes, and added safeguards for the quiz and rename actions. The blockchain network fixed record cleanup, upgraded a network phase, and added tests to reproduce funding reservation leaks. Repositories: GeniusWallet, SuperGenius.</description>
     </item>
   </channel>
 </rss>
